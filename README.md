@@ -1,5 +1,7 @@
 # agentsync-remote
 
+_Part of the [xylem](https://github.com/jarmstrong158/xylem) stack._
+
 A Cloudflare Worker MCP server that makes **claude.ai on your phone** a peer in
 the [agentsync](https://github.com/jarmstrong158/agentsync) coordination mesh —
 the same `claims.json`, the same `agentsync` branch, the same overlap and
@@ -222,3 +224,7 @@ npx wrangler deploy --dry-run --outdir dist   # bundle check
   the MCP handler is stateless and hand-rolled.
 - [Deploy to Cloudflare buttons](https://developers.cloudflare.com/workers/platform/deploy-buttons/)
   — Cloudflare's docs for the one-click deploy flow used above.
+
+## Related
+
+- [agentsync](https://github.com/jarmstrong158/agentsync) — the local git-native original this transport mirrors — and the [xylem](https://github.com/jarmstrong158/xylem) stack hub.
