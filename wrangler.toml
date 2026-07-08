@@ -1,0 +1,29 @@
+name = "agentsync-remote"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+
+# ---------------------------------------------------------------------------
+# Configuration (safe to commit). The two RUNTIME SECRETS this Worker reads --
+# AUTH_TOKEN (endpoint lock) and GH_PAT (fine-grained GitHub token) -- are NOT
+# declared here. The operator adds them after the first deploy via the
+# Cloudflare dashboard: Workers & Pages -> agentsync-remote -> Settings ->
+# Variables and Secrets. Never put secret values in this file.
+# ---------------------------------------------------------------------------
+
+[vars]
+# "owner/name" of the repository that holds the coordination branch.
+REPO = "jarmstrong158/agentsync-remote"
+
+# The agent id this remote peer writes under in claims.json. A local agentsync
+# peer and this remote peer are indistinguishable in claims.json except by id.
+AGENT_ID = "jonny-mobile"
+
+# Branch that carries claims.json (the coordination branch), matching local
+# agentsync's default.
+BRANCH = "agentsync"
+
+# Path of the coordination file on the coordination branch.
+CLAIMS_PATH = "claims.json"
+
+[observability]
+enabled = true
