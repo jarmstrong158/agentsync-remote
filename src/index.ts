@@ -13,10 +13,15 @@ import { createMcpHandler } from "./mcp.js";
 import { buildCtx } from "./tools.js";
 import type { Env } from "./types.js";
 
-// One random instance token per isolate/deployment. This powers the
-// duplicate-agent-id warning: if a claim already exists under this AGENT_ID but
-// carries a different instance, another server is using the same id.
-const INSTANCE = crypto.randomUUID();
+// One random instance token per isolate. This powers the duplicate-agent-id
+// warning: if a claim already exists under this AGENT_ID but carries a different
+// instance, another server is using the same id. Generated lazily on first
+// request -- Workers forbid generating random values in the global scope.
+let instanceToken: string | undefined;
+function instanceId(): string {
+  if (instanceToken === undefined) instanceToken = crypto.randomUUID();
+  return instanceToken;
+}
 
 const handleMcp = createMcpHandler();
 
@@ -33,7 +38,7 @@ export default {
     // Fail closed: unset AUTH_TOKEN or a mismatched token -> 404, no detail.
     if (!env.AUTH_TOKEN || token !== env.AUTH_TOKEN) return NOT_FOUND();
 
-    const ctx = buildCtx(env, { instance: INSTANCE });
+    const ctx = buildCtx(env, { instance: instanceId() });
     return handleMcp(request, ctx);
   },
 } satisfies ExportedHandler<Env>;
