@@ -1,3 +1,16 @@
 {
-  "claims": {}
+  "claims": {
+    "jonny-mobile": {
+      "task": "mobile test claim — demoing phone-as-peer from claude.ai at Knoebels",
+      "touches": [
+        "_xylem_demo/**"
+      ],
+      "requires": [],
+      "branch": "demo/mobile-peer",
+      "status": "in-progress",
+      "updated_at": "2026-07-08T16:51:08.527Z",
+      "instance": "8e5141d2-35f8-4352-9025-4a5e6d38c2cf",
+      "note": null
+    }
+  }
 }
