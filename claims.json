@@ -7,10 +7,10 @@
       ],
       "requires": [],
       "branch": "demo/mobile-peer",
-      "status": "in-progress",
-      "updated_at": "2026-07-08T16:51:08.527Z",
+      "status": "done",
+      "updated_at": "2026-07-08T16:51:40.820Z",
       "instance": "8e5141d2-35f8-4352-9025-4a5e6d38c2cf",
-      "note": null
+      "note": "demo complete — phone-as-peer verified live from claude.ai mobile"
     }
   }
 }
