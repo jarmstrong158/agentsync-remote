@@ -14,7 +14,7 @@ describe("instance token is minted lazily, not in global scope", () => {
   });
 
   it("no crypto.randomUUID at import; generated once per isolate on first request", async () => {
-    const spy = vi.spyOn(globalThis.crypto, "randomUUID");
+    const spy = vi.spyOn(crypto, "randomUUID");
     vi.resetModules();
 
     const mod = await import("../src/index.js");

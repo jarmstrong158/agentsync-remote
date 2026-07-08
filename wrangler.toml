@@ -10,8 +10,14 @@ compatibility_date = "2025-06-01"
 # Variables and Secrets. Never put secret values in this file.
 # ---------------------------------------------------------------------------
 
+# Every var below ships a default so the "Deploy to Cloudflare" button can
+# provision the Worker with no edits. Self-hosters set REPO to their own
+# coordination repo -- either in the deploy dialog (vars are surfaced there) or
+# afterward under the Worker's Settings -> Variables and Secrets. There are no
+# D1/KV/R2 bindings to provision: this Worker's only state is in GitHub.
 [vars]
 # "owner/name" of the repository that holds the coordination branch.
+# Self-hosters: change this to YOUR coordination repo.
 REPO = "jarmstrong158/agentsync-remote"
 
 # The agent id this remote peer writes under in claims.json. A local agentsync
