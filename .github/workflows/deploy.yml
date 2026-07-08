@@ -1,8 +1,13 @@
 name: Deploy
 
-# Deploys via GitHub Actions -> Wrangler (NOT the Cloudflare GitHub App).
-# Every push to main runs the test suite; the deploy step runs only if tests
-# pass, so a red suite can never ship.
+# Deploys the canonical repo via GitHub Actions -> Wrangler (NOT the Cloudflare
+# GitHub App). Every push to main runs the test suite; the deploy step runs only
+# if tests pass, so a red suite can never ship.
+#
+# Self-hosters do NOT use this workflow: the "Deploy to Cloudflare" button forks
+# the repo and wires up Workers Builds (Cloudflare-side CI) automatically. The
+# job below is guarded to the canonical repo so a fork never runs a deploy it
+# has no CLOUDFLARE_* secrets for.
 
 on:
   push:
@@ -12,6 +17,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Only the canonical repo deploys via GitHub Actions; forks deploy via the
+    # Deploy to Cloudflare button + Workers Builds.
+    if: github.repository == 'jarmstrong158/agentsync-remote'
     steps:
       - uses: actions/checkout@v4
 
