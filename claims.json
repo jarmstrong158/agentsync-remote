@@ -1,16 +1,16 @@
 {
   "claims": {
     "jonny-mobile": {
-      "task": "mobile test claim — demoing phone-as-peer from claude.ai at Knoebels",
+      "task": "chat peer (this claude.ai session) holding a contested path for the two-peer CAS test",
       "touches": [
-        "_xylem_demo/**"
+        "_xylem_demo/contested/**"
       ],
       "requires": [],
-      "branch": "demo/mobile-peer",
-      "status": "done",
-      "updated_at": "2026-07-08T16:51:40.820Z",
-      "instance": "8e5141d2-35f8-4352-9025-4a5e6d38c2cf",
-      "note": "demo complete — phone-as-peer verified live from claude.ai mobile"
+      "branch": "demo/two-peer-test",
+      "status": "in-progress",
+      "updated_at": "2026-07-09T23:14:01.933Z",
+      "instance": "55b191d7-187e-4993-aeff-0f5e8ea0b70d",
+      "note": null
     }
   }
 }
