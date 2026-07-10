@@ -13,14 +13,14 @@
       "note": null
     },
     "jonny-desktop": {
-      "task": "home PC desktop peer - two-peer test",
+      "task": "balatron work session - 2026-07-09",
       "touches": [
-        "_xylem_demo/homepc/**"
+        "balatron/**"
       ],
       "requires": [],
-      "branch": "demo/two-peer-test",
+      "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T00:41:28.618985+00:00",
+      "updated_at": "2026-07-10T00:57:13.120492+00:00",
       "instance": "239c8227",
       "note": null
     }
