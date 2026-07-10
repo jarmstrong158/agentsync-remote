@@ -1,16 +1,17 @@
 {
   "claims": {
     "jonny-mobile": {
-      "task": "cambium onboarding v1 (status/setup/fail-helpful)",
+      "task": "cambium: export_markdown + mojibake fix (claim staked by chat session as board proxy for the mobile CC session whose agentsync connector dropped)",
       "touches": [
-        "cambium/**"
+        "cambium/**",
+        "knowledge repo KNOWLEDGE.md"
       ],
       "requires": [],
-      "branch": "claude/cambium-onboarding-v1",
-      "status": "done",
-      "updated_at": "2026-07-10T17:17:22.286Z",
-      "instance": "f4b2fce5-9662-46d6-991c-0df6a15a7455",
-      "note": "cambium onboarding v1 shipped & merged to main (PR #4, a56efc8). status() now returns structured config gaps+fixes and never raises; every tool fails helpful when unconfigured; setup() validates/scaffolds/writes a no-secrets fallback config (env wins, in-process) and offers gh commands for an org repo rather than creating it. 46 tests green (incl. real-agentsync + real MCP stdio). Stayed within cambium/**; did not touch .cambium data dirs, the knowledge repo, xylem, or Balatron \u00e2\u20ac\u201d disjoint from jonny-desktop's first-real-cycle claim. Left a TODO(follow-up) slot to fold in that cycle's friction notes."
+      "branch": "claude/cambium-export-markdown",
+      "status": "in-progress",
+      "updated_at": "2026-07-10T22:01:12.285Z",
+      "instance": "c0ea123c-6099-4c44-b745-4a620fcbede6",
+      "note": null
     }
   }
 }
