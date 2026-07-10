@@ -1,16 +1,16 @@
 {
   "claims": {
     "jonny-mobile": {
-      "task": "chat peer (this claude.ai session) holding a contested path for the two-peer CAS test",
+      "task": "cambium onboarding v1 (status/setup/fail-helpful)",
       "touches": [
-        "_xylem_demo/contested/**"
+        "cambium/**"
       ],
       "requires": [],
-      "branch": "demo/two-peer-test",
-      "status": "done",
-      "updated_at": "2026-07-10T10:51:53.472Z",
-      "instance": "55b191d7-187e-4993-aeff-0f5e8ea0b70d",
-      "note": "two-peer demo complete; releasing stale demo claim to clean the board for real work"
+      "branch": "claude/cambium-onboarding-v1",
+      "status": "in-progress",
+      "updated_at": "2026-07-10T17:04:18.546Z",
+      "instance": "f4b2fce5-9662-46d6-991c-0df6a15a7455",
+      "note": null
     },
     "jonny-desktop": {
       "task": "cambium first real cycle",
