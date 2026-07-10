@@ -20,9 +20,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T20:41:06.088357+00:00",
+      "updated_at": "2026-07-10T20:45:28.861523+00:00",
       "instance": "239c8227",
-      "note": null
+      "note": "Building: manifest version field done, versioned fence markers done, version_check.py done, working on installer update verb + tests."
     }
   }
 }
