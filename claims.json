@@ -11,18 +11,6 @@
       "updated_at": "2026-07-09T23:14:01.933Z",
       "instance": "55b191d7-187e-4993-aeff-0f5e8ea0b70d",
       "note": null
-    },
-    "jonny-desktop": {
-      "task": "balatron work session - 2026-07-09",
-      "touches": [
-        "balatron/**"
-      ],
-      "requires": [],
-      "branch": "master",
-      "status": "in-progress",
-      "updated_at": "2026-07-10T00:57:13.120492+00:00",
-      "instance": "239c8227",
-      "note": null
     }
   }
 }
