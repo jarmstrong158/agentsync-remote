@@ -13,17 +13,16 @@
       "note": "cambium onboarding v1 shipped & merged to main (PR #4, a56efc8). status() now returns structured config gaps+fixes and never raises; every tool fails helpful when unconfigured; setup() validates/scaffolds/writes a no-secrets fallback config (env wins, in-process) and offers gh commands for an org repo rather than creating it. 46 tests green (incl. real-agentsync + real MCP stdio). Stayed within cambium/**; did not touch .cambium data dirs, the knowledge repo, xylem, or Balatron \u00e2\u20ac\u201d disjoint from jonny-desktop's first-real-cycle claim. Left a TODO(follow-up) slot to fold in that cycle's friction notes."
     },
     "jonny-desktop": {
-      "task": "xylem: wire version nudge + balatron block refresh",
+      "task": "balatron: investigate training crawl loop",
       "touches": [
-        "xylem/**",
-        "balatron/CLAUDE.md"
+        "balatron/**"
       ],
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T21:05:29.619826+00:00",
+      "updated_at": "2026-07-10T21:11:51.899223+00:00",
       "instance": "239c8227",
-      "note": "Parts 1+2 done (xylem PR #11 merged, balatron CLAUDE.md pushed with v2 stamp). Working on Part 3 (training metrics read)."
+      "note": null
     }
   }
 }
