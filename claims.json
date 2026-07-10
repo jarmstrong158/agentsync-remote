@@ -21,9 +21,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T21:03:54.059689+00:00",
+      "updated_at": "2026-07-10T21:05:29.619826+00:00",
       "instance": "239c8227",
-      "note": "Part 1 (nudge wiring): installer updated, tests passing. Working on push + verify. Parts 2-3 pending."
+      "note": "Parts 1+2 done (xylem PR #11 merged, balatron CLAUDE.md pushed with v2 stamp). Working on Part 3 (training metrics read)."
     }
   }
 }
