@@ -11,18 +11,6 @@
       "updated_at": "2026-07-10T10:51:53.472Z",
       "instance": "55b191d7-187e-4993-aeff-0f5e8ea0b70d",
       "note": "two-peer demo complete; releasing stale demo claim to clean the board for real work"
-    },
-    "jonny-desktop": {
-      "task": "balatron - dec-058 remeasure training launch",
-      "touches": [
-        "balatron/**"
-      ],
-      "requires": [],
-      "branch": "master",
-      "status": "in-progress",
-      "updated_at": "2026-07-10T13:52:19.834549+00:00",
-      "instance": "239c8227",
-      "note": null
     }
   }
 }
