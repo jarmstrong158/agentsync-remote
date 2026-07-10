@@ -25,9 +25,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T22:44:24.036993+00:00",
+      "updated_at": "2026-07-10T22:49:27.332933+00:00",
       "instance": "239c8227",
-      "note": null
+      "note": "Starting with xylem README restructure. Reading context-keeper summaries and current READMEs for all 5 repos."
     }
   }
 }
