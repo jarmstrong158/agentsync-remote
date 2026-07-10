@@ -10,6 +10,7 @@
 // tool that needs GitHub.
 
 import { createMcpHandler } from "./mcp.js";
+import { log } from "./log.js";
 import { buildCtx } from "./tools.js";
 import type { Env } from "./types.js";
 
@@ -32,13 +33,43 @@ export default {
     const url = new URL(request.url);
 
     const match = url.pathname.match(/^\/mcp\/([^/]+)\/?$/);
+
+    // The path token is the credential -> log the route with it redacted.
+    log("request", {
+      route: match ? "/mcp/***" : url.pathname,
+      method: request.method,
+    });
+
     if (!match) return NOT_FOUND();
 
     const token = match[1];
     // Fail closed: unset AUTH_TOKEN or a mismatched token -> 404, no detail.
-    if (!env.AUTH_TOKEN || token !== env.AUTH_TOKEN) return NOT_FOUND();
+    const ok = !!env.AUTH_TOKEN && token === env.AUTH_TOKEN;
+    log("auth", { ok });
+    if (!ok) return NOT_FOUND();
 
-    const ctx = buildCtx(env, { instance: instanceId() });
-    return handleMcp(request, ctx);
+    // Handshake is pure protocol: buildCtx only assembles config, and every
+    // GitHub call is deferred into the tool handlers. Nothing here touches the
+    // network, so `initialize` answers instantly even on a cold isolate.
+    try {
+      const ctx = buildCtx(env, { instance: instanceId() });
+      return await handleMcp(request, ctx);
+    } catch (e) {
+      // Defence in depth: an unexpected throw must not become a bare 500 that a
+      // reconnecting client reads as a hard failure. Log it and answer with a
+      // well-formed JSON-RPC error so the transport stays alive.
+      log("error", {
+        message: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      });
+      return new Response(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id: null,
+          error: { code: -32603, message: "Internal error" },
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    }
   },
 } satisfies ExportedHandler<Env>;

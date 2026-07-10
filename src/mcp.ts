@@ -9,6 +9,7 @@
 // carries JSON-RPC requests, which is what we return. See DESIGN.md.
 
 import { GhPatMissingError } from "./github.js";
+import { log } from "./log.js";
 import {
   checkConflicts,
   claim,
@@ -191,12 +192,24 @@ async function handleMessage(
   const isNotification = msg.id === undefined || method?.startsWith("notifications/");
 
   switch (method) {
-    case "initialize":
-      return result(msg.id, {
-        protocolVersion: msg.params?.protocolVersion ?? PROTOCOL_VERSION,
+    case "initialize": {
+      // Echo the client's requested protocol version when present -- the most
+      // tolerant negotiation a legitimate but slightly-ahead client can get --
+      // and fall back to our pinned version otherwise. This path never rejects.
+      const requested =
+        typeof msg.params?.protocolVersion === "string"
+          ? msg.params.protocolVersion
+          : undefined;
+      const negotiated = requested ?? PROTOCOL_VERSION;
+      log("handshake", { phase: "start", protocol_version: negotiated, requested: requested ?? null });
+      const res = result(msg.id, {
+        protocolVersion: negotiated,
         capabilities: { tools: {} },
         serverInfo: SERVER_INFO,
       });
+      log("handshake", { phase: "complete", protocol_version: negotiated });
+      return res;
+    }
 
     case "ping":
       return result(msg.id, {});
@@ -212,12 +225,15 @@ async function handleMessage(
 
     case "tools/call": {
       const name = msg.params?.name;
+      const started = Date.now();
       const tool = TOOLS.find((t) => t.name === name);
       if (!tool) {
+        log("error", { message: `Unknown tool: ${name}` });
         return error(msg.id, -32602, `Unknown tool: ${name}`);
       }
       try {
         const out = await tool.handler(ctx, msg.params?.arguments ?? {});
+        log("tool_call", { tool: name, duration_ms: Date.now() - started, ok: true });
         return result(msg.id, {
           content: [{ type: "text", text: JSON.stringify(out, null, 2) }],
         });
@@ -228,6 +244,11 @@ async function handleMessage(
           e instanceof GhPatMissingError
             ? `Configuration error: ${e.message}`
             : `Error: ${e instanceof Error ? e.message : String(e)}`;
+        log("tool_call", { tool: name, duration_ms: Date.now() - started, ok: false });
+        log("error", {
+          message: e instanceof Error ? e.message : String(e),
+          stack: e instanceof Error ? e.stack : undefined,
+        });
         return result(msg.id, {
           content: [{ type: "text", text: message }],
           isError: true,
@@ -279,7 +300,17 @@ export function createMcpHandler(): (request: Request, ctx: Ctx) => Promise<Resp
 
     const responses: object[] = [];
     for (const message of messages) {
-      const res = await handleMessage(message, ctx);
+      let res: object | null;
+      try {
+        res = await handleMessage(message, ctx);
+      } catch (e) {
+        // A single bad message must never take down the batch or bubble a 500.
+        log("error", {
+          message: e instanceof Error ? e.message : String(e),
+          stack: e instanceof Error ? e.stack : undefined,
+        });
+        res = error(message?.id ?? null, -32603, "Internal error");
+      }
       if (res !== null) responses.push(res);
     }
 
