@@ -13,14 +13,14 @@
       "note": "two-peer demo complete; releasing stale demo claim to clean the board for real work"
     },
     "jonny-desktop": {
-      "task": "context-keeper schema budget buyback",
+      "task": "balatron - dec-058 remeasure training launch",
       "touches": [
-        "context-keeper/**"
+        "balatron/**"
       ],
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T13:35:01.070382+00:00",
+      "updated_at": "2026-07-10T13:52:19.834549+00:00",
       "instance": "239c8227",
       "note": null
     }
