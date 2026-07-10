@@ -13,15 +13,14 @@
       "note": "two-peer demo complete; releasing stale demo claim to clean the board for real work"
     },
     "jonny-desktop": {
-      "task": "context-keeper + remote: upsert mirror for edits/deprecations",
+      "task": "context-keeper schema budget buyback",
       "touches": [
-        "context-keeper/**",
-        "context-keeper-remote/**"
+        "context-keeper/**"
       ],
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T12:50:30.979564+00:00",
+      "updated_at": "2026-07-10T13:35:01.070382+00:00",
       "instance": "239c8227",
       "note": null
     }
