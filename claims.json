@@ -12,6 +12,18 @@
       "updated_at": "2026-07-10T22:01:12.285Z",
       "instance": "c0ea123c-6099-4c44-b745-4a620fcbede6",
       "note": null
+    },
+    "jonny-desktop": {
+      "task": "agentsync-remote: handshake hardening",
+      "touches": [
+        "agentsync-remote/**"
+      ],
+      "requires": [],
+      "branch": "master",
+      "status": "in-progress",
+      "updated_at": "2026-07-10T22:07:38.361854+00:00",
+      "instance": "239c8227",
+      "note": null
     }
   }
 }
