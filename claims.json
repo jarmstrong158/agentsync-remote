@@ -20,9 +20,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T21:24:18.691398+00:00",
+      "updated_at": "2026-07-10T21:35:46.761043+00:00",
       "instance": "239c8227",
-      "note": null
+      "note": "Fix 1 (checkpoint-on-teardown) implementing: signal handler + wall-clock safety-net checkpoint + stop-check in rollout loop. Fix 2 diagnosed: INVALID_STATE is stale-state retry storm, not a code bug. Committing shortly."
     }
   }
 }
