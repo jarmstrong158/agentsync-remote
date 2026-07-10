@@ -7,10 +7,10 @@
       ],
       "requires": [],
       "branch": "demo/two-peer-test",
-      "status": "in-progress",
-      "updated_at": "2026-07-09T23:14:01.933Z",
+      "status": "done",
+      "updated_at": "2026-07-10T10:51:53.472Z",
       "instance": "55b191d7-187e-4993-aeff-0f5e8ea0b70d",
-      "note": null
+      "note": "two-peer demo complete; releasing stale demo claim to clean the board for real work"
     }
   }
 }
