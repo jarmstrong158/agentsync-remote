@@ -11,6 +11,19 @@
       "updated_at": "2026-07-10T17:17:22.286Z",
       "instance": "f4b2fce5-9662-46d6-991c-0df6a15a7455",
       "note": "cambium onboarding v1 shipped & merged to main (PR #4, a56efc8). status() now returns structured config gaps+fixes and never raises; every tool fails helpful when unconfigured; setup() validates/scaffolds/writes a no-secrets fallback config (env wins, in-process) and offers gh commands for an org repo rather than creating it. 46 tests green (incl. real-agentsync + real MCP stdio). Stayed within cambium/**; did not touch .cambium data dirs, the knowledge repo, xylem, or Balatron \u00e2\u20ac\u201d disjoint from jonny-desktop's first-real-cycle claim. Left a TODO(follow-up) slot to fold in that cycle's friction notes."
+    },
+    "jonny-desktop": {
+      "task": "cambium org harvest",
+      "touches": [
+        ".cambium/**",
+        "knowledge repo"
+      ],
+      "requires": [],
+      "branch": "master",
+      "status": "in-progress",
+      "updated_at": "2026-07-10T17:44:09.509115+00:00",
+      "instance": "239c8227",
+      "note": null
     }
   }
 }
