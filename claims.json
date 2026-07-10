@@ -21,9 +21,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-10T22:07:38.361854+00:00",
+      "updated_at": "2026-07-10T22:12:41.020203+00:00",
       "instance": "239c8227",
-      "note": null
+      "note": "Audit complete on both Workers. Key finding: context-keeper-remote runs DB migrations on every request (blocking initialize). agentsync-remote runs GitHub API on claims (but init is already fast). Implementing lazy migration + structured logging + tolerance fixes now."
     }
   }
 }
