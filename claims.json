@@ -23,9 +23,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-11T10:21:33.658682+00:00",
+      "updated_at": "2026-07-11T10:24:52.025072+00:00",
       "instance": "239c8227",
-      "note": "Manifest bug confirmed and fixed (context-keeper-remote was available:false). Dry-run verified it now registers. Working on README edits."
+      "note": "Xylem README done and pushed (manifest bug fixed, mirror architecture added, cambium onboarding updated, proven-in-use note). Working on context-keeper README now."
     }
   }
 }
