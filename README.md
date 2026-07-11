@@ -199,6 +199,27 @@ the endpoint) and `GH_PAT` (GitHub Contents read/write on the coordination repo)
 Point local agentsync and this Worker at the **same** `REPO` + `BRANCH` +
 `CLAIMS_PATH` and they share one mesh.
 
+## Reliability
+
+Coordination correctness under contention is measured, not asserted — the full
+write-up is [`docs/RELIABILITY.md`](./docs/RELIABILITY.md), reproducible with the
+commands below.
+
+- **47 / 47 automated tests green**, covering five distinct CAS race scenarios
+  and all three overlap-detection modes (exact · directory-containment · glob,
+  each in both directions).
+- **1000 simulated concurrent races** (`test/stress-cas.test.ts`, seeded
+  `0x5eed`): **0 lost claims, 0 double-grants**, and every race hit a real 409
+  retry — so the number isn't inflated by trivially-serialized runs.
+- **Fail-closed auth is tested** — wrong token, unset `AUTH_TOKEN`, and non-`/mcp`
+  paths all 404; a missing `GH_PAT` surfaces a named error, not a silent failure.
+
+**Honest caveat:** the thousand races are simulated *in-process* — GitHub's 409
+compare-and-swap is reproduced by a fetch-mocked fake ([`test/helpers.ts`](./test/helpers.ts)),
+not exercised over the live API. The results validate the Worker's coordination
+*logic* — which is what runs in production — not GitHub's API, the network, or
+real-world latency.
+
 ## Maintainer / local development
 
 The canonical repo (`jarmstrong158/agentsync-remote`) deploys via GitHub Actions
@@ -222,6 +243,8 @@ npx wrangler deploy --dry-run --outdir dist   # bundle check
   (Claude Code on your machine). Same file, same rules; sibling transport.
 - [`DESIGN.md`](./DESIGN.md) — the CAS translation, overlap semantics, and why
   the MCP handler is stateless and hand-rolled.
+- [`docs/RELIABILITY.md`](./docs/RELIABILITY.md) — the measured reliability
+  report: 47/47 tests, five CAS race scenarios, and 1000 seeded contention races.
 - [Deploy to Cloudflare buttons](https://developers.cloudflare.com/workers/platform/deploy-buttons/)
   — Cloudflare's docs for the one-click deploy flow used above.
 
