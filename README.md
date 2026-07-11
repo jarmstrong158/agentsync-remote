@@ -213,6 +213,16 @@ commands below.
   retry — so the number isn't inflated by trivially-serialized runs.
 - **Fail-closed auth is tested** — wrong token, unset `AUTH_TOKEN`, and non-`/mcp`
   paths all 404; a missing `GH_PAT` surfaces a named error, not a silent failure.
+- **The MCP handshake is hardened** — `initialize` makes no network call, so it
+  answers instantly even on a cold isolate; it negotiates the client's requested
+  protocol version rather than rejecting a slightly-ahead client; and an
+  unexpected throw anywhere becomes a well-formed JSON-RPC error, never a bare
+  `500` a reconnecting client would read as a hard failure.
+- **Structured logs make failures visible** — every request emits one line of
+  JSON (`request` / `auth` / `handshake` / `tool_call` / `error`, with the path
+  token always redacted), so a dropped handshake or a slow tool call is one
+  filter away in Cloudflare Workers Logs (`[observability]` is on in
+  `wrangler.toml`).
 
 **Honest caveat:** the thousand races are simulated *in-process* — GitHub's 409
 compare-and-swap is reproduced by a fetch-mocked fake ([`test/helpers.ts`](./test/helpers.ts)),
