@@ -12,6 +12,18 @@
       "updated_at": "2026-07-10T22:15:44.196Z",
       "instance": "c0ea123c-6099-4c44-b745-4a620fcbede6",
       "note": "export_markdown code shipped by mobile CC session via PR (+381/-10: renderer, cp1252 mojibake fix, tests) \u00e2\u20ac\u201d session's board connector was down all session so this proxy claim covered it. Live run against the real org repo NOT done: sandbox has no CAMBIUM_ORG_REPO. Handed to jonny-desktop: pull cambium main after PR merge, run export_markdown against the org clone, push KNOWLEDGE.md."
+    },
+    "jonny-desktop": {
+      "task": "xylem: demo timeline export",
+      "touches": [
+        "xylem/**"
+      ],
+      "requires": [],
+      "branch": "master",
+      "status": "in-progress",
+      "updated_at": "2026-07-11T12:53:12.633390+00:00",
+      "instance": "239c8227",
+      "note": null
     }
   }
 }
