@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jarmstrong158/agentsync-remote",
   "title": "agentsync (remote)",
-  "description": "Self-hosted Cloudflare Worker remote transport for agentsync: a streamable-HTTP MCP endpoint (GitHub-backed, compare-and-swap) so a second device (e.g. your phone) is a full peer in your agent mesh. Deploy your own Worker; the URL below is your deployment.",
+  "description": "Self-hosted Cloudflare Worker remote transport for agentsync (streamable-HTTP).",
   "repository": {
     "url": "https://github.com/jarmstrong158/agentsync-remote",
     "source": "github"
