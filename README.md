@@ -205,7 +205,7 @@ Coordination correctness under contention is measured, not asserted — the full
 write-up is [`docs/RELIABILITY.md`](./docs/RELIABILITY.md), reproducible with the
 commands below.
 
-- **47 / 47 automated tests green**, covering five distinct CAS race scenarios
+- **49 / 49 automated tests green**, covering five distinct CAS race scenarios
   and all three overlap-detection modes (exact · directory-containment · glob,
   each in both directions).
 - **1000 simulated concurrent races** (`test/stress-cas.test.ts`, seeded
@@ -254,7 +254,7 @@ npx wrangler deploy --dry-run --outdir dist   # bundle check
 - [`DESIGN.md`](./DESIGN.md) — the CAS translation, overlap semantics, and why
   the MCP handler is stateless and hand-rolled.
 - [`docs/RELIABILITY.md`](./docs/RELIABILITY.md) — the measured reliability
-  report: 47/47 tests, five CAS race scenarios, and 1000 seeded contention races.
+  report: 49/49 tests, five CAS race scenarios, and 1000 seeded contention races.
 - [Deploy to Cloudflare buttons](https://developers.cloudflare.com/workers/platform/deploy-buttons/)
   — Cloudflare's docs for the one-click deploy flow used above.
 
