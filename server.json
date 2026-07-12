@@ -7,14 +7,14 @@
     "url": "https://github.com/jarmstrong158/agentsync-remote",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://{host}/mcp/{token}",
+      "url": "https://agentsync-remote.{account}.workers.dev/mcp/{token}",
       "variables": {
-        "host": {
-          "description": "Your deployed Cloudflare Worker host, e.g. agentsync-remote.<your-subdomain>.workers.dev",
+        "account": {
+          "description": "Your Cloudflare account subdomain (the 'x' in x.workers.dev); edit the URL if you use a custom domain.",
           "isRequired": true
         },
         "token": {
