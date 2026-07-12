@@ -130,6 +130,11 @@ export function fakeGitHub(opts: FakeOpts = {}): Fake {
         const currentSha = state.file?.sha;
 
         if (currentSha) {
+          // No-sha create that lost a race: the file now exists, so GitHub
+          // rejects the create with 422 ("sha wasn't supplied"), not 409.
+          if (!incomingSha) {
+            return jsonRes(422, { message: '"sha" wasn\'t supplied.' });
+          }
           // Updating an existing file: sha must match current, else 409.
           if (incomingSha !== currentSha) {
             return jsonRes(409, { message: "does not match" });

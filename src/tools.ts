@@ -30,7 +30,7 @@ export const PUSH_RETRIES = 5;
 export const BACKOFF_BASE_MS = 400;
 
 const BLOCKED_MESSAGE =
-  "Overlap with an active peer claim. Narrow `touches`, wait, or re-call with force=True.";
+  "Overlap with an active peer claim. Narrow `touches`, wait, or re-call with force=true.";
 const EXHAUSTED_MESSAGE =
   "Push kept losing the race; call survey() and try again.";
 const VALID_STATUSES: ClaimStatus[] = ["planning", "in-progress", "done"];
@@ -106,6 +106,13 @@ async function loadState(ctx: Ctx): Promise<LoadedState> {
     content: serialize(empty),
     branch: ctx.branch,
   });
+  if (put.conflict) {
+    // Lost the create race (409, or 422 "sha wasn't supplied"): a peer created
+    // the file first. Re-fetch to pick up the now-existing content and sha, so
+    // the caller commits an update-with-sha instead of another blind create.
+    const now = await getContent(ctx, ctx.claimsPath, ctx.branch);
+    if (now) return { doc: parse(now.content), sha: now.sha };
+  }
   return { doc: empty, sha: put.sha };
 }
 
@@ -140,7 +147,8 @@ async function casLoop<T>(
 
     if (put.ok) return decision.result as T;
 
-    // 409: another peer committed first. Back off and retry against fresh state.
+    // Conflict (409 stale-sha, or 422 lost create race): another peer committed
+    // first. Back off and retry against fresh state.
     if (attempt < PUSH_RETRIES - 1) {
       await ctx.sleep(BACKOFF_BASE_MS * (attempt + 1));
     }

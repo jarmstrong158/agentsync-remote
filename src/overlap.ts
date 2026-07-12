@@ -28,11 +28,38 @@ function isGlob(s: string): boolean {
 // '?' are NOT special about the '/' separator, so 'src/**' matches 'src/api'.
 function fnmatchToRegExp(pattern: string): RegExp {
   let re = "";
-  for (const ch of pattern) {
-    if (ch === "*") re += ".*";
-    else if (ch === "?") re += ".";
-    else if (ch === "[" || ch === "]") re += ch; // pass character classes through
-    else re += ch.replace(/[.+^${}()|\\]/g, "\\$&");
+  let i = 0;
+  const n = pattern.length;
+  while (i < n) {
+    const ch = pattern[i];
+    if (ch === "*") {
+      re += ".*";
+      i++;
+    } else if (ch === "?") {
+      re += ".";
+      i++;
+    } else if (ch === "[") {
+      // Character class. Like Python's fnmatch, a leading '!' negates it and
+      // maps to a regex '^'. Scan to the closing ']' (which may be the first
+      // class member). If unterminated, treat '[' as a literal.
+      let j = i + 1;
+      if (j < n && (pattern[j] === "!" || pattern[j] === "^")) j++;
+      if (j < n && pattern[j] === "]") j++; // ']' as first member is literal
+      while (j < n && pattern[j] !== "]") j++;
+      if (j >= n) {
+        // No closing bracket: '[' is a literal.
+        re += "\\[";
+        i++;
+      } else {
+        let cls = pattern.slice(i + 1, j);
+        if (cls.startsWith("!")) cls = "^" + cls.slice(1);
+        re += "[" + cls + "]";
+        i = j + 1;
+      }
+    } else {
+      re += ch.replace(/[.+^${}()|\\]/g, "\\$&");
+      i++;
+    }
   }
   return new RegExp("^" + re + "$");
 }

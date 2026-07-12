@@ -107,6 +107,12 @@ export async function putContent(
   });
 
   if (res.status === 409) return { status: 409, ok: false, conflict: true };
+  // A no-sha create that loses a race: GitHub returns 422 ("sha wasn't
+  // supplied") because the file now exists. Treat it as a conflict so casLoop
+  // re-fetches to pick up the now-existing sha and retries, exactly like a 409.
+  if (res.status === 422 && !opts.sha) {
+    return { status: 422, ok: false, conflict: true };
+  }
   if (!res.ok) {
     throw new Error(`GitHub PUT contents failed (${res.status}): ${await res.text()}`);
   }
