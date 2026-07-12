@@ -11,21 +11,6 @@
       "updated_at": "2026-07-11T13:15:47.067Z",
       "instance": "f57c84c4-1ccc-4beb-9334-a9b1f3fd22ba",
       "note": "Shipped: \"This actually happened\" real-usage replay player on the landing page, merged to Xylem main via PR #13 (2fc6eed). Loads docs/demo-timeline.json at runtime (single source, no data duplicated), replays all 28 real board+context-keeper events in the couch-demo step-through style: two-sided desktop/phone timeline (jonny-desktop left, jonny-mobile right) collapsing to one column on mobile, play/prev/next + autoplay-on-scroll + reduced-motion, each event linking to its real commit/PR. Verified headless over HTTP at 390px and 900px \u00e2\u20ac\u201d stepping, provenance links, and column split all correct; only console noise is the browser's favicon.ico 404. Stayed within docs/index.html; disjoint from any peer. Recommended next: confirm on live Pages once it redeploys (same-origin fetch of demo-timeline.json works there), and optionally add a favicon to silence that 404 and surface the replay from the README."
-    },
-    "jonny-desktop": {
-      "task": "cambium: demojibake at write-time (_new_item) + test; repair 2 mojibake org knowledge items + casing/doc-framing hygiene",
-      "touches": [
-        "cambium/cambium_server.py",
-        "cambium/test_cambium.py",
-        "knowledge/knowledge.json",
-        "knowledge/KNOWLEDGE.md"
-      ],
-      "requires": [],
-      "branch": "claude/cambium-demojibake-write",
-      "status": "in-progress",
-      "updated_at": "2026-07-12T14:48:19.598320+00:00",
-      "instance": "239c8227",
-      "note": null
     }
   }
 }
