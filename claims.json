@@ -12,6 +12,21 @@
       "updated_at": "2026-07-12T16:14:44.993Z",
       "instance": "4bf13034-57f7-46cc-ac0e-1c4a6c09eb23",
       "note": "Done. context-keeper-remote audit fixes on branch fix/audit-readme-and-retry, pushed to origin, PR #3 opened (NOT merged, per instructions): https://github.com/jarmstrong158/context-keeper-remote/pull/3 . Finding 1 (README tool-table drift): added config/record_entry/upsert_entries, marked deprecated aliases, fixed get_project_summary + query_entries limit + lazy-migration Layout drift. Finding 2 (insertEntry retry): bumped bound to 5 with backoff, id re-derived each attempt. npm test 44/44, typecheck clean. No secrets touched. Next action: review + merge PR #3."
+    },
+    "jonny-desktop": {
+      "task": "cambium+xylem: make cambium project-aware (default CAMBIUM_REPO to cwd git root) + SessionEnd hook targets the session's project, so one config serves all solo projects feeding the knowledge org repo",
+      "touches": [
+        "cambium/cambium_server.py",
+        "cambium/test_cambium.py",
+        "xylem/artifacts/session_end_hook.py",
+        "xylem/tests/test_hooks.py"
+      ],
+      "requires": [],
+      "branch": "claude/cambium-cwd-aware",
+      "status": "in-progress",
+      "updated_at": "2026-07-12T16:46:33.276946+00:00",
+      "instance": "a20b69d2",
+      "note": null
     }
   }
 }
