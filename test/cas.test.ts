@@ -152,6 +152,35 @@ describe("branch/file bootstrap when missing", () => {
   });
 });
 
+describe("422 on first create -> retry succeeds", () => {
+  it("no-sha create races an already-created file (422) -> loop re-fetches and lands", async () => {
+    // Cold repo: no coordination branch, no file. The first-ever write is a
+    // no-sha create. A peer creates claims.json in the same window, so GitHub
+    // answers our create with 422 ("sha wasn't supplied"), not 409. The loop
+    // must treat that as a conflict, re-fetch the now-existing sha, and retry.
+    let raced = false;
+    const fake = fakeGitHub({
+      fileExists: false,
+      defaultBranch: "main",
+      beforePut(state) {
+        if (raced) return;
+        raced = true;
+        // A peer wins the create race between our bootstrap and our PUT.
+        state.file = { obj: { claims: {} }, sha: `sha-${state.shaCounter++}` };
+      },
+    });
+    vi.stubGlobal("fetch", fake.fetch);
+
+    const res: any = await claim(testCtx(), { task: "first", touches: ["src/api"] });
+
+    expect(res.status).toBe("claimed");
+    expect(res.claim.task).toBe("first");
+    // One rejected create (422) + one successful update.
+    expect(fake.state.putCount).toBe(2);
+    expect(fake.state.file?.obj.claims["jonny-mobile"].task).toBe("first");
+  });
+});
+
 describe("duplicate-instance warning", () => {
   it("warns when an existing claim carries a different instance token", async () => {
     const fake = fakeGitHub({

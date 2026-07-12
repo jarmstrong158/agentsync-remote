@@ -34,6 +34,16 @@ describe("pathsOverlap", () => {
     expect(pathsOverlap("src/apiv2", "src/api")).toBe(false); // no false prefix
     expect(pathsOverlap("*.py", "src/api/routes.ts")).toBe(false);
   });
+
+  it("(c) negated character class [!...] matches Python fnmatch semantics", () => {
+    // '[!abc]' is a negated class: matches any single char that is NOT a/b/c,
+    // not the literal string '[!abc]'.
+    expect(pathsOverlap("src/[!x]", "src/a")).toBe(true); // 'a' is not 'x'
+    expect(pathsOverlap("src/[!x]", "src/x")).toBe(false); // 'x' is excluded
+    // A positive class still works.
+    expect(pathsOverlap("src/[abc]", "src/b")).toBe(true);
+    expect(pathsOverlap("src/[abc]", "src/z")).toBe(false);
+  });
 });
 
 describe("computeOverlap", () => {

@@ -28,6 +28,15 @@ const handleMcp = createMcpHandler();
 
 const NOT_FOUND = () => new Response("Not Found", { status: 404 });
 
+// Length-invariant string comparison to avoid timing side channels on the token.
+// Kept in sync with the sibling context-keeper-remote Worker.
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -44,7 +53,7 @@ export default {
 
     const token = match[1];
     // Fail closed: unset AUTH_TOKEN or a mismatched token -> 404, no detail.
-    const ok = !!env.AUTH_TOKEN && token === env.AUTH_TOKEN;
+    const ok = !!env.AUTH_TOKEN && safeEqual(token, env.AUTH_TOKEN);
     log("auth", { ok });
     if (!ok) return NOT_FOUND();
 
