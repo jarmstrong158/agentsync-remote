@@ -12,22 +12,6 @@
       "updated_at": "2026-07-12T16:14:44.993Z",
       "instance": "4bf13034-57f7-46cc-ac0e-1c4a6c09eb23",
       "note": "Done. context-keeper-remote audit fixes on branch fix/audit-readme-and-retry, pushed to origin, PR #3 opened (NOT merged, per instructions): https://github.com/jarmstrong158/context-keeper-remote/pull/3 . Finding 1 (README tool-table drift): added config/record_entry/upsert_entries, marked deprecated aliases, fixed get_project_summary + query_entries limit + lazy-migration Layout drift. Finding 2 (insertEntry retry): bumped bound to 5 with backoff, id re-derived each attempt. npm test 44/44, typecheck clean. No secrets touched. Next action: review + merge PR #3."
-    },
-    "jonny-desktop": {
-      "task": "Planner economy valuation + seal acquisition: make build_survivability value economy jokers (discounted future-buy model), hand-upgrade + boss-nullifier exact fixes, tier prior for scoreless jokers, and seal-aware pack acquisition",
-      "touches": [
-        "environment/planner.py",
-        "environment/hand_eval.py",
-        "training/action_executor.py",
-        "data/jokers.py",
-        "tests/"
-      ],
-      "requires": [],
-      "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-07-13T01:05:43.964436+00:00",
-      "instance": "a20b69d2",
-      "note": null
     }
   }
 }
