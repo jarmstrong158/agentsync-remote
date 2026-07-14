@@ -12,6 +12,20 @@
       "updated_at": "2026-07-12T16:14:44.993Z",
       "instance": "4bf13034-57f7-46cc-ac0e-1c4a6c09eb23",
       "note": "Done. context-keeper-remote audit fixes on branch fix/audit-readme-and-retry, pushed to origin, PR #3 opened (NOT merged, per instructions): https://github.com/jarmstrong158/context-keeper-remote/pull/3 . Finding 1 (README tool-table drift): added config/record_entry/upsert_entries, marked deprecated aliases, fixed get_project_summary + query_entries limit + lazy-migration Layout drift. Finding 2 (insertEntry retry): bumped bound to 5 with backoff, id re-derived each attempt. npm test 44/44, typecheck clean. No secrets touched. Next action: review + merge PR #3."
+    },
+    "jonny-desktop": {
+      "task": "Winning-trend miner: persistent contrastive analyzer (reach-8 survival curves by build feature) + enrich build_progression logging (n_economy/n_mult/n_retrigger/xmult-product) so all of the user's groupings become testable and the causal signal is continuously available",
+      "touches": [
+        "tools/analyze_winning_trends.py",
+        "training/train.py",
+        "environment/reward.py"
+      ],
+      "requires": [],
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-07-14T03:10:42.378392+00:00",
+      "instance": "a20b69d2",
+      "note": null
     }
   }
 }
