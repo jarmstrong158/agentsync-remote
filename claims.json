@@ -21,9 +21,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-07-16T20:12:10.522217+00:00",
+      "updated_at": "2026-07-16T20:17:22.255291+00:00",
       "instance": "441c75b1",
-      "note": null
+      "note": "Fix implemented and tested (167 pass). Verified via toy model that pre-fix projection ratio matches audit (0.18 toy vs 0.30 observed). Fine-tuning the floor parameter to balance calibration vs exploration. Committing shortly."
     }
   }
 }
