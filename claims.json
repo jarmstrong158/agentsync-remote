@@ -7,10 +7,10 @@
       ],
       "requires": [],
       "branch": "claude/xylem-hub-docs-74fver",
-      "status": "in-progress",
-      "updated_at": "2026-07-17T20:13:22.158Z",
+      "status": "done",
+      "updated_at": "2026-07-17T20:14:50.476Z",
       "instance": "5985fa5c-e815-4899-8f33-35a526c62540",
-      "note": null
+      "note": "DONE — fixed the dashboard --remote 403. Diagnosed from the failed run log: context-keeper-remote returned HTTP 403, but the Worker code only ever returns 404/405 (never 403), so it's Cloudflare's edge blocking urllib's default Python-urllib UA before it reaches the Worker. Fix: send a browser-like User-Agent on the JSON-RPC requests (Xylem PR #23, 3fc5ed4). Verified against a mock that echoes the header — client now sends the browser UA, remote route collects data, no regression. Couldn't test the live Worker (sandbox proxy blocks workers.dev). Next: jonny re-runs the Refresh dashboard workflow; if it STILL 403s, the cause is Cloudflare Bot Fight Mode on the account and the remedy is a WAF/bot exception for the Worker. Stayed within install/xylem_dashboard.py."
     },
     "jonny-desktop": {
       "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
