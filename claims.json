@@ -14,16 +14,18 @@
       "note": "Done. context-keeper-remote audit fixes on branch fix/audit-readme-and-retry, pushed to origin, PR #3 opened (NOT merged, per instructions): https://github.com/jarmstrong158/context-keeper-remote/pull/3 . Finding 1 (README tool-table drift): added config/record_entry/upsert_entries, marked deprecated aliases, fixed get_project_summary + query_entries limit + lazy-migration Layout drift. Finding 2 (insertEntry retry): bumped bound to 5 with backoff, id re-derived each attempt. npm test 44/44, typecheck clean. No secrets touched. Next action: review + merge PR #3."
     },
     "jonny-desktop": {
-      "task": "balatron: play-frequency-weighted score projection (the ante wall fix)",
+      "task": "Fix the consumable-use guaranteed-reject leak: policy action_type==8 fires targeted consumables (Trance/Death/Strength/Empress...) with no targets -> API rejects -> they clog the 2 consumable slots forever (Trance 30x, Death 22x), blocking planets and stalling leveling (the one lever that predicts depth). Route through plan_consumable_use for targets; no-op instead of firing a guaranteed reject.",
       "touches": [
-        "balatron/**"
+        "training/action_executor.py",
+        "environment/hand_eval.py",
+        "tests/"
       ],
       "requires": [],
-      "branch": "master",
+      "branch": "main",
       "status": "in-progress",
-      "updated_at": "2026-07-16T20:17:22.255291+00:00",
+      "updated_at": "2026-07-17T01:20:54.775965+00:00",
       "instance": "441c75b1",
-      "note": "Fix implemented and tested (167 pass). Verified via toy model that pre-fix projection ratio matches audit (0.18 toy vs 0.30 observed). Fine-tuning the floor parameter to balance calibration vs exploration. Committing shortly."
+      "note": null
     }
   }
 }
