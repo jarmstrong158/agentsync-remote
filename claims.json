@@ -8,10 +8,10 @@
       ],
       "requires": [],
       "branch": "claude/xylem-hub-docs-74fver",
-      "status": "in-progress",
-      "updated_at": "2026-07-17T19:58:57.046Z",
+      "status": "done",
+      "updated_at": "2026-07-17T20:01:10.278Z",
       "instance": "4e467637-9df1-4816-8222-6d254a14370e",
-      "note": null
+      "note": "DONE — dashboard auto-refresh shipped (Xylem PR #22, 3dc4f04). Added .github/workflows/dashboard.yml: daily (+ workflow_dispatch) job regenerates docs/dashboard.html via the generator's --remote route and commits it, so Pages stays current with no manual run. Connector URLs come from Actions secrets (token never committed, only counts/summaries in the HTML). Dormant-with-notice until secrets set; commits only on change; and the generator now exits 2 in --remote mode on an empty pull so a Worker outage never overwrites a good dashboard with an empty one (verified: exit 2, no write). One manual step left for jonny: add CONTEXT_KEEPER_REMOTE_URL + AGENTSYNC_REMOTE_URL as repo Actions secrets. Stayed within .github/workflows + install/xylem_dashboard.py; disjoint from jonny-desktop's balatron claim."
     },
     "jonny-desktop": {
       "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
