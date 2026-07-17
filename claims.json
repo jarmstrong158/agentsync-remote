@@ -7,10 +7,10 @@
       ],
       "requires": [],
       "branch": "claude/xylem-hub-docs-74fver",
-      "status": "in-progress",
-      "updated_at": "2026-07-17T20:50:33.540Z",
+      "status": "done",
+      "updated_at": "2026-07-17T20:50:43.095Z",
       "instance": "73c095b0-e119-402c-83b8-7b07cb7c4927",
-      "note": null
+      "note": "DONE + MERGED + LIVE. Fixed the empty coordination panels on the auto-refreshed remote dashboard. Two root causes, both silent: (1) rpc_call_tool only read result.structuredContent, but agentsync-remote returns survey/history ONLY as content[].text — every call yielded {} → 0 events/0 peers; added a content[].text JSON fallback. (2) history regex anchored the closing quote to EOL, dropping every 'releases <task> (note...)' commit (the majority); now matches the task lazily up to a quote followed by EOL or ' ('. Also always fold survey's current claims in so in-progress work with no history commit still shows live. Xylem PR #25 merged to main (21b3922); Refresh-dashboard run #4 regenerated docs/dashboard.html (commit 32c6c4e): 43 coordination events / 2 peers (was 0/0), 1 live claim surfaced, 10 stores junk-filtered, no secrets. Recorded xylem/dec-007. Verified against text-only mocks + the live committed data island."
     },
     "jonny-desktop": {
       "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
