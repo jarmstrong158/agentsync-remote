@@ -12,9 +12,9 @@
       "requires": [],
       "branch": "claude/xylem-hub-docs-74fver",
       "status": "in-progress",
-      "updated_at": "2026-07-17T18:47:56.563Z",
+      "updated_at": "2026-07-17T18:57:28.368Z",
       "instance": "9a251e8e-0b11-4a6e-a2d8-7d5001db60c8",
-      "note": null
+      "note": "Pivoted to build the root fix first: an ORG REGISTRY in context-keeper-remote so the dashboard can enumerate the whole org reliably (no more case-guessing project names — that's how the earlier sweep missed Clark/Conductor). Added a list_projects MCP tool (D1 GROUP BY over the entries table's project column): per-project active counts + active/deprecated totals + last-updated, plus roll-up totals; preserves exact case-sensitive names. 46 tests pass, typecheck clean. context-keeper-remote PR #5 (NOT merged — merging auto-deploys the production Worker, left for jonny). NEXT: once list_projects is deployed, build the xylem generic dashboard generator (stdlib) that calls list_projects -> get_project_summary per project + the agentsync board, and bakes a self-contained per-user dashboard.html; de-personalize the template. Claim stays open (xylem files not yet touched)."
     },
     "jonny-desktop": {
       "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
