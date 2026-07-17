@@ -1,16 +1,20 @@
 {
   "claims": {
     "jonny-mobile": {
-      "task": "xylem dashboard: include all org repos context-keeper touches",
+      "task": "xylem: generic self-generating dashboard — de-personalize into a template + stdlib generator that renders any user's org",
       "touches": [
-        "docs/dashboard.html"
+        "docs/dashboard.html",
+        "docs/dashboard.template.html",
+        "install/xylem_dashboard.py",
+        "install/README.md",
+        "README.md"
       ],
       "requires": [],
       "branch": "claude/xylem-hub-docs-74fver",
-      "status": "done",
-      "updated_at": "2026-07-17T18:29:30.269Z",
-      "instance": "588ca451-bd56-404b-990d-a669c997f80c",
-      "note": "DONE (correction) — dashboard now has all 9 context-keeper stores. Root cause of the earlier miss: context-keeper project names are CASE-SENSITIVE with no consistent rule (balatron lowercase, but Clark and Conductor Title-case). My first sweep probed lowercase only, so Clark (32 dec / 18 con / 5 pipe) and Conductor (4 / 5) returned 0 and were dropped. Re-probed every org repo in BOTH casings — those two were the only misses. Full set: balatron 74/18, Clark 32/18, context-keeper 13/7, clark-mcp 7/2, cambium 7/2, Conductor 4/5, skillmatch-mcp 4/3, xylem 4/0, rag-pipeline 2/0 = 147 decisions / 55 constraints. PR #19 merged to Xylem main (987ce61); render-verified, no errors. Lesson worth capturing org-wide: always probe context-keeper project names at their exact on-disk casing, not a normalized lowercase."
+      "status": "in-progress",
+      "updated_at": "2026-07-17T18:47:56.563Z",
+      "instance": "9a251e8e-0b11-4a6e-a2d8-7d5001db60c8",
+      "note": null
     },
     "jonny-desktop": {
       "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
