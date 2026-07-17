@@ -12,6 +12,23 @@
       "updated_at": "2026-07-12T16:14:44.993Z",
       "instance": "4bf13034-57f7-46cc-ac0e-1c4a6c09eb23",
       "note": "Done. context-keeper-remote audit fixes on branch fix/audit-readme-and-retry, pushed to origin, PR #3 opened (NOT merged, per instructions): https://github.com/jarmstrong158/context-keeper-remote/pull/3 . Finding 1 (README tool-table drift): added config/record_entry/upsert_entries, marked deprecated aliases, fixed get_project_summary + query_entries limit + lazy-migration Layout drift. Finding 2 (insertEntry retry): bumped bound to 5 with backoff, id re-derived each attempt. npm test 44/44, typecheck clean. No secrets touched. Next action: review + merge PR #3."
+    },
+    "jonny-desktop": {
+      "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction \u2014 PBRS is policy-invariant); (2) FIX MEASUREMENT \u2014 repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
+      "touches": [
+        "environment/reward.py",
+        "tests/test_margin_potential.py",
+        "evaluate.py",
+        "training/action_executor.py",
+        "environment/action_space.py",
+        "DECISIONS.md"
+      ],
+      "requires": [],
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-07-17T01:52:40.843006+00:00",
+      "instance": "441c75b1",
+      "note": null
     }
   }
 }
