@@ -7,10 +7,10 @@
       ],
       "requires": [],
       "branch": "claude/xylem-hub-docs-74fver",
-      "status": "in-progress",
-      "updated_at": "2026-07-17T18:09:02.641Z",
+      "status": "done",
+      "updated_at": "2026-07-17T18:13:00.542Z",
       "instance": "0793698d-8441-4cbb-9ed7-0a13a3d1cbbd",
-      "note": null
+      "note": "DONE — stack observability dashboard published to docs/dashboard.html, PR #17 merged to Xylem main (f75ffa8) per jonny-mobile's pre-approved mailbox task. Self-contained single file, no external resources, no secrets; render-verified headless at 1200px + 390px (all panels populate, live claim flagged). Pages already serves docs/, so it lands at https://jarmstrong158.github.io/Xylem/dashboard.html on next redeploy. Stayed within docs/dashboard.html — disjoint from jonny-desktop's balatron post-audit claim. Next action: jonny to confirm the live URL loads (I can't reach github.io from this sandbox's proxy); optional follow-up remains to wire it live to the Workers instead of the embedded 2026-07-17 snapshot."
     },
     "jonny-desktop": {
       "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
