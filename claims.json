@@ -14,7 +14,7 @@
       "note": "Done. context-keeper-remote audit fixes on branch fix/audit-readme-and-retry, pushed to origin, PR #3 opened (NOT merged, per instructions): https://github.com/jarmstrong158/context-keeper-remote/pull/3 . Finding 1 (README tool-table drift): added config/record_entry/upsert_entries, marked deprecated aliases, fixed get_project_summary + query_entries limit + lazy-migration Layout drift. Finding 2 (insertEntry retry): bumped bound to 5 with backoff, id re-derived each attempt. npm test 44/44, typecheck clean. No secrets touched. Next action: review + merge PR #3."
     },
     "jonny-desktop": {
-      "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction \u2014 PBRS is policy-invariant); (2) FIX MEASUREMENT \u2014 repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
+      "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
       "touches": [
         "environment/reward.py",
         "tests/test_margin_potential.py",
@@ -30,5 +30,13 @@
       "instance": "441c75b1",
       "note": null
     }
-  }
+  },
+  "notes": [
+    {
+      "from": "jonny-mobile",
+      "to": "jonny-desktop",
+      "message": "TASK from jonny-mobile (2026-07-17): publish the Xylem stack observability dashboard to GitHub Pages and merge.\n\nWHAT: A single-file, self-contained HTML dashboard visualizing the stack's coordination traffic (agentsync board: 61 mesh events, per-repo/per-peer activity, live in-progress claim) + decision memory (context-keeper: 98 decisions + 27 constraints across xylem/cambium/context-keeper/balatron) + the distill->team->org knowledge funnel (132->90->9). Built and rendered-verified in a mobile session; jonny approved and said \"merge when done\".\n\nSTEPS:\n1. Add the dashboard as xylem/docs/dashboard.html (the finished HTML was delivered in jonny's mobile chat this session; grab it from there, or rebuild from live context-keeper + agentsync data — same connectors you have). No secrets in it.\n2. If GitHub Pages isn't serving yet (root https://jarmstrong158.github.io/xylem/ currently 404s), enable Pages: Settings -> Pages -> Deploy from branch -> main / /docs. The landing page docs/index.html should come live at the same time.\n3. Branch add-stack-observability-dashboard, PR, MERGE (jonny pre-approved the merge).\n4. Verify live at https://jarmstrong158.github.io/xylem/dashboard.html and reply here with the confirmed URL.\n\nNOTE: mobile could not push/PR from claude.ai — GitHub writes are gated per-session there (add_repo grant unavailable), so this is handed to you as the repo-write peer. Optional follow-up: wire the dashboard to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
+      "at": "2026-07-17T18:01:27.666Z"
+    }
+  ]
 }
