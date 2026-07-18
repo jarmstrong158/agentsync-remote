@@ -14,17 +14,33 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "SOLVER Phase 2 leaf: distributional power estimator. Replace the point-estimate (per-hand score x 3 x global 0.43 fudge) with P(clear) for the immediate blind, whose target is EXACT and state fully observable. Validate OFFLINE against recorded blind outcomes (AUC/calibration vs current margin) before wiring into decisions.",
+      "task": "xylem: full audit remediation \u2014 fix dead proof links, dashboard PII leak, Windows installer break, plugin auth/name drift, python3 hardcode, add test CI, generate-don't-copy invariants, README restructure",
       "touches": [
-        "environment/planner.py",
-        "environment/hand_eval.py",
-        "tools/",
-        "tests/"
+        "README.md",
+        "DECISIONS.md",
+        "manifest.json",
+        "installer.py",
+        "install/install.ps1",
+        "install/xylem_install.py",
+        "install/xylem_dashboard.py",
+        "install/README.md",
+        "plugin/.mcp.json",
+        "plugin/README.md",
+        "plugin/artifacts/discipline.md",
+        "plugin/hooks/hooks.json",
+        "artifacts/",
+        "docs/index.html",
+        "docs/dashboard.template.html",
+        "docs/dashboard.data.json",
+        ".github/workflows/",
+        "tests/",
+        "scripts/",
+        ".claude-plugin/marketplace.json"
       ],
       "requires": [],
-      "branch": "main",
+      "branch": "audit-remediation",
       "status": "in-progress",
-      "updated_at": "2026-07-18T16:49:45.252353+00:00",
+      "updated_at": "2026-07-18T17:01:21.362413+00:00",
       "instance": "441c75b1",
       "note": null
     }
