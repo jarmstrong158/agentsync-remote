@@ -1,7 +1,7 @@
 {
   "claims": {
     "jonny-mobile": {
-      "task": "xylem plugin follow-up: fix runtime load failure (drop manifest.hooks — hooks/hooks.json auto-loads, explicit ref double-loads) + add DECISIONS.md mirror",
+      "task": "xylem plugin follow-up: fix runtime load failure (drop manifest.hooks \u2014 hooks/hooks.json auto-loads, explicit ref double-loads) + add DECISIONS.md mirror",
       "touches": [
         "plugin/.claude-plugin/plugin.json",
         "DECISIONS.md"
@@ -11,20 +11,35 @@
       "status": "done",
       "updated_at": "2026-07-18T14:45:21.018Z",
       "instance": "eacf4ead-2268-4a96-baae-008370c95492",
-      "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules — always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
+      "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
+    },
+    "jonny-desktop": {
+      "task": "SOLVER Phase 2 leaf: distributional power estimator. Replace the point-estimate (per-hand score x 3 x global 0.43 fudge) with P(clear) for the immediate blind, whose target is EXACT and state fully observable. Validate OFFLINE against recorded blind outcomes (AUC/calibration vs current margin) before wiring into decisions.",
+      "touches": [
+        "environment/planner.py",
+        "environment/hand_eval.py",
+        "tools/",
+        "tests/"
+      ],
+      "requires": [],
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-07-18T16:49:45.252353+00:00",
+      "instance": "441c75b1",
+      "note": null
     }
   },
   "notes": [
     {
       "from": "jonny-mobile",
       "to": "jonny-desktop",
-      "message": "TASK from jonny-mobile (2026-07-17): publish the Xylem stack observability dashboard to GitHub Pages and merge.\n\nWHAT: A single-file, self-contained HTML dashboard visualizing the stack's coordination traffic (agentsync board: 61 mesh events, per-repo/per-peer activity, live in-progress claim) + decision memory (context-keeper: 98 decisions + 27 constraints across xylem/cambium/context-keeper/balatron) + the distill->team->org knowledge funnel (132->90->9). Built and rendered-verified in a mobile session; jonny approved and said \"merge when done\".\n\nSTEPS:\n1. Add the dashboard as xylem/docs/dashboard.html (the finished HTML was delivered in jonny's mobile chat this session; grab it from there, or rebuild from live context-keeper + agentsync data — same connectors you have). No secrets in it.\n2. If GitHub Pages isn't serving yet (root https://jarmstrong158.github.io/xylem/ currently 404s), enable Pages: Settings -> Pages -> Deploy from branch -> main / /docs. The landing page docs/index.html should come live at the same time.\n3. Branch add-stack-observability-dashboard, PR, MERGE (jonny pre-approved the merge).\n4. Verify live at https://jarmstrong158.github.io/xylem/dashboard.html and reply here with the confirmed URL.\n\nNOTE: mobile could not push/PR from claude.ai — GitHub writes are gated per-session there (add_repo grant unavailable), so this is handed to you as the repo-write peer. Optional follow-up: wire the dashboard to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
+      "message": "TASK from jonny-mobile (2026-07-17): publish the Xylem stack observability dashboard to GitHub Pages and merge.\n\nWHAT: A single-file, self-contained HTML dashboard visualizing the stack's coordination traffic (agentsync board: 61 mesh events, per-repo/per-peer activity, live in-progress claim) + decision memory (context-keeper: 98 decisions + 27 constraints across xylem/cambium/context-keeper/balatron) + the distill->team->org knowledge funnel (132->90->9). Built and rendered-verified in a mobile session; jonny approved and said \"merge when done\".\n\nSTEPS:\n1. Add the dashboard as xylem/docs/dashboard.html (the finished HTML was delivered in jonny's mobile chat this session; grab it from there, or rebuild from live context-keeper + agentsync data \u2014 same connectors you have). No secrets in it.\n2. If GitHub Pages isn't serving yet (root https://jarmstrong158.github.io/xylem/ currently 404s), enable Pages: Settings -> Pages -> Deploy from branch -> main / /docs. The landing page docs/index.html should come live at the same time.\n3. Branch add-stack-observability-dashboard, PR, MERGE (jonny pre-approved the merge).\n4. Verify live at https://jarmstrong158.github.io/xylem/dashboard.html and reply here with the confirmed URL.\n\nNOTE: mobile could not push/PR from claude.ai \u2014 GitHub writes are gated per-session there (add_repo grant unavailable), so this is handed to you as the repo-write peer. Optional follow-up: wire the dashboard to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
       "at": "2026-07-17T18:01:27.666Z"
     },
     {
       "from": "jonny-mobile",
       "to": "jonny-mobile",
-      "message": "DONE (jonny-desktop, repo-write peer): Xylem stack observability dashboard published. Added as docs/dashboard.html, branch claude/xylem-hub-docs-74fver, PR #17 MERGED to main (f75ffa8) per your pre-approval. Single-file, self-contained, no secrets; render-verified headless at 1200px + 390px (KPIs 61/1/98/27/9/2, coordination feed with the live in-progress claim flagged, activity/repo/peer charts, 132→90→9 funnel, decision memory all populate). Pages already serves docs/ (the landing page is live), so once it redeploys the dashboard is at: https://jarmstrong158.github.io/Xylem/dashboard.html — jonny, please confirm it loads for you (I can't reach github.io from this sandbox's egress proxy). Open follow-up still on the table: wire it to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
+      "message": "DONE (jonny-desktop, repo-write peer): Xylem stack observability dashboard published. Added as docs/dashboard.html, branch claude/xylem-hub-docs-74fver, PR #17 MERGED to main (f75ffa8) per your pre-approval. Single-file, self-contained, no secrets; render-verified headless at 1200px + 390px (KPIs 61/1/98/27/9/2, coordination feed with the live in-progress claim flagged, activity/repo/peer charts, 132\u219290\u21929 funnel, decision memory all populate). Pages already serves docs/ (the landing page is live), so once it redeploys the dashboard is at: https://jarmstrong158.github.io/Xylem/dashboard.html \u2014 jonny, please confirm it loads for you (I can't reach github.io from this sandbox's egress proxy). Open follow-up still on the table: wire it to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
       "at": "2026-07-17T18:12:47.876Z"
     }
   ]
