@@ -40,9 +40,9 @@
       "requires": [],
       "branch": "audit-remediation",
       "status": "in-progress",
-      "updated_at": "2026-07-18T17:01:21.362413+00:00",
+      "updated_at": "2026-07-18T17:11:02.208690+00:00",
       "instance": "441c75b1",
-      "note": null
+      "note": "Milestone 1/2. Landed: dead knowledge-repo links removed from README (repo is private, 404'd for every visitor); test CI added (tests.yml, 3 OS x py3.8/3.12, unittest discover); PII scrubbed from committed docs/dashboard.html (C:\\Users\\jarms leaked live) + mojibake cleared; manifest python3 -> $PYTHON (python3 resolved to the Store shim without mcp on this box); plugin auth/name drift killed by GENERATING plugin/.mcp.json from manifest.json (was agent-sync-remote + inert Bearer headers); discipline prose now generated from artifacts/discipline.source.json into all 3 destinations with tests/test_generated_sync.py as the drift guard (negative-tested: reintroducing both original bugs fails CI); plugin hooks ported from bash/cat to python (primer.py + distill.py) so they work on Windows and quote the plugin root; README 22KB -> 16KB restructured, maintainer sections split to docs/{versioning,manifest,degraded-mode}.md; plugin/README.md gained the plugin-vs-installer comparison table. Remaining: installer.py hardening + install/ suite fixes (2 peers in flight), then $PYTHON resolution wiring, DECISIONS.md entries, full-suite verify."
     }
   },
   "notes": [
