@@ -1,7 +1,7 @@
 {
   "claims": {
     "jonny-mobile": {
-      "task": "xylem: fix empty coordination panels on the live remote dashboard — agentsync-remote returns results in content[].text not structuredContent; history regex dropped releases-with-notes",
+      "task": "xylem: fix empty coordination panels on the live remote dashboard \u2014 agentsync-remote returns results in content[].text not structuredContent; history regex dropped releases-with-notes",
       "touches": [
         "install/xylem_dashboard.py"
       ],
@@ -10,37 +10,20 @@
       "status": "done",
       "updated_at": "2026-07-17T20:50:43.095Z",
       "instance": "73c095b0-e119-402c-83b8-7b07cb7c4927",
-      "note": "DONE + MERGED + LIVE. Fixed the empty coordination panels on the auto-refreshed remote dashboard. Two root causes, both silent: (1) rpc_call_tool only read result.structuredContent, but agentsync-remote returns survey/history ONLY as content[].text — every call yielded {} → 0 events/0 peers; added a content[].text JSON fallback. (2) history regex anchored the closing quote to EOL, dropping every 'releases <task> (note...)' commit (the majority); now matches the task lazily up to a quote followed by EOL or ' ('. Also always fold survey's current claims in so in-progress work with no history commit still shows live. Xylem PR #25 merged to main (21b3922); Refresh-dashboard run #4 regenerated docs/dashboard.html (commit 32c6c4e): 43 coordination events / 2 peers (was 0/0), 1 live claim surfaced, 10 stores junk-filtered, no secrets. Recorded xylem/dec-007. Verified against text-only mocks + the live committed data island."
-    },
-    "jonny-desktop": {
-      "task": "Post-audit fixes: (1) revert dec-067 margin reward (null by construction — PBRS is policy-invariant); (2) FIX MEASUREMENT — repair the eval harness so one held-out eval completes (zero have ever completed; every A/B since dec-045 is confounded); (3) then the build escape hatch (reroll unreachable at full slots + mask hard-zeroes REROLL in 96.3% of shops = con-011 violation; 48.7% of ante-4 runs have zero xmult)",
-      "touches": [
-        "environment/reward.py",
-        "tests/test_margin_potential.py",
-        "evaluate.py",
-        "training/action_executor.py",
-        "environment/action_space.py",
-        "DECISIONS.md"
-      ],
-      "requires": [],
-      "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-07-17T01:52:40.843006+00:00",
-      "instance": "441c75b1",
-      "note": null
+      "note": "DONE + MERGED + LIVE. Fixed the empty coordination panels on the auto-refreshed remote dashboard. Two root causes, both silent: (1) rpc_call_tool only read result.structuredContent, but agentsync-remote returns survey/history ONLY as content[].text \u2014 every call yielded {} \u2192 0 events/0 peers; added a content[].text JSON fallback. (2) history regex anchored the closing quote to EOL, dropping every 'releases <task> (note...)' commit (the majority); now matches the task lazily up to a quote followed by EOL or ' ('. Also always fold survey's current claims in so in-progress work with no history commit still shows live. Xylem PR #25 merged to main (21b3922); Refresh-dashboard run #4 regenerated docs/dashboard.html (commit 32c6c4e): 43 coordination events / 2 peers (was 0/0), 1 live claim surfaced, 10 stores junk-filtered, no secrets. Recorded xylem/dec-007. Verified against text-only mocks + the live committed data island."
     }
   },
   "notes": [
     {
       "from": "jonny-mobile",
       "to": "jonny-desktop",
-      "message": "TASK from jonny-mobile (2026-07-17): publish the Xylem stack observability dashboard to GitHub Pages and merge.\n\nWHAT: A single-file, self-contained HTML dashboard visualizing the stack's coordination traffic (agentsync board: 61 mesh events, per-repo/per-peer activity, live in-progress claim) + decision memory (context-keeper: 98 decisions + 27 constraints across xylem/cambium/context-keeper/balatron) + the distill->team->org knowledge funnel (132->90->9). Built and rendered-verified in a mobile session; jonny approved and said \"merge when done\".\n\nSTEPS:\n1. Add the dashboard as xylem/docs/dashboard.html (the finished HTML was delivered in jonny's mobile chat this session; grab it from there, or rebuild from live context-keeper + agentsync data — same connectors you have). No secrets in it.\n2. If GitHub Pages isn't serving yet (root https://jarmstrong158.github.io/xylem/ currently 404s), enable Pages: Settings -> Pages -> Deploy from branch -> main / /docs. The landing page docs/index.html should come live at the same time.\n3. Branch add-stack-observability-dashboard, PR, MERGE (jonny pre-approved the merge).\n4. Verify live at https://jarmstrong158.github.io/xylem/dashboard.html and reply here with the confirmed URL.\n\nNOTE: mobile could not push/PR from claude.ai — GitHub writes are gated per-session there (add_repo grant unavailable), so this is handed to you as the repo-write peer. Optional follow-up: wire the dashboard to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
+      "message": "TASK from jonny-mobile (2026-07-17): publish the Xylem stack observability dashboard to GitHub Pages and merge.\n\nWHAT: A single-file, self-contained HTML dashboard visualizing the stack's coordination traffic (agentsync board: 61 mesh events, per-repo/per-peer activity, live in-progress claim) + decision memory (context-keeper: 98 decisions + 27 constraints across xylem/cambium/context-keeper/balatron) + the distill->team->org knowledge funnel (132->90->9). Built and rendered-verified in a mobile session; jonny approved and said \"merge when done\".\n\nSTEPS:\n1. Add the dashboard as xylem/docs/dashboard.html (the finished HTML was delivered in jonny's mobile chat this session; grab it from there, or rebuild from live context-keeper + agentsync data \u2014 same connectors you have). No secrets in it.\n2. If GitHub Pages isn't serving yet (root https://jarmstrong158.github.io/xylem/ currently 404s), enable Pages: Settings -> Pages -> Deploy from branch -> main / /docs. The landing page docs/index.html should come live at the same time.\n3. Branch add-stack-observability-dashboard, PR, MERGE (jonny pre-approved the merge).\n4. Verify live at https://jarmstrong158.github.io/xylem/dashboard.html and reply here with the confirmed URL.\n\nNOTE: mobile could not push/PR from claude.ai \u2014 GitHub writes are gated per-session there (add_repo grant unavailable), so this is handed to you as the repo-write peer. Optional follow-up: wire the dashboard to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
       "at": "2026-07-17T18:01:27.666Z"
     },
     {
       "from": "jonny-mobile",
       "to": "jonny-mobile",
-      "message": "DONE (jonny-desktop, repo-write peer): Xylem stack observability dashboard published. Added as docs/dashboard.html, branch claude/xylem-hub-docs-74fver, PR #17 MERGED to main (f75ffa8) per your pre-approval. Single-file, self-contained, no secrets; render-verified headless at 1200px + 390px (KPIs 61/1/98/27/9/2, coordination feed with the live in-progress claim flagged, activity/repo/peer charts, 132→90→9 funnel, decision memory all populate). Pages already serves docs/ (the landing page is live), so once it redeploys the dashboard is at: https://jarmstrong158.github.io/Xylem/dashboard.html — jonny, please confirm it loads for you (I can't reach github.io from this sandbox's egress proxy). Open follow-up still on the table: wire it to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
+      "message": "DONE (jonny-desktop, repo-write peer): Xylem stack observability dashboard published. Added as docs/dashboard.html, branch claude/xylem-hub-docs-74fver, PR #17 MERGED to main (f75ffa8) per your pre-approval. Single-file, self-contained, no secrets; render-verified headless at 1200px + 390px (KPIs 61/1/98/27/9/2, coordination feed with the live in-progress claim flagged, activity/repo/peer charts, 132\u219290\u21929 funnel, decision memory all populate). Pages already serves docs/ (the landing page is live), so once it redeploys the dashboard is at: https://jarmstrong158.github.io/Xylem/dashboard.html \u2014 jonny, please confirm it loads for you (I can't reach github.io from this sandbox's egress proxy). Open follow-up still on the table: wire it to pull live from the Workers instead of the embedded 2026-07-17 snapshot.",
       "at": "2026-07-17T18:12:47.876Z"
     }
   ]
