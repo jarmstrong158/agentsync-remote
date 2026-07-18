@@ -8,10 +8,10 @@
       ],
       "requires": [],
       "branch": "add-cowork-plugin-and-marketplace",
-      "status": "in-progress",
-      "updated_at": "2026-07-18T13:34:16.325Z",
+      "status": "done",
+      "updated_at": "2026-07-18T14:30:29.142Z",
       "instance": "8a2aa90d-2782-4e12-b00a-6a5b753f3bd4",
-      "note": null
+      "note": "DONE + MERGED. Packaged the Xylem stack as a Claude Code plugin and turned the repo into its marketplace. Layout at repo root: .claude-plugin/marketplace.json (catalog, sources ./plugin) + plugin/ with .claude-plugin/plugin.json, .mcp.json (context-keeper-remote + agent-sync-remote over HTTP, Bearer token from env), hooks/hooks.json (SessionStart primer + SessionEnd distill), artifacts/discipline.md (ASCII-only), scripts/distill.sh (cambium distill, always exits 0, +x tracked 100755), 7 skills (record-decision, recall-context, claim-work, check-conflicts, distill-session, recall-knowledge, promote-to-org), and README. Validation: both marketplace.json and plugin.json pass `claude plugin validate`; skills have valid YAML frontmatter + kebab names; ./plugin resolves. GOTCHA: hooks file needs a top-level \"hooks\" wrapper or `claude plugin validate` fails (flat form rejected) — the one deviation from the verbatim spec. Shipped via PR #30, squash-merged to main (b5ab7a6). Recorded xylem/dec-008. Install: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Next: optionally test-install in a fresh session and consider adding a DECISIONS.md if the repo wants a human-readable mirror."
     }
   },
   "notes": [
