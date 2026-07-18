@@ -8,10 +8,10 @@
       ],
       "requires": [],
       "branch": "fix-plugin-hooks-load-and-decisions-md",
-      "status": "in-progress",
-      "updated_at": "2026-07-18T14:43:08.056Z",
+      "status": "done",
+      "updated_at": "2026-07-18T14:45:21.018Z",
       "instance": "eacf4ead-2268-4a96-baae-008370c95492",
-      "note": null
+      "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules — always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     }
   },
   "notes": [
