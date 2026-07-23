@@ -27,10 +27,11 @@
       ],
       "requires": [],
       "branch": "humanoid-prop-layers",
-      "status": "in-progress",
-      "updated_at": "2026-07-23T01:55:57.302025+00:00",
+      "status": "done",
+      "updated_at": "2026-07-23T02:04:34.122797+00:00",
       "instance": "82ed4c32",
-      "note": null
+      "note": "DONE + PUSHED to origin/humanoid-prop-layers (commits 075470d gen/gate/skill/MCP, a295bbf DECISIONS.md). Character distinctness is now first-class config on the humanoid archetype: held (staff/rod/flamestaff/shield/daggers), garment (apron/scarf/cloak), feet bare, arms stone, hair_accent flora, hat hood. Each is a Pose-layer drawn before the shared cv.outline pass so it animates for free and needs no self-outline. Colour budget is now per-class via contract.budget_for() -- character=24, tiles/items stay 15 (palette.max_colors_by_class in the style contract). MCP list_sprite_archetypes/check_sprite surface + validate the new axes via catalog.py (typo'd prop = cross-ref error). All 6 Vanguard party members generate from pure config and pass the gate; 86 tests green; library.png regenerated. Recorded context-keeper dec-005-7b51 + updated con-001-fb66; mirrored as DECISIONS.md dec-0033. NEXT: open a PR for humanoid-prop-layers if desired, and optionally wire these party configs into the Vanguard project / add the next props (quiver, book, pauldrons) via the same recipe.",
+      "changed_files": null
     }
   },
   "notes": [
