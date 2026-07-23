@@ -27,10 +27,11 @@
       ],
       "requires": [],
       "branch": "meristem-self-install",
-      "status": "in-progress",
-      "updated_at": "2026-07-23T11:03:47.689676+00:00",
+      "status": "done",
+      "updated_at": "2026-07-23T11:11:40.714624+00:00",
       "instance": "82ed4c32",
-      "note": null
+      "note": "DONE + PUSHED to origin/meristem-self-install; PR #2 opened (meristem-self-install -> main). Meristem now installs from one link. /plugin install ships only plugins/meristem/, so the engine (5 meristem_* packages, generators, tools, examples) was unreachable (ModuleNotFoundError). Added /meristem-setup + /meristem-doctor commands and a stdlib-only, idempotent bootstrap (plugins/meristem/scripts/install.py) that finds Python 3.10+, clones the whole suite to ~/.meristem, builds a venv, pip installs all packages (spec-store[mcp]), repoints the plugin .mcp.json at the venv python, writes ENVIRONMENT.md, and runs a doctor. One-move install: /plugin marketplace add jarmstrong158/meristem -> /plugin install meristem@meristem -> /meristem-setup. README got a 'give this to your Claude' block + web caveat; docs/INSTALL.md has full details/troubleshooting; marketplace desc + plugin bumped to 0.2.0. VERIFIED end to end over the real GitHub network clone into a fresh home -> doctor ALL GREEN; 128 package tests green. Recorded context-keeper dec-006-0863; mirrored DECISIONS.md dec-0034. NOTE: the shareable link goes live on the DEFAULT branch only once PR #2 (which also carries dec-0033 prop layers, PR-only, unmerged) is merged to main -- the bootstrap defaults to --branch main. NEXT: user merges PR #2 (their PR workflow), then a fresh clone of main installs clean.",
+      "changed_files": null
     }
   },
   "notes": [
