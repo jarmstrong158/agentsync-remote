@@ -14,24 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Make character distinctness first-class: add config-driven prop/accessory layers (held items, garments, feet, arms, hair accents) to the humanoid archetype, per-class color budget, and document it in the pixel-art skill + MCP catalog",
+      "task": "Self-installing bundle: /meristem-setup + /meristem-doctor commands and a stdlib bootstrap (clone whole suite to ~/.meristem, venv, pip install packages incl spec-store[mcp], patch plugin .mcp.json to the venv python), README 'give this to your Claude' block + web caveat, marketplace desc fix",
       "touches": [
-        "packages/generators/meristem_generators/humanoid.py",
-        "packages/generators/meristem_generators/catalog.py",
-        "packages/asset-gate/asset_gate/contract.py",
-        "packages/asset-gate/asset_gate/gate.py",
-        "experiments/00-bakeoff/style-contract.json",
-        "packages/spec-store/meristem_spec_store/server.py",
-        "plugins/meristem/skills/pixel-art/SKILL.md",
-        "tools/contact_sheet.py"
+        "plugins/meristem/scripts/install.py",
+        "plugins/meristem/commands/meristem-setup.md",
+        "plugins/meristem/commands/meristem-doctor.md",
+        "plugins/meristem/.mcp.json",
+        "plugins/meristem/.claude-plugin/plugin.json",
+        ".claude-plugin/marketplace.json",
+        "README.md",
+        "docs/INSTALL.md"
       ],
       "requires": [],
-      "branch": "humanoid-prop-layers",
-      "status": "done",
-      "updated_at": "2026-07-23T02:04:34.122797+00:00",
+      "branch": "meristem-self-install",
+      "status": "in-progress",
+      "updated_at": "2026-07-23T11:03:47.689676+00:00",
       "instance": "82ed4c32",
-      "note": "DONE + PUSHED to origin/humanoid-prop-layers (commits 075470d gen/gate/skill/MCP, a295bbf DECISIONS.md). Character distinctness is now first-class config on the humanoid archetype: held (staff/rod/flamestaff/shield/daggers), garment (apron/scarf/cloak), feet bare, arms stone, hair_accent flora, hat hood. Each is a Pose-layer drawn before the shared cv.outline pass so it animates for free and needs no self-outline. Colour budget is now per-class via contract.budget_for() -- character=24, tiles/items stay 15 (palette.max_colors_by_class in the style contract). MCP list_sprite_archetypes/check_sprite surface + validate the new axes via catalog.py (typo'd prop = cross-ref error). All 6 Vanguard party members generate from pure config and pass the gate; 86 tests green; library.png regenerated. Recorded context-keeper dec-005-7b51 + updated con-001-fb66; mirrored as DECISIONS.md dec-0033. NEXT: open a PR for humanoid-prop-layers if desired, and optionally wire these party configs into the Vanguard project / add the next props (quiver, book, pauldrons) via the same recipe.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
