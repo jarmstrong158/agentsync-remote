@@ -14,36 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "xylem: full audit remediation \u2014 fix dead proof links, dashboard PII leak, Windows installer break, plugin auth/name drift, python3 hardcode, add test CI, generate-don't-copy invariants, README restructure",
+      "task": "Make character distinctness first-class: add config-driven prop/accessory layers (held items, garments, feet, arms, hair accents) to the humanoid archetype, per-class color budget, and document it in the pixel-art skill + MCP catalog",
       "touches": [
-        "README.md",
-        "DECISIONS.md",
-        "manifest.json",
-        "installer.py",
-        "install/install.ps1",
-        "install/xylem_install.py",
-        "install/xylem_dashboard.py",
-        "install/README.md",
-        "plugin/.mcp.json",
-        "plugin/README.md",
-        "plugin/artifacts/discipline.md",
-        "plugin/hooks/hooks.json",
-        "artifacts/",
-        "docs/index.html",
-        "docs/dashboard.template.html",
-        "docs/dashboard.data.json",
-        ".github/workflows/",
-        "tests/",
-        "scripts/",
-        ".claude-plugin/marketplace.json"
+        "packages/generators/meristem_generators/humanoid.py",
+        "packages/generators/meristem_generators/catalog.py",
+        "packages/asset-gate/asset_gate/contract.py",
+        "packages/asset-gate/asset_gate/gate.py",
+        "experiments/00-bakeoff/style-contract.json",
+        "packages/spec-store/meristem_spec_store/server.py",
+        "plugins/meristem/skills/pixel-art/SKILL.md",
+        "tools/contact_sheet.py"
       ],
       "requires": [],
-      "branch": "audit-remediation",
-      "status": "done",
-      "updated_at": "2026-07-18T19:12:57.933373+00:00",
-      "instance": "441c75b1",
-      "note": "CLOSED \u2014 MERGED + LIVE + VERIFIED. PR #33 squash-merged to main (3e17a62), branch deleted, local main synced and clean, 204 tests green on main. Push to origin VERIFIED. Post-merge I triggered the Refresh dashboard workflow (29657282848) so the regenerated dashboard actually picked up the new generator + template \u2014 commit d1aae3a. VERIFIED ON THE LIVE PAGES SITE (cache-busted): dashboard has 0 mojibake, 0 username leaks, 0 dead knowledge links, and the new \"back to Xylem\" link; landing page has 1 <main> landmark, working skip link, 0 bogus role=tab, CTA contrast 8.68 dark / 6.34 light (both pass AA, were 2.14/3.51), no video placeholder, plugin install in the hero, no broken anchors. CORRECTION worth carrying forward: my first \"mojibake cleared\" check was FALSE-GREEN \u2014 the checker script had its own comparison literals mangled on write, so it compared garbage to garbage and reported 0. The mojibake was still live. Caught it only by inspecting the rendered page in a browser. Lesson: a checker that hardcodes the corrupt byte sequences it is searching for can be corrupted the same way \u2014 build such markers from code points (String.fromCharCode / \\\\u escapes), and prefer verifying the rendered artifact over the source. Also note docs/dashboard.html is GENERATED: editing dashboard.template.html changes nothing live until a refresh run regenerates it. NEXT ACTION: none required. Open item for the human only \u2014 jarmstrong158/knowledge is still private and deliberately unpublished; if you want the \"Proven in use\" evidence to be openable, read it through first, since the stack demonstrably writes local paths into notes.",
-      "changed_files": null
+      "branch": "humanoid-prop-layers",
+      "status": "in-progress",
+      "updated_at": "2026-07-23T01:55:57.302025+00:00",
+      "instance": "82ed4c32",
+      "note": null
     }
   },
   "notes": [
