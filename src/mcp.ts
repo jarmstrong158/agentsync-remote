@@ -11,6 +11,19 @@
 import { GhPatMissingError } from "./github.js";
 import { log } from "./log.js";
 import {
+  type JsonRpcMessage,
+  type JsonSchemaLike,
+  RPC_INVALID_PARAMS,
+  RPC_METHOD_NOT_FOUND,
+  handleJsonRpcHttp,
+  isNotification,
+  negotiateProtocol,
+  rpcError,
+  rpcResult,
+  validateArguments,
+} from "./shared/mcp-core.js";
+import {
+  RetryExhaustedError,
   checkConflicts,
   claim,
   history,
@@ -21,19 +34,35 @@ import {
 } from "./tools.js";
 import type { Ctx } from "./types.js";
 
-const PROTOCOL_VERSION = "2025-06-18";
 const SERVER_INFO = { name: "agentsync-remote", version: "0.1.0" };
 
 interface ToolDef {
   name: string;
   description: string;
-  inputSchema: Record<string, unknown>;
+  inputSchema: JsonSchemaLike;
   handler: (ctx: Ctx, args: any) => Promise<unknown>;
 }
 
-const pathArray = (desc: string) => ({
+// Cardinality and length caps. These are advertised in the schema AND enforced
+// at the call boundary by the same object (see validateArguments), so what a
+// client is told and what the server accepts cannot drift apart.
+//
+// They are not cosmetic: claims.json is a single shared file that every peer --
+// including the local Python agentsync server -- fetches and parses on EVERY
+// operation, so an unbounded claim is an availability problem for the whole
+// mesh, not just for the caller. MAX_PATH_LENGTH additionally bounds the input
+// to the glob matcher (see overlap.ts).
+const MAX_TASK_LENGTH = 4000;
+const MAX_NOTE_LENGTH = 4000;
+const MAX_PATHS = 64;
+const MAX_PATH_LENGTH = 256;
+const MAX_BRANCH_LENGTH = 255;
+const MAX_MESSAGE_LENGTH = 4000;
+
+const pathArray = (desc: string): JsonSchemaLike => ({
   type: "array",
-  items: { type: "string" },
+  items: { type: "string", maxLength: MAX_PATH_LENGTH },
+  maxItems: MAX_PATHS,
   description: desc,
 });
 
@@ -58,10 +87,18 @@ export const TOOLS: ToolDef[] = [
     inputSchema: {
       type: "object",
       properties: {
-        task: { type: "string", description: "Short description of the work." },
+        task: {
+          type: "string",
+          maxLength: MAX_TASK_LENGTH,
+          description: "Short description of the work.",
+        },
         touches: pathArray("Paths/globs this work will modify (e.g. ['src/api', 'src/**'])."),
         requires: pathArray("Paths/globs this work depends on but will not modify."),
-        branch: { type: "string", description: "The feature branch this work lands on." },
+        branch: {
+          type: "string",
+          maxLength: MAX_BRANCH_LENGTH,
+          description: "The feature branch this work lands on.",
+        },
         force: {
           type: "boolean",
           description: "Claim even if it overlaps an active peer.",
@@ -82,6 +119,7 @@ export const TOOLS: ToolDef[] = [
       properties: {
         against_branch: {
           type: "string",
+          maxLength: MAX_BRANCH_LENGTH,
           description: "Only report conflicts with peers on this branch.",
         },
       },
@@ -102,7 +140,11 @@ export const TOOLS: ToolDef[] = [
           enum: ["planning", "in-progress", "done"],
           description: "New status for your claim.",
         },
-        note: { type: ["string", "null"], description: "Optional free-form note." },
+        note: {
+          type: ["string", "null"],
+          maxLength: MAX_NOTE_LENGTH,
+          description: "Optional free-form note.",
+        },
       },
       required: ["status"],
       additionalProperties: false,
@@ -117,7 +159,11 @@ export const TOOLS: ToolDef[] = [
     inputSchema: {
       type: "object",
       properties: {
-        note: { type: ["string", "null"], description: "Optional closing note." },
+        note: {
+          type: ["string", "null"],
+          maxLength: MAX_NOTE_LENGTH,
+          description: "Optional closing note.",
+        },
       },
       additionalProperties: false,
     },
@@ -133,7 +179,9 @@ export const TOOLS: ToolDef[] = [
       properties: {
         limit: {
           type: "number",
-          description: "How many commits to return (default 20).",
+          minimum: 1,
+          maximum: 100,
+          description: "How many commits to return (default 20, max 100).",
         },
       },
       additionalProperties: false,
@@ -150,8 +198,16 @@ export const TOOLS: ToolDef[] = [
     inputSchema: {
       type: "object",
       properties: {
-        message: { type: "string", description: "Note to post. Omit to read the mailbox." },
-        to: { type: "string", description: "Optional peer id this note is addressed to." },
+        message: {
+          type: "string",
+          maxLength: MAX_MESSAGE_LENGTH,
+          description: "Note to post. Omit to read the mailbox.",
+        },
+        to: {
+          type: "string",
+          maxLength: 128,
+          description: "Optional peer id this note is addressed to.",
+        },
       },
       additionalProperties: false,
     },
@@ -161,26 +217,12 @@ export const TOOLS: ToolDef[] = [
 
 // --------------------------------------------------------------------------
 // JSON-RPC plumbing
+//
+// The envelope (batching, notifications, parse errors, body-size and batch
+// caps), protocol negotiation and argument validation all live in
+// src/shared/mcp-core.ts, shared byte-identically with context-keeper-remote
+// and cambium-remote. Only the MCP method semantics below are repo-specific.
 // --------------------------------------------------------------------------
-
-interface JsonRpcMessage {
-  jsonrpc?: string;
-  id?: string | number | null;
-  method?: string;
-  params?: any;
-}
-
-function result(id: string | number | null | undefined, res: unknown) {
-  return { jsonrpc: "2.0", id: id ?? null, result: res };
-}
-
-function error(
-  id: string | number | null | undefined,
-  code: number,
-  message: string,
-) {
-  return { jsonrpc: "2.0", id: id ?? null, error: { code, message } };
-}
 
 async function handleMessage(
   msg: JsonRpcMessage,
@@ -188,34 +230,29 @@ async function handleMessage(
 ): Promise<object | null> {
   const method = msg.method;
 
-  // Notifications (no id, or the notifications/* namespace) get no response.
-  const isNotification = msg.id === undefined || method?.startsWith("notifications/");
-
   switch (method) {
     case "initialize": {
-      // Echo the client's requested protocol version when present -- the most
-      // tolerant negotiation a legitimate but slightly-ahead client can get --
-      // and fall back to our pinned version otherwise. This path never rejects.
-      const requested =
-        typeof msg.params?.protocolVersion === "string"
-          ? msg.params.protocolVersion
-          : undefined;
-      const negotiated = requested ?? PROTOCOL_VERSION;
-      log("handshake", { phase: "start", protocol_version: negotiated, requested: requested ?? null });
-      const res = result(msg.id, {
-        protocolVersion: negotiated,
+      // Previously this echoed whatever the client sent, so asking for
+      // "banana" got you `protocolVersion: "banana"` -- the server advertising
+      // a protocol it does not implement. Now an unrecognized request
+      // negotiates DOWN to our pinned revision, which is what the spec's
+      // version negotiation is for.
+      const { version, requested, downgraded } = negotiateProtocol(msg.params?.protocolVersion);
+      log("handshake", { phase: "start", protocol_version: version, requested, downgraded });
+      const res = rpcResult(msg.id, {
+        protocolVersion: version,
         capabilities: { tools: {} },
         serverInfo: SERVER_INFO,
       });
-      log("handshake", { phase: "complete", protocol_version: negotiated });
+      log("handshake", { phase: "complete", protocol_version: version });
       return res;
     }
 
     case "ping":
-      return result(msg.id, {});
+      return rpcResult(msg.id, {});
 
     case "tools/list":
-      return result(msg.id, {
+      return rpcResult(msg.id, {
         tools: TOOLS.map((t) => ({
           name: t.name,
           description: t.description,
@@ -229,27 +266,55 @@ async function handleMessage(
       const tool = TOOLS.find((t) => t.name === name);
       if (!tool) {
         log("error", { message: `Unknown tool: ${name}` });
-        return error(msg.id, -32602, `Unknown tool: ${name}`);
+        return rpcError(msg.id, RPC_INVALID_PARAMS, `Unknown tool: ${name}`);
       }
+
+      // ENFORCE the schema we advertise. Until this existed the handlers took
+      // `msg.params?.arguments ?? {}` completely raw, so
+      // `claim({task: 123, touches: "src/api"})` type-confused straight through
+      // `args.touches ?? []` into computeOverlap, which iterated the STRING
+      // character by character ("src/api" -> 's','r','c','/','a','p','i'),
+      // produced nonsense conflicts, and then committed a schema-violating
+      // ClaimEntry into the claims.json the local Python peer also consumes.
+      const args = msg.params?.arguments ?? {};
+      const problems = validateArguments(tool.inputSchema, args);
+      if (problems.length > 0) {
+        log("error", { message: `Invalid arguments for ${name}: ${problems.join("; ")}` });
+        return rpcError(
+          msg.id,
+          RPC_INVALID_PARAMS,
+          `Invalid arguments for ${name}: ${problems.join("; ")}`,
+        );
+      }
+
       try {
-        const out = await tool.handler(ctx, msg.params?.arguments ?? {});
+        const out = await tool.handler(ctx, args);
         log("tool_call", { tool: name, duration_ms: Date.now() - started, ok: true });
-        return result(msg.id, {
+        return rpcResult(msg.id, {
           content: [{ type: "text", text: JSON.stringify(out, null, 2) }],
+          isError: false,
         });
       } catch (e) {
         // Tool-execution errors are reported as isError content (so the model
         // sees them), not as JSON-RPC protocol errors.
+        //
+        // RetryExhaustedError is deliberately in this bucket. It used to be
+        // returned as an ordinary `{status: "retry_exhausted"}` payload inside
+        // a result with NO isError flag, i.e. indistinguishable from success to
+        // anything skimming the envelope -- an agent could read "retry" and
+        // believe its claim had landed when nothing was written at all.
         const message =
           e instanceof GhPatMissingError
             ? `Configuration error: ${e.message}`
-            : `Error: ${e instanceof Error ? e.message : String(e)}`;
+            : e instanceof RetryExhaustedError
+              ? `Not applied: ${e.message}`
+              : `Error: ${e instanceof Error ? e.message : String(e)}`;
         log("tool_call", { tool: name, duration_ms: Date.now() - started, ok: false });
         log("error", {
           message: e instanceof Error ? e.message : String(e),
           stack: e instanceof Error ? e.stack : undefined,
         });
-        return result(msg.id, {
+        return rpcResult(msg.id, {
           content: [{ type: "text", text: message }],
           isError: true,
         });
@@ -257,8 +322,8 @@ async function handleMessage(
     }
 
     default:
-      if (isNotification) return null;
-      return error(msg.id, -32601, `Method not found: ${method}`);
+      if (isNotification(msg)) return null;
+      return rpcError(msg.id, RPC_METHOD_NOT_FOUND, `Method not found: ${method}`);
   }
 }
 
@@ -270,62 +335,15 @@ async function handleMessage(
  */
 export function createMcpHandler(): (request: Request, ctx: Ctx) => Promise<Response> {
   return async (request: Request, ctx: Ctx): Promise<Response> => {
-    if (request.method === "GET") {
-      // No server-initiated SSE stream in stateless mode.
-      return new Response("Method Not Allowed", {
-        status: 405,
-        headers: { Allow: "POST, DELETE" },
-      });
-    }
-    if (request.method === "DELETE") {
-      // No session to tear down.
-      return new Response(null, { status: 204 });
-    }
-    if (request.method !== "POST") {
-      return new Response("Method Not Allowed", {
-        status: 405,
-        headers: { Allow: "POST, DELETE" },
-      });
-    }
-
-    let payload: unknown;
-    try {
-      payload = await request.json();
-    } catch {
-      return json(error(null, -32700, "Parse error"), 200);
-    }
-
-    const isBatch = Array.isArray(payload);
-    const messages = (isBatch ? payload : [payload]) as JsonRpcMessage[];
-
-    const responses: object[] = [];
-    for (const message of messages) {
-      let res: object | null;
-      try {
-        res = await handleMessage(message, ctx);
-      } catch (e) {
-        // A single bad message must never take down the batch or bubble a 500.
+    return handleJsonRpcHttp(request, (msg) => handleMessage(msg, ctx), {
+      // No server-initiated SSE stream and no session to tear down.
+      allow: "POST, DELETE",
+      handleDelete: true,
+      onError: (e) =>
         log("error", {
           message: e instanceof Error ? e.message : String(e),
           stack: e instanceof Error ? e.stack : undefined,
-        });
-        res = error(message?.id ?? null, -32603, "Internal error");
-      }
-      if (res !== null) responses.push(res);
-    }
-
-    if (responses.length === 0) {
-      // Notification-only: nothing to return.
-      return new Response(null, { status: 202 });
-    }
-
-    return json(isBatch ? responses : responses[0], 200);
+        }),
+    });
   };
-}
-
-function json(body: unknown, status: number): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
 }

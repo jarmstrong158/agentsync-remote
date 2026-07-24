@@ -32,8 +32,28 @@ export const BACKOFF_BASE_MS = 400;
 const BLOCKED_MESSAGE =
   "Overlap with an active peer claim. Narrow `touches`, wait, or re-call with force=true.";
 const EXHAUSTED_MESSAGE =
-  "Push kept losing the race; call survey() and try again.";
+  `Nothing was written. The compare-and-swap lost the race ${PUSH_RETRIES} times ` +
+  "in a row, so your claim/update/note did NOT land. Call survey() to see the " +
+  "current board and try again.";
 const VALID_STATUSES: ClaimStatus[] = ["planning", "in-progress", "done"];
+
+/**
+ * Thrown when casLoop() gives up after PUSH_RETRIES failed compare-and-swaps.
+ *
+ * This is an ERROR, not a status. It previously returned as an ordinary value
+ * -- `{status: "retry_exhausted", message}` cast to T -- which mcp.ts then
+ * wrapped in a result with no isError flag. To anything skimming the envelope
+ * (including a model reading tool output) that is indistinguishable from a
+ * successful claim, so an agent could proceed to edit files it did not hold.
+ * Throwing forces the caller to classify it: mcp.ts maps it to isError: true.
+ */
+export class RetryExhaustedError extends Error {
+  readonly status = "retry_exhausted";
+  constructor(message: string = EXHAUSTED_MESSAGE) {
+    super(message);
+    this.name = "RetryExhaustedError";
+  }
+}
 
 // --------------------------------------------------------------------------
 // Context construction
@@ -153,10 +173,9 @@ async function casLoop<T>(
       await ctx.sleep(BACKOFF_BASE_MS * (attempt + 1));
     }
   }
-  return {
-    status: "retry_exhausted",
-    message: EXHAUSTED_MESSAGE,
-  } as unknown as T;
+  // Out of retries: nothing was committed. Throwing (rather than returning a
+  // success-shaped payload) is what makes this reach the client as isError.
+  throw new RetryExhaustedError();
 }
 
 // --------------------------------------------------------------------------
