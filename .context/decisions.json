@@ -1,0 +1,36 @@
+[
+  {
+    "id": "dec-001-04ca",
+    "summary": "Replace the RegExp-based fnmatch glob matcher with a non-backtracking two-pointer matcher. Complexity caps are defence in depth, not the primary control, and over-cap patterns fail safe (no glob match) rather than throwing.",
+    "problem": "fnmatchToRegExp() in src/overlap.ts compiled unvalidated caller-supplied path/glob tokens into a RegExp and ran it against every peer token in both directions. A claim of touches: [\"a*a*a*a*a*a*a*a*a*b\"] compiled to /^a.*a.*a.*a.*a.*a.*a.*a.*a.*b$/, which against a long non-matching peer path is catastrophic backtracking. claim() re-runs overlap detection against freshly fetched state on every compare-and-swap retry, so one call re-triggered the blowup up to PUSH_RETRIES times. On a Cloudflare Worker that is CPU-time exhaustion for the whole isolate, denying the coordination board to every local and remote peer, reachable by anyone holding the path token.",
+    "why_chosen": "Capping the pattern alone does not work: with N wildcards the backtracking cost is O(text_length^N), so even four stars against a 512-character path is unbounded in practice, and any cap loose enough to be usable is still exploitable. Removing the RegExp entirely is the only structural fix. The pattern is compiled to a flat token list (lit / any / star / class) and matched with the classic two-pointer glob algorithm, which remembers exactly one backtrack point per star and is therefore O(pattern * text) worst case with no exponential path available. Runs of '*' collapse to a single token, which is identical fnmatch semantics and strictly cheaper. Over-cap patterns fail SAFE (they simply do not glob-match, and are still compared literally by pathsOverlap) rather than throwing, because a hostile pattern must never be able to WIDEN a claim, and because throwing inside the CAS decision function would crash the retry loop.",
+    "what_we_tried": "",
+    "tradeoffs": "Hand-written matching code is more surface than delegating to the regex engine, so semantics parity with Python's fnmatch (which the local agentsync peer uses) now depends on tests rather than on the engine. Covered by an explicit parity test: '*' not special about '/', [!...] negation, a-z ranges, ']' as a first class member, and a literal unterminated '['.",
+    "alternatives": [],
+    "constraints_created": [
+      "Never compile caller-supplied input into a RegExp anywhere in the remote Workers",
+      "Glob semantics in overlap.ts must stay parity-tested against Python fnmatch, because the local agentsync peer evaluates the same claims.json"
+    ],
+    "related_to": [],
+    "tags": [
+      "security",
+      "redos",
+      "overlap",
+      "agentsync",
+      "workers"
+    ],
+    "retrieval_hints": [
+      "why is there no RegExp in overlap.ts",
+      "ReDoS in agentsync-remote glob matching",
+      "two-pointer glob matcher rationale",
+      "MAX_PATTERN_TOKENS cap"
+    ],
+    "origin": "agent",
+    "schema_version": 4,
+    "status": "active",
+    "superseded_by": null,
+    "created_at": "2026-07-24T21:27:58.371181+00:00",
+    "updated_at": "2026-07-24T21:27:58.371181+00:00",
+    "verified_at": "2026-07-24T21:27:58.371181+00:00"
+  }
+]

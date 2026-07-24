@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/index.js";
 import { createMcpHandler } from "../src/mcp.js";
 import { computeOverlap, fnmatch, pathsOverlap } from "../src/overlap.js";
+import { MAX_MAILBOX_NOTES, mailbox } from "../src/tools.js";
 
 import type { Env } from "../src/types.js";
 import { fakeGitHub, testCtx } from "./helpers.js";
@@ -280,6 +281,39 @@ describe("request limits", () => {
     );
     const json = (await res.json()) as any;
     expect(json.error.message).toMatch(/too large/);
+  });
+
+  it("bounds mailbox growth in the shared coordination file", async () => {
+    // claims.json is not a log: every peer, local and remote, fetches and
+    // parses it on EVERY survey/claim/release, so unbounded notes tax every
+    // operation the mesh performs. Oldest-first eviction keeps the channel
+    // useful (a question just asked is the one that matters).
+    const notes = Array.from({ length: MAX_MAILBOX_NOTES }, (_, i) => ({
+      from: "peer",
+      to: null,
+      message: `old ${i}`,
+      at: "2026-01-01T00:00:00.000Z",
+    }));
+    const fake = fakeGitHub({ claims: {}, notes });
+    vi.stubGlobal("fetch", fake.fetch);
+
+    const res: any = await mailbox(testCtx(), { message: "the newest question" });
+
+    expect(res.notes.length).toBe(MAX_MAILBOX_NOTES);
+    expect(res.dropped_oldest).toBe(1);
+    expect(res.retention).toMatch(/git history/);
+    // The oldest went, the newest stayed.
+    expect(res.notes[0].message).toBe("old 1");
+    expect(res.notes[MAX_MAILBOX_NOTES - 1].message).toBe("the newest question");
+    expect(fake.state.file!.obj.notes!.length).toBe(MAX_MAILBOX_NOTES);
+  });
+
+  it("leaves a small mailbox untouched and reports no eviction", async () => {
+    const fake = fakeGitHub({ claims: {}, notes: [] });
+    vi.stubGlobal("fetch", fake.fetch);
+    const res: any = await mailbox(testCtx(), { message: "hello" });
+    expect(res.notes.length).toBe(1);
+    expect(res.dropped_oldest).toBeUndefined();
   });
 
   it("still handles a normal batch", async () => {

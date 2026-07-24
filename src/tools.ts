@@ -29,6 +29,22 @@ import type {
 export const PUSH_RETRIES = 5;
 export const BACKOFF_BASE_MS = 400;
 
+/**
+ * Most mailbox notes retained in claims.json.
+ *
+ * mailbox() appended without limit. claims.json is not a log -- it is a hot
+ * coordination file that EVERY peer, local and remote, fetches and parses on
+ * EVERY survey/claim/release. Unbounded growth therefore taxes every operation
+ * the mesh performs, and it degrades gradually enough that nobody notices until
+ * the file is large. Notes are also the least durable content in the file: they
+ * are a human-in-the-loop channel, not an audit trail (the coordination
+ * branch's git history is the audit trail, and history() surfaces it).
+ *
+ * So the oldest notes are dropped once the cap is reached, and the response
+ * says so explicitly rather than silently discarding a peer's question.
+ */
+export const MAX_MAILBOX_NOTES = 200;
+
 const BLOCKED_MESSAGE =
   "Overlap with an active peer claim. Narrow `touches`, wait, or re-call with force=true.";
 const EXHAUSTED_MESSAGE =
@@ -456,9 +472,29 @@ export async function mailbox(ctx: Ctx, args: MailboxArgs = {}): Promise<unknown
       at: ctx.now(),
     };
     doc.notes.push(note);
+
+    // Bound the file. Dropping the OLDEST notes keeps the channel usable
+    // (a question just asked is the one that matters) and keeps every peer's
+    // fetch-and-parse cost flat.
+    let dropped = 0;
+    if (doc.notes.length > MAX_MAILBOX_NOTES) {
+      dropped = doc.notes.length - MAX_MAILBOX_NOTES;
+      doc.notes = doc.notes.slice(dropped);
+    }
+
     return {
       message: `agentsync: ${ctx.agentId} posts a note`,
-      result: { status: "posted", note, notes: doc.notes },
+      result: {
+        status: "posted",
+        note,
+        notes: doc.notes,
+        ...(dropped
+          ? {
+              dropped_oldest: dropped,
+              retention: `claims.json keeps the ${MAX_MAILBOX_NOTES} most recent notes; older ones remain in the coordination branch's git history (see history()).`,
+            }
+          : {}),
+      },
     };
   });
 }
