@@ -11,6 +11,7 @@
 
 import { createMcpHandler } from "./mcp.js";
 import { log } from "./log.js";
+import { pathTokenMatches } from "./shared/mcp-core.js";
 import { buildCtx } from "./tools.js";
 import type { Env } from "./types.js";
 
@@ -28,14 +29,12 @@ const handleMcp = createMcpHandler();
 
 const NOT_FOUND = () => new Response("Not Found", { status: 404 });
 
-// Length-invariant string comparison to avoid timing side channels on the token.
-// Kept in sync with the sibling context-keeper-remote Worker.
-function safeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return diff === 0;
-}
+// Token comparison lives in src/shared/mcp-core.ts (pathTokenMatches), shared
+// byte-identically with context-keeper-remote and cambium-remote. The three
+// local copies this replaces all claimed to be "kept in sync with the sibling
+// Worker" and all three behaved differently: this one never percent-decoded the
+// path segment, and all three early-returned on a length mismatch, leaking the
+// token's length. See mcp-core.ts for the constant-time construction.
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -51,9 +50,8 @@ export default {
 
     if (!match) return NOT_FOUND();
 
-    const token = match[1];
     // Fail closed: unset AUTH_TOKEN or a mismatched token -> 404, no detail.
-    const ok = !!env.AUTH_TOKEN && safeEqual(token, env.AUTH_TOKEN);
+    const ok = await pathTokenMatches(match[1], env.AUTH_TOKEN);
     log("auth", { ok });
     if (!ok) return NOT_FOUND();
 
