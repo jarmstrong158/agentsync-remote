@@ -14,24 +14,17 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Self-installing bundle: /meristem-setup + /meristem-doctor commands and a stdlib bootstrap (clone whole suite to ~/.meristem, venv, pip install packages incl spec-store[mcp], patch plugin .mcp.json to the venv python), README 'give this to your Claude' block + web caveat, marketplace desc fix",
+      "task": "Fix prune_backups mtime bug flagged in PR 41 (install/xylem_install.py): age must come from the backup filename, not st_mtime (copy2 copies the config's mtime onto the backup)",
       "touches": [
-        "plugins/meristem/scripts/install.py",
-        "plugins/meristem/commands/meristem-setup.md",
-        "plugins/meristem/commands/meristem-doctor.md",
-        "plugins/meristem/.mcp.json",
-        "plugins/meristem/.claude-plugin/plugin.json",
-        ".claude-plugin/marketplace.json",
-        "README.md",
-        "docs/INSTALL.md"
+        "install/xylem_install.py",
+        "tests/test_xylem_install.py"
       ],
       "requires": [],
-      "branch": "meristem-self-install",
-      "status": "done",
-      "updated_at": "2026-07-23T11:11:40.714624+00:00",
-      "instance": "82ed4c32",
-      "note": "DONE + PUSHED to origin/meristem-self-install; PR #2 opened (meristem-self-install -> main). Meristem now installs from one link. /plugin install ships only plugins/meristem/, so the engine (5 meristem_* packages, generators, tools, examples) was unreachable (ModuleNotFoundError). Added /meristem-setup + /meristem-doctor commands and a stdlib-only, idempotent bootstrap (plugins/meristem/scripts/install.py) that finds Python 3.10+, clones the whole suite to ~/.meristem, builds a venv, pip installs all packages (spec-store[mcp]), repoints the plugin .mcp.json at the venv python, writes ENVIRONMENT.md, and runs a doctor. One-move install: /plugin marketplace add jarmstrong158/meristem -> /plugin install meristem@meristem -> /meristem-setup. README got a 'give this to your Claude' block + web caveat; docs/INSTALL.md has full details/troubleshooting; marketplace desc + plugin bumped to 0.2.0. VERIFIED end to end over the real GitHub network clone into a fresh home -> doctor ALL GREEN; 128 package tests green. Recorded context-keeper dec-006-0863; mirrored DECISIONS.md dec-0034. NOTE: the shareable link goes live on the DEFAULT branch only once PR #2 (which also carries dec-0033 prop layers, PR-only, unmerged) is merged to main -- the bootstrap defaults to --branch main. NEXT: user merges PR #2 (their PR workflow), then a fresh clone of main installs clean.",
-      "changed_files": null
+      "branch": "fix/audit-sweep",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T13:14:31.022713+00:00",
+      "instance": "712c43ad",
+      "note": null
     }
   },
   "notes": [
