@@ -14,22 +14,21 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Close the four open items: shibboleth master->main, correct stale org memory k-571a3346 via PR, draft the dillongio notice, and add real test suites to Jack / conductor-mcp / shipexec-metrics / vanguard-web",
+      "task": "context-keeper: verify decisions against the artifact rather than the calendar - code-drift staleness, scope resolution, usage tracking, and passive capture candidates",
       "touches": [
-        "shibboleth/.github/workflows/tests.yml",
-        "knowledge/knowledge.json",
-        "Jack/tests",
-        "conductor-mcp/test_server.py",
-        "shipexec-metrics/test_metrics.py",
-        "vanguard-web/src"
+        "context-keeper/server.py",
+        "context-keeper/code_drift.py",
+        "context-keeper/usage.py",
+        "context-keeper/hooks/commit_capture_reminder.py",
+        "context-keeper/tests",
+        "context-keeper/README.md"
       ],
       "requires": [],
-      "branch": "fix/close-open-items",
-      "status": "done",
-      "updated_at": "2026-07-25T17:45:05.566326+00:00",
+      "branch": "feat/verify-against-the-artifact",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T20:07:51.906853+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED (aa0d2e9). Portfolio site: kept the existing layout, added a Receipts section plus a drift guard. The three redesign concepts I drafted were worse than the original and were binned - preview server stopped, scratch dir deleted, launch.json config removed. Root cause of that failure was procedural and mine: the Browser pane was not displaying, so I designed three pages and wrote a confident comparison without having seen a single pixel of my work OR of the site I proposed to replace. Once visible it was obvious - the original's headline treatment, stat cards and verification chips beat all three; concept C used monospace body text and gave 21 repos equal visual weight against the deliberate two-flagship structure, A replaced narrative with a spreadsheet, B cut 15 of 21 projects. WHAT SHIPPED: (1) Receipts section after Stack, before the CTA - ten claims each next to a link to the repo that produces it, closing on what the numbers do NOT show (single-digit adoption, no production traffic, no outside code review). Rendered from the new data/claims.json via the same progressive-enhancement pattern the stats row already uses, so a failed fetch hides the section rather than half-building it. (2) data/claims.json is now the single place these numbers are written. (3) scripts/check_claims.py fails if any superseded value reappears in index.html, data/projects.meta.json or data.json. Three claims were wrong for months and survived a full restructure because the same fact is asserted in hand-written prose AND in curated blurbs, in different wording, with nothing checking they agree. Full generation of the prose was rejected: index.html is hand-tuned and worth more than the duplication costs, so this takes the cheaper half - a number may still be written twice, but a corrected number cannot silently return. Verified by reintroducing 71/71: exit 1, naming file and current value. Wired into refresh-data.yml before the build, again after it (build_data pulls live GitHub descriptions and can import a stale value that was never in the curated files), and on pull_request. Verified in-browser at desktop and 375px: 10 rows, no console errors, no horizontal overflow, stacks to one column. Push was rejected once by the daily Action; rebased, then re-ran the guard against the Action's regenerated data.json - clean. EARLIER FINDING STILL LIVE: measured that ZERO of projects.meta.json's metric fields appear in index.html, so my earlier \"same number in three files\" framing was imprecise - the duplication is between meta blurbs and hand-written prose, which is why a verbatim-match guard would not have worked and the superseded-value approach was used instead.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
