@@ -14,59 +14,16 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "xylem: distill.py must not fall back to os.getcwd() when the SessionEnd payload has no cwd - it distills the wrong project, and the A||B interpreter chain makes the second run hit exactly that path",
+      "task": "Cross-repo test audit: fix suites that do not pass. First: Render-Groups-Batch-Renderer bpy stub missing types.Material breaks all 44 tests at import",
       "touches": [
-        "plugin/scripts/distill.py",
-        "tests/test_hooks.py"
+        "Render-Groups-Batch-Renderer/tests/test_planning.py"
       ],
       "requires": [],
-      "branch": "fix/audit-sweep",
-      "status": "done",
-      "updated_at": "2026-07-25T13:48:33.183303+00:00",
+      "branch": "fix/test-audit",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T13:56:30.939705+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED. plugin/scripts/distill.py no longer falls back to os.getcwd() when the SessionEnd payload has no cwd - it now skips. The fallback silently captured session knowledge into whichever repo the hook process started in, which the file's own header documents as the exact failure the previous rewrite existed to fix. The _git_root guard cannot catch it because the inherited cwd usually IS a git repo, just the wrong one. Verified not theorised: against the old code the new test distils into \"some-other-repo\" purely because that was the process cwd. This also closes the gap in the hooks.json A||B chain - that chain is justified by \"both scripts exit 0 on every path\", but that is a property of the scripts' CODE while the fallback fires on the PROCESS exit status, which a script does not control when killed; SessionEnd has a hard timeout, and a killed first leg leaves the second running against a drained stdin, landing on exactly this path. artifacts/session_end_hook.py was already correct and pinned by tests; only the plugin path had drifted. Commit 43c7974 on fix/audit-sweep, pushed, part of open PR #41 (now 10 commits). Full suite 403 passed / 3 skipped. Constraint recorded as con-002-360e.",
-      "changed_files": [
-        {
-          "status": "A",
-          "path": ".context/decisions.json"
-        },
-        {
-          "status": "M",
-          "path": "src/index.ts"
-        },
-        {
-          "status": "M",
-          "path": "src/mcp.ts"
-        },
-        {
-          "status": "M",
-          "path": "src/overlap.ts"
-        },
-        {
-          "status": "A",
-          "path": "src/shared/mcp-core.ts"
-        },
-        {
-          "status": "M",
-          "path": "src/tools.ts"
-        },
-        {
-          "status": "M",
-          "path": "test/cas.test.ts"
-        },
-        {
-          "status": "A",
-          "path": "test/hardening.test.ts"
-        },
-        {
-          "status": "A",
-          "path": "test/raw-modules.d.ts"
-        },
-        {
-          "status": "A",
-          "path": "test/shared-drift.test.ts"
-        }
-      ]
+      "note": null
     }
   },
   "notes": [
