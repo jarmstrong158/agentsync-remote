@@ -24,10 +24,11 @@
       ],
       "requires": [],
       "branch": "fix/same-id-claim-clobber",
-      "status": "in-progress",
-      "updated_at": "2026-07-25T13:27:59.053535+00:00",
+      "status": "done",
+      "updated_at": "2026-07-25T13:46:32.136420+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED + PR OPEN. agentsync PR #4 on fix/same-id-claim-clobber. (1) claim() now returns status \"blocked\" with a shared_agent_id reason when your agent id already holds an in-progress claim written by a different server instance, naming the task/branch/files that would be erased. Root cause of the 4x-reported collision: claims.json holds one claim per agent id, the old code overwrote and returned \"claimed\", and the warning was attached to that success result - produced after the other claim was already gone. The overlap loop skips our own id, so the erased claim's files lost protection silently. force=True still wins, so DESIGN's \"advisory not enforced\" holds and a restarted server reclaims its slot in one call. Rejected keying by agent+instance: instance changes every restart and DESIGN deliberately rejects auto-expiry, so orphans would accumulate unbounded. (2) Finished claims now carry changed_files_repo. A claim records a branch NAME with no repo qualifier and the diffstat runs in the board repo, so a same-named branch there yields a confidently wrong list - observed live, a xylem claim annotated with agentsync-remote TypeScript files because both repos have a fix/audit-sweep. _origin_slug reads git config not gh, and handles filesystem-path remotes. (3) DESIGN/README/AGENTS updated: every AGENT needs a unique id, not every person. Tests 52 passed; the old test_duplicate_agent_id_warns asserted the replaced behaviour and became 4 tests covering the full matrix. Decision recorded as dec-002-90ef.",
+      "changed_files": null
     }
   },
   "notes": [
