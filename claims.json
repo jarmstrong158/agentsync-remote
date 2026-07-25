@@ -20,10 +20,11 @@
       ],
       "requires": [],
       "branch": "fix/test-audit",
-      "status": "in-progress",
-      "updated_at": "2026-07-25T13:56:30.939705+00:00",
+      "status": "done",
+      "updated_at": "2026-07-25T14:25:16.812852+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE. Cross-repo test audit: 24 repos with suites, 18 green on first run, 6 investigated, all now green. FIXED+PUSHED: (1) Render-Groups-Batch-Renderer c83f08c - all 44 failed; bpy.types stub lacked Material and the add-on annotates functions with bpy types, and annotations evaluate at import, so one missing name killed load_addon() and every test; stub now vivifies unknown types via __getattr__. Plus 2 assertions hard-coded \"/\" against os.path.join output (POSIX-only). Added the missing .gitignore. (2) shibboleth 9c6813d - added pythonpath=src (src layout, suite could not import at all), which exposed a real bug: panphon opens its UTF-8 IPA tables via Traversable.open() with no encoding, so on any non-UTF-8 locale (default Windows cp1252) it fails to load and phone_distance silently degrades to plain edit distance - feature weighting, the module's entire purpose, off on a whole platform behind one log line. _panphon() now supplies the encoding for the load only; verified t->d 0.0115 vs t->sh 0.092. Also corrected a docstring that claimed the fallback was \"monotone in the same direction\" - it is PER, which scores all substitutions alike. (3) waveform MCP 49777b8 - added testpaths+pythonpath=src; 16 collection errors became 257 passed. (4) render-groups-mcp 4492c63 (LOCAL ONLY, repo has no remote) - test_contract.py is a hand-run script whose name matches pytest discovery, so pytest imported it, ran it, and hit module-level sys.exit(0) = INTERNALERROR; body moved under a __main__ guard. COMMITTED LOCAL ONLY, NOT PUSHED: (5) cognicore-explore 68cf60d - origin is Kaushalt2004/cognicore-my-openenv, a third party repo, push correctly 403s and was not forced. test_remote_with_valid_jwt opened an SSE endpoint with client.stream(); SSE never ends and TestClient will not tear down its portal thread, so the suite stalled at 76% forever (420s in the audit). Neither close() nor a client timeout releases it. Now drives AuthMiddleware directly with a stub app: 643 passed in 44s. NO CODE CHANGE NEEDED: (6) skein - pytest-asyncio is a declared dev extra that was not installed; installed it, 130 passed. Also installed panphon, a declared core dep of shibboleth. NOT A FAILURE: chao-garden has no test suite at all (npm init placeholder script), flagged only because my detector matched the placeholder.",
+      "changed_files": null
     }
   },
   "notes": [
