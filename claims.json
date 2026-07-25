@@ -21,10 +21,52 @@
       ],
       "requires": [],
       "branch": "fix/audit-sweep",
-      "status": "in-progress",
-      "updated_at": "2026-07-25T13:14:31.022713+00:00",
+      "status": "done",
+      "updated_at": "2026-07-25T13:18:40.792781+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED. prune_backups() in install/xylem_install.py now ages backups by the .bak-YYYYMMDDHHMMSS filename instead of st_mtime. Root cause: write_with_backup() creates the backup with shutil.copy2, which copies the SOURCE mtime onto the copy, so mtime meant \"config last edited\", not \"backup taken\". Broke both ways: a config untouched for a year yielded a brand-new backup that looked a year old and got deleted on the next --apply; a config edited daily yielded backups that never aged out, and these files carry live connector tokens. installer.py already read the epoch from the filename; this file had diverged. Undatable 14-digit names are kept rather than guessed at (uninstall --apply still purges all .bak-* unconditionally). The pre-existing test could not catch this - it called os.utime(b,(0,0)) to force an old mtime, so it passed under either implementation; its fixture also used day 00, which strptime rejects. Two new tests pin both directions and both fail against the old code. Full suite 402 passed / 3 skipped. Commit 38537e3 on fix/audit-sweep, pushed to origin, part of open PR #41. Constraint recorded as con-001-ff21.",
+      "changed_files": [
+        {
+          "status": "A",
+          "path": ".context/decisions.json"
+        },
+        {
+          "status": "M",
+          "path": "src/index.ts"
+        },
+        {
+          "status": "M",
+          "path": "src/mcp.ts"
+        },
+        {
+          "status": "M",
+          "path": "src/overlap.ts"
+        },
+        {
+          "status": "A",
+          "path": "src/shared/mcp-core.ts"
+        },
+        {
+          "status": "M",
+          "path": "src/tools.ts"
+        },
+        {
+          "status": "M",
+          "path": "test/cas.test.ts"
+        },
+        {
+          "status": "A",
+          "path": "test/hardening.test.ts"
+        },
+        {
+          "status": "A",
+          "path": "test/raw-modules.d.ts"
+        },
+        {
+          "status": "A",
+          "path": "test/shared-drift.test.ts"
+        }
+      ]
     }
   },
   "notes": [
