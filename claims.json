@@ -14,22 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "context-keeper: verify decisions against the artifact rather than the calendar - code-drift staleness, scope resolution, usage tracking, and passive capture candidates",
+      "task": "context-keeper: task-aware session-start injection (bias by the files you are actually touching) + enforced_by pointer on constraints",
       "touches": [
         "context-keeper/server.py",
-        "context-keeper/code_drift.py",
-        "context-keeper/usage.py",
-        "context-keeper/hooks/commit_capture_reminder.py",
+        "context-keeper/work_focus.py",
+        "context-keeper/hooks/session_start.py",
         "context-keeper/tests",
-        "context-keeper/README.md"
+        "context-keeper/CLAUDE.md"
       ],
       "requires": [],
-      "branch": "feat/verify-against-the-artifact",
-      "status": "done",
-      "updated_at": "2026-07-25T20:19:04.335277+00:00",
+      "branch": "feat/task-aware-injection",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T21:13:27.478628+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED + PR OPEN. context-keeper PR #10 on feat/verify-against-the-artifact. All four gaps built. THESIS: an entry's health is a property of the thing it describes and of whether anyone reads it, not of how long ago someone clicked verify. (1) code_drift.py - entry scope usually names a path; one git log for the whole store (not one per entry) buckets commits by path, so entries whose scope moved since verified_at are flagged code_drift and entries whose scope no longer exists are flagged orphaned_scope. Directory scopes cover what is beneath them but do not swallow sibling prefixes (src/api must not match src/api_v2). Domain scopes like global are ABSENT from the report rather than reported clean, and verify_quality returns drift_checked so a missing work tree cannot read as a clean bill of health. Motivating incident reconstructed as a test against a real git repo: cambium k-571a3346 warned about an agentsync result already fixed to stop being produced, 9 recalls, unflagged because by date it looked healthy. (2) usage.py - counts injected (blanket session-start load) separately from retrieved (targeted get_context/query_entries); many injections and zero retrievals means the store paid for that entry hundreds of times and nobody went looking. Advisory only, never auto-deletes, sidecar file so a counter changing on every read does not churn the git history of the record it describes. (3) commit_capture_reminder.py rewritten - reads the commit message, names the phrase matched and the entry kind it implies, and stays SILENT on trivial or purely descriptive commits. A hook that interrupts identically for everything trains the reader to skip it. Still proposes rather than records. (4) scope resolution folded into code_drift (orphaned_scope). Both modules import defensively; a vendored server.py or a machine without git behaves exactly as before. NOTABLE: the suite's own packaging-completeness guard caught both new modules missing from sdist, wheel and mcpb bundle before they shipped broken - their drift-guard pattern working on me. 331 passed, up from 285. Decision recorded as dec-016-1bf6 with all four rejected alternatives.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
