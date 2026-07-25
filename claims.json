@@ -23,9 +23,9 @@
       "requires": [],
       "branch": "main",
       "status": "in-progress",
-      "updated_at": "2026-07-25T15:24:10.636065+00:00",
+      "updated_at": "2026-07-25T15:29:38.828096+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "dec-079 code landed + 179 tests pass. Paired A/B launched on ckpt 006268, 300 seeds: arm A control (BALATRON_AHEAD_EARLY_BONUS=0.0, verified pinned in the live evaluate.py env) then arm B treatment (1.0). Training paused for the duration; arm B restores the supervisor in its finally block. Analyze with eval_report.py on logs/eval_dec079_control.jsonl vs logs/eval_dec079_treat.jsonl."
     }
   },
   "notes": [
