@@ -14,21 +14,16 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "CI + hygiene sweep: add test workflows to the four authored repos with real suites and no CI (shibboleth, waveform MCP, repo-scope, git-onboard), matched to xylem's multi-OS pattern; add conductor-mcp .gitignore",
+      "task": "Profile README: correct four stale numeric/link claims and add the CI + test-ratio facts the audit verified",
       "touches": [
-        "shibboleth/.github/workflows/tests.yml",
-        "waveform MCP/.github/workflows/tests.yml",
-        "repo-scope/.github/workflows/tests.yml",
-        "git-onboard/.github/workflows/tests.yml",
-        "conductor-mcp/.gitignore"
+        "jarmstrong158/README.md"
       ],
       "requires": [],
-      "branch": "ci/add-test-workflows",
-      "status": "done",
-      "updated_at": "2026-07-25T16:22:47.166517+00:00",
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T16:52:27.337054+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED + ALL GREEN. CI added to the four authored repos that had substantial suites and none: shibboleth (38 tests), waveform MCP (257), repo-scope (111), git-onboard (20). Matrix ubuntu-latest + windows-latest on py3.10 and 3.12, 4 jobs each, matched to xylem's pattern. Windows is deliberate - it is the platform every real defect here needed. Final: shibboleth bb665bb success, waveform MCP 38b7e0e success, repo-scope b4afd4a success, git-onboard 956cb8e success. Also added the missing conductor-mcp .gitignore (529f569). CI found four pre-existing defects on its first runs, none reproducible locally: (1) waveform MCP imported numpy at module level in five package files and declared it nowhere, so pip install of a PUBLISHED registry server yields ImportError in normal use - declared in 675111e. (2) waveform MCP's _auto_populate_drum_kit returned None on success AND failure, so an unloadable kit gave ok=True, zero warnings and a silently mute drum track; its presets path is Windows-only by construction so that was the guaranteed result on macOS and Linux - now returns a reason, plugin_add surfaces it as res[warning], compose_from_spec appends to warnings (38b7e0e), verified against the CI condition by pointing Path.home at an empty dir. (3) git-onboard fixtures used rmtree(onexc=), 3.12+, so all 13 teardowns died on 3.10 - rmtree_compat added (a8f79ec, sys import fixed in 956cb8e; I pushed a8f79ec without reading test output, my error, red on the remote about a minute). (4) my own workflow bugs: cache:pip needs a requirements.txt or pyproject.toml to hash and hard-fails without one (2e47e0c, b4afd4a), and shibboleth's default branch is master not main so a [main] filter queued no run at all - the repo looked covered while having zero CI (bb665bb). OPEN FOR THE USER: repo-scope's workflow lives on fix/audit-sweep behind open PR #1, so it guards that PR and not main until merged; shibboleth remains on master while the other repos are on main. Constraint con-003-b795 recorded and updated with all three workflow traps.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
