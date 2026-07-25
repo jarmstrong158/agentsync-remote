@@ -14,21 +14,18 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "context-keeper: task-aware session-start injection (bias by the files you are actually touching) + enforced_by pointer on constraints",
+      "task": "context-keeper: verify entries against a commit SHA rather than a timestamp, so drift is exact under clock skew, rebases and amended commits",
       "touches": [
+        "context-keeper/code_drift.py",
         "context-keeper/server.py",
-        "context-keeper/work_focus.py",
-        "context-keeper/hooks/session_start.py",
-        "context-keeper/tests",
-        "context-keeper/CLAUDE.md"
+        "context-keeper/tests/test_drift_and_usage.py"
       ],
       "requires": [],
-      "branch": "feat/task-aware-injection",
-      "status": "done",
-      "updated_at": "2026-07-25T22:09:29.314483+00:00",
+      "branch": "feat/verify-against-sha",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T22:16:29.202811+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED + PR OPEN, CI GREEN, AWAITING MERGE. context-keeper PR #11 on feat/task-aware-injection, 4/4 jobs green (ubuntu + windows, py3.10 + 3.12). 354 tests passing, up from 331. (1) Task-aware session-start injection: work_focus.py derives what the session is about from uncommitted paths, falling back to the last 5 commits on a clean tree, and appends a \"Rules covering what you are working on\" block naming constraints scoped to those paths. This is dec-005's scope_guard idea moved from edit time to session start. Critical design constraint respected: the injected block is deterministically ordered for prompt-cache stability, so focus is APPENDED after everything stable and after truncation, never ranked in among the constraints - a test asserts the stable block remains a literal prefix. Interleaving would invalidate the cache on every file touched, costing more than the irrelevance it fixes. (2) enforced_by: optional pointer naming the test that checks a constraint; verify_quality confirms the name resolves and drift details say \"run X\" instead of \"go read the code\". NEVER executed, with a test proving a command-shaped value does not fire - import_snapshot pulls from git and mirror pulls from a Worker, so an executable field would be a code-execution path into an offline store. Schema cost measured against con-004 first: +28 tokens, 2927 to 2955, 195 headroom left. THREE BUGS THE TESTS CAUGHT, all would have shipped silently: _norm used lstrip(\"./\") which strips CHARACTERS not a prefix, so .context/ became context/ and any entry scoped to a dotfile path could never match - the same bug was already live in code_drift.py from the earlier merge and is fixed there too; git status collapses an untracked directory to \"hooks/\" so a brand-new file never matched a file-scoped constraint, needs -uall; and reading the summary dirtied the tree it reads because usage.record() writes .context/usage.json, so generating a summary changed the focus signal for the next one - two features built the same day interfering with each other. Dogfooded mid-edit on this repo: with server.py uncommitted it surfaced con-004, the token-budget rule this very PR had to measure itself against. NOT BUILT, remaining from the analysis: verify against a commit SHA rather than a timestamp, which would remove clock-skew/rebase fuzziness from drift.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
