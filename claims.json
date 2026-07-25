@@ -14,17 +14,21 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Profile README: correct four stale numeric/link claims and add the CI + test-ratio facts the audit verified",
+      "task": "Close the four open items: shibboleth master->main, correct stale org memory k-571a3346 via PR, draft the dillongio notice, and add real test suites to Jack / conductor-mcp / shipexec-metrics / vanguard-web",
       "touches": [
-        "jarmstrong158/README.md"
+        "shibboleth/.github/workflows/tests.yml",
+        "knowledge/knowledge.json",
+        "Jack/tests",
+        "conductor-mcp/test_server.py",
+        "shipexec-metrics/test_metrics.py",
+        "vanguard-web/src"
       ],
       "requires": [],
-      "branch": "main",
-      "status": "done",
-      "updated_at": "2026-07-25T16:55:40.645471+00:00",
+      "branch": "fix/close-open-items",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T17:02:58.828747+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED. Profile README (jarmstrong158/jarmstrong158) corrected in 7964159, on top of the #2/#3 restructure rather than over it - my first attempt was written against a stale local copy and the push was correctly rejected as non-fast-forward; I reset to origin/main, re-read the new content and re-applied. Five stale claims fixed, all re-measured at write time: skein 71/71 -> 130/130 tests; Balatron 814-dim -> 850-dim state; Conductor 22 -> 24 MCP tools; shipexec link href still pointed at the pre-July-rename Ship.exec-metrics-tracker (label had been updated, URL had not, so it survived on a redirect); and Clark 'fine-tune in ~30 min' -> '~50 episodes (~3.3 h on a consumer GPU)' to match Clark's own README - a 6.6x overclaim contradicting the linked project page, the worst of the five because one click catches it. Verified correct and left alone: waveform-MCP '150+ tools' is actually 161, Clark '~18M params' is 18,019,331. All 20 GitHub links now resolve exactly with no redirects. Added a testing-posture line: CI on Linux and Windows across Python versions, 39% test-to-code on the Xylem suite (14,877 test LOC / 38,013 LOC), scoped to infrastructure and tooling because the game repos have no tests. Four of the five errors understated the work.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
