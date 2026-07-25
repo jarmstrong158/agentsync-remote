@@ -22,10 +22,11 @@
       ],
       "requires": [],
       "branch": "feat/verify-against-sha",
-      "status": "in-progress",
-      "updated_at": "2026-07-25T22:16:29.202811+00:00",
+      "status": "done",
+      "updated_at": "2026-07-25T22:25:42.812946+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED + PR OPEN, CI GREEN, AWAITING MERGE. context-keeper PR #12 on feat/verify-against-sha, 4/4 green. 361 tests, up from 354. Entries now carry verified_sha, stamped SERVER-SIDE at every point verified_at is set (three record paths, update_entry, and the dedup merge - the merge path needed base_dir threaded through _merge_entry_fields, which the existing tests caught as a NameError). Deliberately not a tool parameter: it is an observation about the machine doing the write, not something a caller should assert, and keeping it off the schema keeps tools/list unchanged at ~2955 against con-004's 195 tokens of headroom. Comparison stays inside the single git log: each commit carries its index and newest-first ordering means a commit is after the verified point exactly when it sits at a lower index, so there is still no per-entry spawn. TWO FALLBACKS, both tested: a SHA that no longer resolves (rebased away, amended, shallow clone) degrades to the timestamp rather than crashing or silently reporting zero, and entries predating the feature take the same path; the report exposes verified_against sha|timestamp so an exact answer stays distinguishable from a best-effort one. A TEST CAUGHT A CIRCULAR DESIGN FLAW: the git window is derived from timestamps, so it could fail to contain the very commit the SHA names - and that bites exactly when the timestamp is wrong, which is the whole reason for preferring the SHA. An entry with a future verified_at produced an empty window and reported zero drift while one real commit sat there. Fixed by widening once, bounded by MAX_COMMITS, only when a given SHA is missing; measured at 1 git log in the common case and 2 in the fallback. All 7 new tests fail against the previous implementation, covering both directions of the clock problem (past timestamp over-reports, future timestamp hides drift entirely). This closes the full improvement list: drift, scope resolution, usage tracking, passive capture, task-aware injection, enforced_by, SHA verification.",
+      "changed_files": null
     }
   },
   "notes": [
