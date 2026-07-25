@@ -14,59 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Fix prune_backups mtime bug flagged in PR 41 (install/xylem_install.py): age must come from the backup filename, not st_mtime (copy2 copies the config's mtime onto the backup)",
+      "task": "agentsync: stop silent same-id claim clobber (4x reported) and stop changed_files diffstatting a same-named branch in the board repo",
       "touches": [
-        "install/xylem_install.py",
-        "tests/test_xylem_install.py"
+        "agentsync_server.py",
+        "test_agentsync.py",
+        "DESIGN.md",
+        "README.md",
+        "AGENTS.md"
       ],
       "requires": [],
-      "branch": "fix/audit-sweep",
-      "status": "done",
-      "updated_at": "2026-07-25T13:18:40.792781+00:00",
+      "branch": "fix/same-id-claim-clobber",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T13:27:59.053535+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED. prune_backups() in install/xylem_install.py now ages backups by the .bak-YYYYMMDDHHMMSS filename instead of st_mtime. Root cause: write_with_backup() creates the backup with shutil.copy2, which copies the SOURCE mtime onto the copy, so mtime meant \"config last edited\", not \"backup taken\". Broke both ways: a config untouched for a year yielded a brand-new backup that looked a year old and got deleted on the next --apply; a config edited daily yielded backups that never aged out, and these files carry live connector tokens. installer.py already read the epoch from the filename; this file had diverged. Undatable 14-digit names are kept rather than guessed at (uninstall --apply still purges all .bak-* unconditionally). The pre-existing test could not catch this - it called os.utime(b,(0,0)) to force an old mtime, so it passed under either implementation; its fixture also used day 00, which strptime rejects. Two new tests pin both directions and both fail against the old code. Full suite 402 passed / 3 skipped. Commit 38537e3 on fix/audit-sweep, pushed to origin, part of open PR #41. Constraint recorded as con-001-ff21.",
-      "changed_files": [
-        {
-          "status": "A",
-          "path": ".context/decisions.json"
-        },
-        {
-          "status": "M",
-          "path": "src/index.ts"
-        },
-        {
-          "status": "M",
-          "path": "src/mcp.ts"
-        },
-        {
-          "status": "M",
-          "path": "src/overlap.ts"
-        },
-        {
-          "status": "A",
-          "path": "src/shared/mcp-core.ts"
-        },
-        {
-          "status": "M",
-          "path": "src/tools.ts"
-        },
-        {
-          "status": "M",
-          "path": "test/cas.test.ts"
-        },
-        {
-          "status": "A",
-          "path": "test/hardening.test.ts"
-        },
-        {
-          "status": "A",
-          "path": "test/raw-modules.d.ts"
-        },
-        {
-          "status": "A",
-          "path": "test/shared-drift.test.ts"
-        }
-      ]
+      "note": null
     }
   },
   "notes": [
