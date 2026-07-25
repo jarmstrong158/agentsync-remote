@@ -14,21 +14,17 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "agentsync: stop silent same-id claim clobber (4x reported) and stop changed_files diffstatting a same-named branch in the board repo",
+      "task": "xylem: distill.py must not fall back to os.getcwd() when the SessionEnd payload has no cwd - it distills the wrong project, and the A||B interpreter chain makes the second run hit exactly that path",
       "touches": [
-        "agentsync_server.py",
-        "test_agentsync.py",
-        "DESIGN.md",
-        "README.md",
-        "AGENTS.md"
+        "plugin/scripts/distill.py",
+        "tests/test_hooks.py"
       ],
       "requires": [],
-      "branch": "fix/same-id-claim-clobber",
-      "status": "done",
-      "updated_at": "2026-07-25T13:46:32.136420+00:00",
+      "branch": "fix/audit-sweep",
+      "status": "in-progress",
+      "updated_at": "2026-07-25T13:46:40.661167+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED + PR OPEN. agentsync PR #4 on fix/same-id-claim-clobber. (1) claim() now returns status \"blocked\" with a shared_agent_id reason when your agent id already holds an in-progress claim written by a different server instance, naming the task/branch/files that would be erased. Root cause of the 4x-reported collision: claims.json holds one claim per agent id, the old code overwrote and returned \"claimed\", and the warning was attached to that success result - produced after the other claim was already gone. The overlap loop skips our own id, so the erased claim's files lost protection silently. force=True still wins, so DESIGN's \"advisory not enforced\" holds and a restarted server reclaims its slot in one call. Rejected keying by agent+instance: instance changes every restart and DESIGN deliberately rejects auto-expiry, so orphans would accumulate unbounded. (2) Finished claims now carry changed_files_repo. A claim records a branch NAME with no repo qualifier and the diffstat runs in the board repo, so a same-named branch there yields a confidently wrong list - observed live, a xylem claim annotated with agentsync-remote TypeScript files because both repos have a fix/audit-sweep. _origin_slug reads git config not gh, and handles filesystem-path remotes. (3) DESIGN/README/AGENTS updated: every AGENT needs a unique id, not every person. Tests 52 passed; the old test_duplicate_agent_id_warns asserted the replaced behaviour and became 4 tests covering the full matrix. Decision recorded as dec-002-90ef.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
