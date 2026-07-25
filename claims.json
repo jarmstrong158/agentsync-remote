@@ -14,18 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "dec-079: fix AHEAD_BUFFER myopia (SAVE gate suppresses engine-building in antes 1-3) + make it env-overridable for a paired A/B",
+      "task": "CI + hygiene sweep: add test workflows to the four authored repos with real suites and no CI (shibboleth, waveform MCP, repo-scope, git-onboard), matched to xylem's multi-OS pattern; add conductor-mcp .gitignore",
       "touches": [
-        "training/action_executor.py",
-        "eval_session.py",
-        "tests/test_planner.py"
+        "shibboleth/.github/workflows/tests.yml",
+        "waveform MCP/.github/workflows/tests.yml",
+        "repo-scope/.github/workflows/tests.yml",
+        "git-onboard/.github/workflows/tests.yml",
+        "conductor-mcp/.gitignore"
       ],
       "requires": [],
-      "branch": "main",
+      "branch": "ci/add-test-workflows",
       "status": "in-progress",
-      "updated_at": "2026-07-25T15:29:38.828096+00:00",
+      "updated_at": "2026-07-25T16:08:46.812323+00:00",
       "instance": "712c43ad",
-      "note": "dec-079 code landed + 179 tests pass. Paired A/B launched on ckpt 006268, 300 seeds: arm A control (BALATRON_AHEAD_EARLY_BONUS=0.0, verified pinned in the live evaluate.py env) then arm B treatment (1.0). Training paused for the duration; arm B restores the supervisor in its finally block. Analyze with eval_report.py on logs/eval_dec079_control.jsonl vs logs/eval_dec079_treat.jsonl."
+      "note": null
     }
   },
   "notes": [
