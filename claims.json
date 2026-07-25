@@ -21,10 +21,52 @@
       ],
       "requires": [],
       "branch": "fix/audit-sweep",
-      "status": "in-progress",
-      "updated_at": "2026-07-25T13:46:40.661167+00:00",
+      "status": "done",
+      "updated_at": "2026-07-25T13:48:33.183303+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED. plugin/scripts/distill.py no longer falls back to os.getcwd() when the SessionEnd payload has no cwd - it now skips. The fallback silently captured session knowledge into whichever repo the hook process started in, which the file's own header documents as the exact failure the previous rewrite existed to fix. The _git_root guard cannot catch it because the inherited cwd usually IS a git repo, just the wrong one. Verified not theorised: against the old code the new test distils into \"some-other-repo\" purely because that was the process cwd. This also closes the gap in the hooks.json A||B chain - that chain is justified by \"both scripts exit 0 on every path\", but that is a property of the scripts' CODE while the fallback fires on the PROCESS exit status, which a script does not control when killed; SessionEnd has a hard timeout, and a killed first leg leaves the second running against a drained stdin, landing on exactly this path. artifacts/session_end_hook.py was already correct and pinned by tests; only the plugin path had drifted. Commit 43c7974 on fix/audit-sweep, pushed, part of open PR #41 (now 10 commits). Full suite 403 passed / 3 skipped. Constraint recorded as con-002-360e.",
+      "changed_files": [
+        {
+          "status": "A",
+          "path": ".context/decisions.json"
+        },
+        {
+          "status": "M",
+          "path": "src/index.ts"
+        },
+        {
+          "status": "M",
+          "path": "src/mcp.ts"
+        },
+        {
+          "status": "M",
+          "path": "src/overlap.ts"
+        },
+        {
+          "status": "A",
+          "path": "src/shared/mcp-core.ts"
+        },
+        {
+          "status": "M",
+          "path": "src/tools.ts"
+        },
+        {
+          "status": "M",
+          "path": "test/cas.test.ts"
+        },
+        {
+          "status": "A",
+          "path": "test/hardening.test.ts"
+        },
+        {
+          "status": "A",
+          "path": "test/raw-modules.d.ts"
+        },
+        {
+          "status": "A",
+          "path": "test/shared-drift.test.ts"
+        }
+      ]
     }
   },
   "notes": [
