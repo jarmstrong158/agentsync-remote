@@ -14,19 +14,19 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "balatron: make full-slot shop joker buys a LEGALITY gate (con-011) so the planner swap path is reachable; env-overridable for a paired A/B",
+      "task": "meristem sprite readability pass: make quadruped/flyer builds silhouette-distinct, give tiles real structure + wrap-safe features, per-shape pickup colours, readable chests, distinct blade family",
       "touches": [
-        "environment/action_space.py",
-        "tests/test_action_mask.py",
-        "DECISIONS.md"
+        "packages/generators/meristem_generators/creatures.py",
+        "packages/generators/meristem_generators/items.py",
+        "packages/generators/meristem_generators/procedural.py",
+        "packages/generators/tests/test_generators.py",
+        "docs/reference/library.png",
+        "tools/contact_sheet.py"
       ],
-      "requires": [
-        "training/action_executor.py",
-        "environment/planner.py"
-      ],
-      "branch": "main",
+      "requires": [],
+      "branch": "feat/sprite-readability",
       "status": "in-progress",
-      "updated_at": "2026-07-26T00:13:27.598539+00:00",
+      "updated_at": "2026-07-26T00:32:50.441447+00:00",
       "instance": "712c43ad",
       "note": null
     }
