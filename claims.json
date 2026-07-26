@@ -14,17 +14,22 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem CI: run the Godot engine assertions in CI (linux) so behavioural checks guard every push, not just local runs",
+      "task": "meristem tile passability: solid tiles get collision so level geometry is real (the ground had none - the player walked over water and stone, and is_on_wall could never fire), plus cross-ref refusing spawns on impassable cells and an engine assertion that the player cannot walk through a wall",
       "touches": [
-        ".github/workflows/tests.yml"
+        "packages/generators/meristem_generators/procedural.py",
+        "packages/generators/meristem_generators/__init__.py",
+        "packages/spec-store/meristem_spec_store/crossref.py",
+        "packages/compiler/meristem_compiler/scenes.py",
+        "packages/compiler/meristem_compiler/compile.py",
+        "packages/verifier/meristem_verifier/assertions.py",
+        "packages/verifier/meristem_verifier/harness/verify.gd"
       ],
       "requires": [],
-      "branch": "ci/godot-engine-assertions",
-      "status": "done",
-      "updated_at": "2026-07-26T19:48:45.428230+00:00",
+      "branch": "feat/tile-collision",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T21:06:15.822823+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. PR #15 (branch ci/godot-engine-assertions, commit ead07f8), CI green ubuntu + windows py3.12. PR #14 merged as 45b67ed first, so not stacked. CI now RUNS the Godot engine assertions on Linux: pinned GODOT_VERSION in one workflow-level place, cached download, MERISTEM_GODOT exported via GITHUB_ENV, install step ends with --headless --version so a bad download or missing shared library fails under its own step name rather than as a confusing test error. Godot 4.6 ran headless on ubuntu-latest with NO extra apt packages needed. One OS on purpose: these assert game logic, not platform behaviour, and the rest of the suite already covers both. VERIFIED THAT THEY ACTUALLY RAN rather than the job merely passing - ubuntu went from 198 passed / 13 skipped to 203 passed / 8 skipped (five more tests), the log prints RAN: Godot engine assertions, and the only Godot-related skip is the visual capture with its intended reason. Seven behavioural assertions plus the compile/import/run smoke test now guard every push: move_speed, melee_damage, ability_damage, ability_cost, gear_bonus, loot_drop, room_transition. WHY THIS MATTERED: three real bugs this session were invisible to CI and green - a melee attack_range of 22px against the ~24px two colliding 16px bodies actually settle at (the swing could never hit a touching enemy), an input-timing flake in the harness where a single-frame press-then-release could miss the is_action_just_pressed window, and an ability `cost` read by the runner but never baked so every ability was free. FIXED A GATING BUG FOUND WHILE DOING IT: MERISTEM_GODOT alone gated two capabilities with different requirements. The assertion loop runs under true --headless and needs only the binary; the visual loop runs Godot WINDOWED on purpose because --headless uses dummy drivers that do not render (dec-0007), so it needs a display. Turning the assertions on in CI would have turned on a capture that cannot possibly work on a display-less runner. The visual test now also requires a display - DISPLAY on POSIX, always true on Windows - so it still runs on a real desktop and skips in CI instead of failing. Checked the capture code BEFORE pushing, which is what surfaced this. Decision recorded as dec-019-a72b. REMAINING GAPS unchanged: narrative, economy and items.rarity_tiers still unread (rarity does not affect drop odds despite looking like it should); no inventory or unequip, a second weapon silently replaces the first; only atk/def bonuses consumed so an item granting hp or spd validates and does nothing; dropped items land where the enemy died with no placement validity check so loot can land in a wall or on water; turn_based_combat emits nothing; no attack animation in the humanoid archetype; engine assertions do not run on Windows; visual capture unguarded by CI entirely; GODOT_VERSION must be bumped in step with the engine the templates target and nothing enforces that pairing. RECOMMENDED NEXT: merge PR #15, then either give loot a placement check so drops cannot land in a wall (small, and the fight-loot-equip loop is now the main path players walk), or start on inventory/unequip so found gear can be compared rather than silently replacing what you wear.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
