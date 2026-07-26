@@ -132,6 +132,44 @@ read/write your coordination file.** Treat the whole URL like a password:
 `GH_PAT` is likewise a credential — scope it to *only* your coordination repo
 with *only* Contents: Read and write, so a leak can't reach anything else.
 
+### Why the token is in the URL path, and what that costs you
+
+This is a **deliberate design choice, not an oversight**. claude.ai custom
+connectors do not reliably send custom headers, so an `Authorization:` header —
+the obvious alternative — cannot be depended on. Putting the credential in the
+path is what makes the connector work at all.
+
+Be clear about the price, because it is not the same as a header:
+
+- **URLs get recorded in places request bodies never do.** Browser history,
+  shell history, proxy and CDN access logs, crash reports, bug reports,
+  screenshots, "copy link" buttons, and **agent session transcripts**. During
+  the audit that produced this section, the connector URLs for these Workers
+  were found in **~54 occurrences across 13 local session transcripts** on a
+  single machine — none pasted deliberately; they were simply part of the tool
+  configuration an agent echoed back.
+- **The Worker itself does not log it.** Every log line records the route as
+  `/mcp/***`. The leak surface is everything *around* the Worker, which is
+  exactly what you cannot audit.
+- **A leaked token makes the holder a full peer in your mesh** — able to claim,
+  force-claim over you, release your claims, and post to the mailbox — with no
+  second factor and no per-caller identity. There is nothing to revoke except
+  the token, and no log that will tell you who used it.
+
+**Practical guidance:**
+
+1. **Rotate on a schedule**, not just on suspicion — assume the URL has been
+   recorded somewhere you don't control. Rotation is cheap: change `AUTH_TOKEN`,
+   update the connector.
+2. **Rotate immediately** if you've shared a terminal recording, a transcript,
+   a screen capture, or a bug report from a machine where the connector is
+   configured.
+3. Use a **long random token** (32+ bytes, e.g. `openssl rand -hex 32`). The
+   comparison is constant-time in both content *and* length, so length is not
+   observable — but entropy is still your only defence against guessing.
+4. If you ever get the chance to use a header or OAuth instead, **take it**.
+   This tradeoff is forced by the client, not preferred.
+
 ## Cross-transport walkthrough — two transports, one mesh
 
 This is the whole point. The laptop and the phone coordinate through one file.
@@ -166,6 +204,45 @@ Claude: posted.
 > agentsync release --note "refactor landed"
 {"status": "released"}              # laptop's claim -> status "done"
 ```
+
+> ### ⚠️ Known gap: the mailbox is currently WRITE-ONLY across tiers
+>
+> **The "Back on the PC" step above does not work yet.** This Worker's
+> `mailbox()` writes a top-level `notes[]` array into `claims.json`, and the
+> **local Python agentsync server has no concept of `notes`** — it exposes no
+> `mailbox` tool, and its `survey()` returns only `me`, `branch`, `partners`
+> and `stale_claims`. A note posted from the phone lands in the file correctly
+> and is simply never surfaced to a desktop peer.
+>
+> That matters more than a missing feature normally would, because the
+> repository-level agent instructions tell agents to raise judgment calls
+> *through this mailbox*. An escape hatch that silently swallows the question
+> is worse than no escape hatch: the agent believes it has asked and waits, or
+> proceeds, on a question nobody will ever see.
+>
+> **Until the local side lands, read the mailbox from the remote peer**
+> (`mailbox` with no `message`, or `survey`), or read `claims.json` on the
+> coordination branch directly.
+>
+> **The local-side change required** (in the Python `agentsync` package — a
+> separate repo, deliberately not modified here):
+>
+> 1. **Parse and preserve `notes`.** The claims-file reader must round-trip the
+>    top-level `notes` key. Today an unrecognised key risks being dropped on
+>    the next local write, which would *delete* remote peers' notes. Preserving
+>    unknown top-level keys is the minimum safe change and should land first,
+>    independently.
+> 2. **Surface notes in `survey()`** — add a `notes` field alongside
+>    `partners`/`stale_claims`, defaulting to `[]`.
+> 3. **Add a local `mailbox(message=None, to=None)` tool** mirroring this one:
+>    append `{from, to, message, at}` under the same compare-and-swap the local
+>    claim writes already use, and cap retention at the 200 most recent notes
+>    (this Worker evicts oldest-first at that bound — the two sides must agree,
+>    or they will fight over the file).
+>
+> The on-disk shape is already compatible in both directions: this Worker only
+> emits `notes` when non-empty, so a `claims.json` with no mailbox activity
+> stays byte-shape-identical to pure-local output.
 
 **On the phone again:**
 
