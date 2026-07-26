@@ -14,26 +14,27 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem Zelda path part 1 (combat): player melee attack, enemy AI archetypes (idle/patrol/chase) as spec-driven templates, enemy damage + death, kill counter. Makes the top-down slice an actual game - currently the player cannot fight back and enemy hp is never read.",
+      "task": "meristem abilities: new `abilities` domain over a fixed kind library (projectile/melee_arc/heal/dash), bound to ability_1..3 input slots, runner as a child node on the player",
       "touches": [
+        "schemas/abilities.schema.json",
         "schemas/entities.schema.json",
-        "schemas/mechanics.schema.json",
+        "packages/spec-store/meristem_spec_store/schemas.py",
+        "packages/spec-store/meristem_spec_store/crossref.py",
+        "packages/spec-store/meristem_spec_store/scaffold.py",
         "packages/compiler/meristem_compiler/scenes.py",
         "packages/compiler/meristem_compiler/compile.py",
-        "packages/compiler/meristem_compiler/templates/top_down_controller.gd.tmpl",
-        "packages/compiler/meristem_compiler/templates/enemy_idle.gd.tmpl",
-        "packages/compiler/meristem_compiler/templates/enemy_patrol.gd.tmpl",
-        "packages/compiler/meristem_compiler/templates/enemy_chase.gd.tmpl",
-        "packages/compiler/tests/test_compile.py",
+        "packages/compiler/meristem_compiler/assets.py",
+        "packages/compiler/meristem_compiler/godot_project.py",
+        "packages/verifier/meristem_verifier/assertions.py",
+        "packages/verifier/meristem_verifier/harness/verify.gd",
         "examples/slice-01/manifest.json"
       ],
       "requires": [],
-      "branch": "feat/zelda-combat",
-      "status": "done",
-      "updated_at": "2026-07-26T14:34:15.070540+00:00",
+      "branch": "feat/abilities",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T15:27:24.413504+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. Three stacked PRs, all CI green ubuntu + windows py3.12: #7 fix/refuse-unimplemented-controller (67c4421), #8 feat/zelda-combat (edf1f55, base #7), #9 feat/zelda-rooms (7d806ee, base #8). Merge in order 7 -> 8 -> 9 and each retargets to main. THE FIX: write_scripts rendered top_down_controller.gd.tmpl unconditionally, so a valid platformer manifest (validate_all ok/complete/valid) compiled without error into a top-down game with no gravity or jump, discarding jump_height and gravity and inventing a FRICTION constant the platformer schema does not allow. Proved it by compiling one, not just reading code - the emitted player.gd header named the wrong archetype. Now CONTROLLERS maps kind to (template, its own params), refusal names what is implemented and says the manifest is valid and this is a compiler gap, and the kind is resolved before any assets are generated. ZELDA COMBAT: player melee (facing vector, range+arc test, cooldown; reach and rate from the controller archetype, damage from the entity atk stat), enemy AI archetypes idle/patrol/chase selected by a new optional `ai` with tuning from entity stats, enemies take damage/flash/die, Game tracks kills, HUD shows them, example slime is now a chaser. An unimplemented ai is refused like an unimplemented controller. ZELDA ROOMS: new optional level `exits` (level-scoped, because world.connections joins regions which are too coarse), cross-ref validates door bounds/target/self-loop/arrival-in-target-bounds; every level now compiles to a room (previously pick_level built ONE and the rest were silently never built), start stays main.tscn, others level_<id>.tscn, all from one _room_tscn builder; world.gd takes an exported level_name instead of being baked per level; doors hand the arrival cell through the Game autoload since change_scene_to_file cannot carry args, take_pending_spawn is read-once so a stale cell cannot teleport after a death-reload, and doors are one-shot because body_entered can fire twice in a frame. KEY LESSON (dec-015-5a5c): the string assertions ALL passed while the attack did not work. Running the verifier assertion loop in real Godot 4.6 showed no damage - bodies settle 23.9px apart and attack_range was 22.0, so the reach could never hit a touching enemy. Added melee_damage and room_transition assertions; a string check proves code was written, not that it connects. Suite 183 passed with MERISTEM_GODOT set (Godot 4.6 at C:\\\\Users\\\\jarms\\\\repos\\\\Godot_v4.6-stable_win64.exe), 179 without it as CI runs. STILL NOT BUILT, from the same audit: economy and narrative domains are authorable and entirely unread by the compiler; abilities, inventory, equipping, quests and roguelite run structure do not exist as concepts; gear slot/stats/rarity/drop_tables are inert beyond sprite and placement; turn_based_combat emits nothing; no attack animation exists in the humanoid archetype. RECOMMENDED NEXT: merge 7, 8, 9 in order, then pick between abilities (gates combat depth, gear effects and roguelite upgrades) or making economy/gear reach the game.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
