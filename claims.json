@@ -14,16 +14,16 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem sim test: express a real Vanguard slice (Act 1 scene 1-7, the Greenweald Detour) as a Meristem manifest from the actual design docs, compile and run it, and report every gap where Vanguard content could not be expressed",
+      "task": "rebuild all Vanguard sprites through the current Meristem pipeline: regenerate the 43-creature bestiary with the improved archetypes, and generate the 6 party members from their documented appearances using humanoid prop layers, replacing the third-party Puny placeholders",
       "touches": [
-        "examples/vanguard-greenweald/manifest.json",
-        "examples/vanguard-greenweald/README.md",
-        "docs/reference/vanguard-fit.md"
+        "tools/vanguard_bestiary.py",
+        "docs/reference/vanguard-bestiary.png",
+        "docs/reference/vanguard-cast.png"
       ],
       "requires": [],
-      "branch": "docs/vanguard-sim-test",
+      "branch": "feat/vanguard-cast",
       "status": "in-progress",
-      "updated_at": "2026-07-26T23:23:41.960649+00:00",
+      "updated_at": "2026-07-26T23:36:21.381516+00:00",
       "instance": "712c43ad",
       "note": null
     }
