@@ -14,22 +14,19 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem sprite readability pass: make quadruped/flyer builds silhouette-distinct, give tiles real structure + wrap-safe features, per-shape pickup colours, readable chests, distinct blade family",
+      "task": "meristem sprite readability follow-up: give ghost:specter a real hooded-phantom silhouette, and separate the projectile kinds (fireball vs bolt are near-identical orange spiky balls)",
       "touches": [
         "packages/generators/meristem_generators/creatures.py",
         "packages/generators/meristem_generators/items.py",
-        "packages/generators/meristem_generators/procedural.py",
         "packages/generators/tests/test_generators.py",
-        "docs/reference/library.png",
-        "tools/contact_sheet.py"
+        "docs/reference/library.png"
       ],
       "requires": [],
-      "branch": "feat/sprite-readability",
-      "status": "done",
-      "updated_at": "2026-07-26T00:55:09.361198+00:00",
+      "branch": "feat/specter-and-projectiles",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T01:29:09.579001+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. Sprite readability pass shipped as PR #4 (branch feat/sprite-readability, commit d59d7cc). CI green on ubuntu + windows py3.12; full suite 153 passed. Six defects fixed, all found by rendering the library as pure alpha masks: (1) quadruped builds shared one hardcoded body loaf - now each declares back/belly knots that reshape the torso, worst silhouette pair 46px -> 144px; (2) flyer bird/moth were the same ellipse, now swept wing + tail fan vs fore/hind lobes + antennae, 60px -> 108px; (3) tile crack walk CLAMPED instead of wrapping, causing a dark smudge repeating at every seam - all features now go through wrap-safe _put/_disc; (4) _wave stepped 3 into a 16px tile so courses collided at the seam - periods are now named constants asserted to divide the tile; (5) grass/dirt/sand/snow/stone were one noise field recoloured - each got real structure; (6) pickups all defaulted to gold, chest had no lid seam, blades were one drawing at three scales. 9 new tests asserting on silhouette and colour, 5 of them verified to FAIL against main before merging. Deliberately did NOT ship an image-level tile-seam metric: measured it, it false-positives on brick and water whose own periods make a correct seam look broken, i.e. it reports CANNOT TELL as BROKEN. Decisions recorded as dec-011-b5c3 and dec-012-d904. RECOMMENDED NEXT: review and merge PR #4; the remaining known-weak sprites are ghost:specter (reads as a grey rounded rectangle) and the projectile pair fireball/bolt (near-identical orange spiky balls) - neither was in this scope.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
