@@ -47,6 +47,11 @@ export const MAX_MAILBOX_NOTES = 200;
 
 const BLOCKED_MESSAGE =
   "Overlap with an active peer claim. Narrow `touches`, wait, or re-call with force=true.";
+const SELF_OVERWRITE_MESSAGE =
+  "You already hold an ACTIVE claim on unrelated files. Claims are keyed by " +
+  "agent_id, so this would silently replace it — and a later release()/finish() " +
+  "would then act on the WRONG claim. Close the old one first (finish/release), " +
+  "or re-call with force=true if you really mean to abandon it.";
 const EXHAUSTED_MESSAGE =
   `Nothing was written. The compare-and-swap lost the race ${PUSH_RETRIES} times ` +
   "in a row, so your claim/update/note did NOT land. Call survey() to see the " +
@@ -292,6 +297,35 @@ export async function claim(ctx: Ctx, args: ClaimArgs): Promise<unknown> {
     }
 
     const existing = doc.claims[ctx.agentId];
+
+    // Self-overwrite guard. Claims are keyed by agent_id alone, so a second
+    // claim under the same id REPLACES the first with no signal. When one human
+    // runs several concurrent sessions they share an agent_id, so a session
+    // working on project B silently evicts project A's claim — and A's later
+    // release()/finish() then closes B's claim instead. That is not theoretical:
+    // it happened, and a "done" claim for an unrelated project got released.
+    //
+    // The duplicate-agent warning below cannot catch it: it compares
+    // `existing.instance`, and concurrent sessions can carry the SAME instance
+    // token, so the mismatch never fires.
+    //
+    // Trigger on ZERO overlap rather than any difference, so the common,
+    // legitimate case of a session widening its own scope ([a] -> [a, b]) still
+    // passes untouched, while an unrelated workstream is stopped. `done` claims
+    // are free to replace — that is the normal finish-then-claim-next flow.
+    if (!force && existing && existing.status !== "done") {
+      const prev = new Set(existing.touches ?? []);
+      if (prev.size > 0 && !touches.some((t) => prev.has(t))) {
+        return {
+          return: {
+            status: "blocked",
+            message: SELF_OVERWRITE_MESSAGE,
+            existing_claim: existing,
+          },
+        };
+      }
+    }
+
     const entry: ClaimEntry = {
       task: args.task,
       touches,

@@ -206,7 +206,12 @@ describe("duplicate-instance warning", () => {
     });
     vi.stubGlobal("fetch", fake.fetch);
 
-    const res: any = await claim(testCtx(), { task: "new", touches: ["a"] });
+    // Touches OVERLAP the existing claim on purpose. The self-overwrite guard
+    // blocks an UNRELATED claim over my own active one, so the warning path is
+    // now reached via a re-claim of the same files — which is also the realistic
+    // shape of this case: a server restart mints a new instance token and the
+    // agent re-claims the work it was already holding.
+    const res: any = await claim(testCtx(), { task: "new", touches: ["src/x"] });
 
     expect(res.status).toBe("claimed");
     expect(res.warning).toMatch(/already holds agent_id 'jonny-mobile'/);
