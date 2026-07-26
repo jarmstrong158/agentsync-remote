@@ -14,23 +14,18 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem tile passability: solid tiles get collision so level geometry is real (the ground had none - the player walked over water and stone, and is_on_wall could never fire), plus cross-ref refusing spawns on impassable cells and an engine assertion that the player cannot walk through a wall",
+      "task": "meristem sim test: express a real Vanguard slice (Act 1 scene 1-7, the Greenweald Detour) as a Meristem manifest from the actual design docs, compile and run it, and report every gap where Vanguard content could not be expressed",
       "touches": [
-        "packages/generators/meristem_generators/procedural.py",
-        "packages/generators/meristem_generators/__init__.py",
-        "packages/spec-store/meristem_spec_store/crossref.py",
-        "packages/compiler/meristem_compiler/scenes.py",
-        "packages/compiler/meristem_compiler/compile.py",
-        "packages/verifier/meristem_verifier/assertions.py",
-        "packages/verifier/meristem_verifier/harness/verify.gd"
+        "examples/vanguard-greenweald/manifest.json",
+        "examples/vanguard-greenweald/README.md",
+        "docs/reference/vanguard-fit.md"
       ],
       "requires": [],
-      "branch": "feat/tile-collision",
-      "status": "done",
-      "updated_at": "2026-07-26T21:16:14.024547+00:00",
+      "branch": "docs/vanguard-sim-test",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T23:23:41.960649+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. PR #16 (branch feat/tile-collision, commit 30a3177), CI green ubuntu + windows py3.12, and the CI log confirms the seven engine assertions RAN (209 passed / 8 skipped on ubuntu) rather than the job merely being green. PR #15 merged as 7735941 first, so not stacked. SCOPE CORRECTION WORTH KNOWING: I set out to add a runtime placement check so dropped loot could not land in a wall, and checking the ground builder FIRST showed there was no wall to land in - it created Sprite2D nodes and nothing else, so the compiled game had NO collision anywhere. The player walked across water and stone and the patrol AI's is_on_wall() could never be true. The loot-placement problem did not exist because the thing it depended on did not either, so the nudge was dropped as solving a symptom of a missing feature. WHAT LANDED: terrain passability. water/stone/brick/lava block movement, grass/dirt/sand/snow are walkable. It lives with the tile vocabulary in the generators because whether you can walk on water is a fact about water, not about one map, and is exposed via public solid_tiles()/tile_is_solid() for the same reason known_tiles is - the compiler bakes it into world.gd and cross-ref resolves spawn cells against it, so a rename must break an import (the ProceduralGenerator._TILES lesson). lava is solid rather than passable-and-damaging because no terrain damage system exists to be the other half. The ground builder puts every wall shape on ONE StaticBody2D so the physics server sees one collider instead of hundreds; shape centres offset half a tile since tiles draw from their top-left. Cross-ref now refuses a player_spawn, spawn, door, or door ARRIVAL cell on impassable terrain - the follow-up the visual loop earned when it caught an enemy on the water pond. That check immediately caught a bad fixture of MINE: the two-room test manifest laid the whole cave floor in stone, so the room was entirely wall with its player_spawn and door inside it, wrong since the room-transition work and unnoticed because nothing could notice. VERIFIED with a new tile_collision assertion derived from the map (scans the start level for the first passable cell with a solid right neighbour, derives nothing if the map has no walls): in Godot 4.6 the player starts at x=200 beside the pond, holds right 60 physics frames and stops at x=202.99 against a boundary of 208 - exactly its 5px collision half-width, where with no collision it would have reached about x=480. Suite 210 passed with MERISTEM_GODOT set (seven assertions), 204 without. Decision recorded as dec-020-65e9. REMAINING GAPS: solid is binary - no one-way ledges, no damaging-but-walkable terrain, no per-level material override, and water being solid means no swimming; collision is rebuilt at runtime from the grid JSON so the .tscn does not describe the walls; the tile_collision assertion only tests the rightward direction. Unwired domains unchanged: narrative, economy, items.rarity_tiers (rarity does not affect drop odds). No inventory or unequip - a second weapon silently replaces the first. Only atk/def bonuses consumed. turn_based_combat emits nothing. No attack animation in the humanoid archetype. Engine assertions do not run on Windows and the visual capture is unguarded by CI. RECOMMENDED NEXT: merge PR #16, then inventory/unequip is the biggest remaining gameplay hole now that geometry, combat and loot are all real - found gear silently replacing what you wear is the most surprising behaviour left in the loop.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
