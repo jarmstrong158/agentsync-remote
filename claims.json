@@ -14,28 +14,25 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem abilities: new `abilities` domain over a fixed kind library (projectile/melee_arc/heal/dash), bound to ability_1..3 input slots, runner as a child node on the player",
+      "task": "meristem gear + ability cost: bake the items table into Game so worn slots equip on pickup and move effective atk/def, and give abilities an mp cost that a failed cast does not burn a cooldown on",
       "touches": [
         "schemas/abilities.schema.json",
-        "schemas/entities.schema.json",
-        "packages/spec-store/meristem_spec_store/schemas.py",
+        "schemas/README.md",
         "packages/spec-store/meristem_spec_store/crossref.py",
         "packages/spec-store/meristem_spec_store/scaffold.py",
         "packages/compiler/meristem_compiler/scenes.py",
         "packages/compiler/meristem_compiler/compile.py",
-        "packages/compiler/meristem_compiler/assets.py",
-        "packages/compiler/meristem_compiler/godot_project.py",
+        "packages/compiler/meristem_compiler/templates/top_down_controller.gd.tmpl",
         "packages/verifier/meristem_verifier/assertions.py",
         "packages/verifier/meristem_verifier/harness/verify.gd",
         "examples/slice-01/manifest.json"
       ],
       "requires": [],
-      "branch": "feat/abilities",
-      "status": "done",
-      "updated_at": "2026-07-26T15:27:47.152840+00:00",
+      "branch": "feat/gear-and-ability-cost",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T18:08:57.224025+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. PR #12 (branch feat/abilities, commit 1e7dcfe), CI green ubuntu + windows py3.12. Earlier this session the stacked Zelda work all landed on main: #7 (945481b refuse unimplemented mechanics kind), #10 (311a365 combat, was #8), #11 (7d65a6c rooms, was #9). NOTE a process mistake worth remembering: merging #7 with --delete-branch AUTO-CLOSED the PRs stacked on it, and a closed PR cannot be retargeted or reopened once its base branch is gone. Recovered by rebasing each branch onto main and opening fresh PRs (#10, #11) with comments on the closed ones. Next time either retarget dependents to main BEFORE merging the base, or do not stack. ABILITIES: new `abilities` domain, parameters over a fixed kind library (projectile / melee_arc / heal / dash), entities hold `abilities: [id]` with ORDER SIGNIFICANT binding to ability_1..3. A kind the runner cannot execute is refused, and an ability past the bound slots is refused as unreachable - same discipline as CONTROLLERS and ENEMY_AI. The runner is a child NODE on the player, not code in the controller template, so abilities are not coupled to a control scheme and a future platformer controller inherits them; all four kinds live in one script because a character holds several at once and dispatches per slot at runtime, unlike a controller where exactly one applies. Projectiles get their own scene with sprite/speed/power/range baked and are added to the SCENE not the caster, so a shot outlives the caster. Cross-ref: unique ids, entity refs resolve, and a projectile must carry the speed/range/sprite that make it one. Scaffold and the slice example now ship two starter abilities (firebolt + mend). VERIFIED in Godot 4.6 with a new ability_damage assertion: firebolt takes the slime 8 -> 4 through the real input binding. That work exposed an order-dependent bug in the verifier harness itself - the check passed in a full run and failed alone, because Input.action_press lands mid-frame and a single-frame press-then-release can close the is_action_just_pressed window; fixed with a shared _tap helper holding two physics frames, confirmed by running the assertion in isolation. Docs: several places said \"8 domains\" and listed neither levels nor abilities (already stale before this change) - corrected across schemas README, spec-store README, architecture diagram, scaffold docstring, scaffold_project tool description, and the game-interview skill which gains an ability table and a note on connecting rooms. Suite 190 passed with MERISTEM_GODOT set, 185 without as CI runs. Decision recorded as dec-016-9f56. STILL NOT BUILT: no cost resource for abilities (cooldowns only, no mana/stamina) and no HUD cooldown display; enemy `abilities` validate but only the player's are wired; economy and narrative remain entirely unread; gear slot/stats/rarity/drop_tables inert; no inventory, equipping, quests, or roguelite run structure; turn_based_combat still emits nothing; no attack animation in the humanoid archetype. RECOMMENDED NEXT: merge PR #12, then either make gear stats actually modify the player (the shortest path to items mattering) or add a cost resource so abilities have a tradeoff.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
