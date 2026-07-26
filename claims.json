@@ -14,19 +14,21 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "context-keeper: verify entries against a commit SHA rather than a timestamp, so drift is exact under clock skew, rebases and amended commits",
+      "task": "balatron: make full-slot shop joker buys a LEGALITY gate (con-011) so the planner swap path is reachable; env-overridable for a paired A/B",
       "touches": [
-        "context-keeper/code_drift.py",
-        "context-keeper/server.py",
-        "context-keeper/tests/test_drift_and_usage.py"
+        "environment/action_space.py",
+        "tests/test_action_mask.py",
+        "DECISIONS.md"
       ],
-      "requires": [],
-      "branch": "feat/verify-against-sha",
-      "status": "done",
-      "updated_at": "2026-07-25T22:25:42.812946+00:00",
+      "requires": [
+        "training/action_executor.py",
+        "environment/planner.py"
+      ],
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T00:13:27.598539+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED + PR OPEN, CI GREEN, AWAITING MERGE. context-keeper PR #12 on feat/verify-against-sha, 4/4 green. 361 tests, up from 354. Entries now carry verified_sha, stamped SERVER-SIDE at every point verified_at is set (three record paths, update_entry, and the dedup merge - the merge path needed base_dir threaded through _merge_entry_fields, which the existing tests caught as a NameError). Deliberately not a tool parameter: it is an observation about the machine doing the write, not something a caller should assert, and keeping it off the schema keeps tools/list unchanged at ~2955 against con-004's 195 tokens of headroom. Comparison stays inside the single git log: each commit carries its index and newest-first ordering means a commit is after the verified point exactly when it sits at a lower index, so there is still no per-entry spawn. TWO FALLBACKS, both tested: a SHA that no longer resolves (rebased away, amended, shallow clone) degrades to the timestamp rather than crashing or silently reporting zero, and entries predating the feature take the same path; the report exposes verified_against sha|timestamp so an exact answer stays distinguishable from a best-effort one. A TEST CAUGHT A CIRCULAR DESIGN FLAW: the git window is derived from timestamps, so it could fail to contain the very commit the SHA names - and that bites exactly when the timestamp is wrong, which is the whole reason for preferring the SHA. An entry with a future verified_at produced an empty window and reported zero drift while one real commit sat there. Fixed by widening once, bounded by MAX_COMMITS, only when a given SHA is missing; measured at 1 git log in the common case and 2 in the fallback. All 7 new tests fail against the previous implementation, covering both directions of the clock problem (past timestamp over-reports, future timestamp hides drift entirely). This closes the full improvement list: drift, scope resolution, usage tracking, passive capture, task-aware injection, enforced_by, SHA verification.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
