@@ -14,16 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem compiler: refuse a mechanics kind it cannot emit, instead of silently rendering the top-down controller and discarding the platformer's jump/gravity params",
+      "task": "meristem Zelda path part 1 (combat): player melee attack, enemy AI archetypes (idle/patrol/chase) as spec-driven templates, enemy damage + death, kill counter. Makes the top-down slice an actual game - currently the player cannot fight back and enemy hp is never read.",
       "touches": [
+        "schemas/entities.schema.json",
+        "schemas/mechanics.schema.json",
         "packages/compiler/meristem_compiler/scenes.py",
         "packages/compiler/meristem_compiler/compile.py",
-        "packages/compiler/tests/test_compile.py"
+        "packages/compiler/meristem_compiler/templates/top_down_controller.gd.tmpl",
+        "packages/compiler/meristem_compiler/templates/enemy_idle.gd.tmpl",
+        "packages/compiler/meristem_compiler/templates/enemy_patrol.gd.tmpl",
+        "packages/compiler/meristem_compiler/templates/enemy_chase.gd.tmpl",
+        "packages/compiler/tests/test_compile.py",
+        "examples/slice-01/manifest.json"
       ],
       "requires": [],
-      "branch": "fix/refuse-unimplemented-controller",
+      "branch": "feat/zelda-combat",
       "status": "in-progress",
-      "updated_at": "2026-07-26T14:04:43.918175+00:00",
+      "updated_at": "2026-07-26T14:11:10.876367+00:00",
       "instance": "712c43ad",
       "note": null
     }
