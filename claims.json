@@ -23,10 +23,11 @@
       ],
       "requires": [],
       "branch": "feat/specter-and-projectiles",
-      "status": "in-progress",
-      "updated_at": "2026-07-26T01:29:09.579001+00:00",
+      "status": "done",
+      "updated_at": "2026-07-26T01:36:53.773422+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED, awaiting merge. PR #5 (branch feat/specter-and-projectiles, commit cfc1f34), CI green ubuntu + windows py3.12, full suite 155 passed. Earlier PR #4 was merged as 4e6f38c. ghost:specter was a dome on a rectangle with the same blunt top as the sheet ghost (apex ratio 0.378 vs 0.368) and read as a grey pillar; it is now a pointed hood widening into a robe, with the cowl set INSIDE the hood and a ragged hem (apex ratio 0.175). Two intermediate versions were worse and are documented in-code so they do not come back: a pinched neck plus shoulder flare read as blocky arms, and a full-width cowl read as a robot visor. Projectiles held the library's two closest pairs, and measurement corrected my eyeball call: worst was arrow/knife at 16px (same 2px diagonal, a 3x3 block on one end that read as a hammer), not the fireball/bolt pair that merely looked similar by colour. bolt was ALSO a 4-pointed star, identical in kind to shuriken at 37px; it is now a lightning zigzag. Worst projectile pair 16px -> 32px. KEY LESSON recorded as dec-013-e61a: silhouette XOR is the default distinctness guard but not a universal one - the specter fix moved ghost/specter from 96px to 74px apart while clearly improving readability, because the change was to WHERE the shape narrows, not how much disagrees, so an XOR assertion would have failed a real improvement. Used an apex-ratio test instead, validated old-vs-new. Both new tests confirmed to fail against main. RECOMMENDED NEXT: review and merge PR #5. No further weak sprites identified in the library at this point.",
+      "changed_files": null
     }
   },
   "notes": [
