@@ -25,10 +25,11 @@
       ],
       "requires": [],
       "branch": "feat/sprite-readability",
-      "status": "in-progress",
-      "updated_at": "2026-07-26T00:51:23.051975+00:00",
+      "status": "done",
+      "updated_at": "2026-07-26T00:55:09.361198+00:00",
       "instance": "712c43ad",
-      "note": "All six sprite readability fixes implemented and visually verified. Quadruped + flyer builds now reshape the torso/wing OUTLINE (worst silhouette pair 46px -> 144px quad, 60px -> 108px flyer); tiles got per-material structure (blades/pebbles/ripples/drifts/crust) plus a wrap-safety fix for the clamped crack walk and a wave period that divides the tile; pickups get per-shape colours; chest gained a lid seam + overhang + real open state; blade family separated by guard span (widths 6/12/16, was 8/10/12). 9 new tests, 5 of which were verified to FAIL against main. Full suite 153 passed. Next: commit + push + PR."
+      "note": "DONE + PUSHED, awaiting merge. Sprite readability pass shipped as PR #4 (branch feat/sprite-readability, commit d59d7cc). CI green on ubuntu + windows py3.12; full suite 153 passed. Six defects fixed, all found by rendering the library as pure alpha masks: (1) quadruped builds shared one hardcoded body loaf - now each declares back/belly knots that reshape the torso, worst silhouette pair 46px -> 144px; (2) flyer bird/moth were the same ellipse, now swept wing + tail fan vs fore/hind lobes + antennae, 60px -> 108px; (3) tile crack walk CLAMPED instead of wrapping, causing a dark smudge repeating at every seam - all features now go through wrap-safe _put/_disc; (4) _wave stepped 3 into a 16px tile so courses collided at the seam - periods are now named constants asserted to divide the tile; (5) grass/dirt/sand/snow/stone were one noise field recoloured - each got real structure; (6) pickups all defaulted to gold, chest had no lid seam, blades were one drawing at three scales. 9 new tests asserting on silhouette and colour, 5 of them verified to FAIL against main before merging. Deliberately did NOT ship an image-level tile-seam metric: measured it, it false-positives on brick and water whose own periods make a correct seam look broken, i.e. it reports CANNOT TELL as BROKEN. Decisions recorded as dec-011-b5c3 and dec-012-d904. RECOMMENDED NEXT: review and merge PR #4; the remaining known-weak sprites are ghost:specter (reads as a grey rounded rectangle) and the projectile pair fireball/bolt (near-identical orange spiky balls) - neither was in this scope.",
+      "changed_files": null
     }
   },
   "notes": [
