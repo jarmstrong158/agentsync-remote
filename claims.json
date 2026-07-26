@@ -26,9 +26,9 @@
       "requires": [],
       "branch": "feat/sprite-readability",
       "status": "in-progress",
-      "updated_at": "2026-07-26T00:32:50.441447+00:00",
+      "updated_at": "2026-07-26T00:51:23.051975+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "All six sprite readability fixes implemented and visually verified. Quadruped + flyer builds now reshape the torso/wing OUTLINE (worst silhouette pair 46px -> 144px quad, 60px -> 108px flyer); tiles got per-material structure (blades/pebbles/ripples/drifts/crust) plus a wrap-safety fix for the clamped crack walk and a wave period that divides the tile; pickups get per-shape colours; chest gained a lid seam + overhang + real open state; blade family separated by guard span (widths 6/12/16, was 8/10/12). 9 new tests, 5 of which were verified to FAIL against main. Full suite 153 passed. Next: commit + push + PR."
     }
   },
   "notes": [
