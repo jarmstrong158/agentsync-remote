@@ -12,26 +12,6 @@
       "updated_at": "2026-07-18T14:45:21.018Z",
       "instance": "eacf4ead-2268-4a96-baae-008370c95492",
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
-    },
-    "jonny-desktop": {
-      "task": "meristem MCP + skill development: add sprite rendering to the MCP (preview_sprite, compare_builds) so the authoring loop can actually SEE what it picked, flag typo'd config KEYS (currently silently ignored), and bring the pixel-art skill up to date with the tile wrap-safety and silhouette-distinctness standards",
-      "touches": [
-        "packages/generators/meristem_generators/preview.py",
-        "packages/generators/meristem_generators/catalog.py",
-        "packages/generators/meristem_generators/__init__.py",
-        "packages/generators/tests/test_generators.py",
-        "packages/spec-store/meristem_spec_store/server.py",
-        "packages/spec-store/pyproject.toml",
-        "packages/spec-store/tests/test_server.py",
-        "plugins/meristem/skills/pixel-art/SKILL.md"
-      ],
-      "requires": [],
-      "branch": "feat/mcp-sprite-preview",
-      "status": "done",
-      "updated_at": "2026-07-26T12:48:58.250075+00:00",
-      "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. PR #6 (branch feat/mcp-sprite-preview, commit 32819d7), CI green ubuntu + windows py3.12, full suite 166 passed. Earlier PR #5 merged as b733750; stale humanoid-prop-layers branch deleted, remote now main only. Closed the biggest gap in the authoring surface: the pixel-art skill's core loop is render-then-judge-by-eye, but nothing in the MCP could produce a picture, so every defect found in #4/#5 came from a step the MCP could not do. Added meristem_generators.preview (pure functions: render_sprite, render_builds) plus MCP tools preview_sprite and compare_builds returning real ImageContent. Both render against the MANIFEST's style_contract - the same domain the compiler builds from, so a preview cannot show a different game than the build - report the gate verdict beside the picture, and REFUSE a descriptor whose build does not exist (a typo'd build renders the default, so previewing it would put a dog under the label griffon and read as confirmation). compare_builds defaults to silhouettes because interior detail hides outline collisions. Variant axis derived per archetype, not hardcoded to build - otherwise weapons (kind), pickups (shape) and tiles (name) would each render one default N times. Also fixed a silent-failure gap: config KEYS were never validated, so {shpae: heart} or British {hat_colour: ...} validated clean then rendered the default; check_sprite now returns warnings for them, deliberately warnings not errors because the legal-key set is derived and a bad derivation must not fail a manifest that renders correctly. The one hand-maintained piece (_ANIM_PARAMS) is guarded behaviourally, because the last hand-maintained table here (color_keys) rotted. Added public variant_options() rather than reading catalog's private _VARIANTS - the ProceduralGenerator._TILES lesson. spec-store now declares meristem-asset-gate; plugin README's standalone pip line was already broken for meristem-generators and is corrected. Skill updated with the #4/#5 standards: silhouette distinctness BETWEEN variants, byte-difference tests are not distinctness tests, tiles are a torus (wrap not clamp, periods divide, review 3x3), and a new section on validating a metric before trusting it listing the three discarded this week. Doctor gains a render check. Decision recorded as dec-014-8a77. RECOMMENDED NEXT: review and merge PR #6. Known follow-up deliberately NOT bundled and called out in the PR: key warnings reach check_sprite but not validate_all, which needs cross_reference's (errors, skipped) return shape widened - reusing checks_skipped would be a lie since a typo'd key is not a skipped check.",
-      "changed_files": null
     }
   },
   "notes": [
