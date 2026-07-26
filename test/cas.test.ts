@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { claim, survey } from "../src/tools.js";
+import { PUSH_RETRIES, RetryExhaustedError, claim, survey } from "../src/tools.js";
 import { fakeGitHub, makeClaim, testCtx } from "./helpers.js";
 
 afterEach(() => vi.unstubAllGlobals());
@@ -103,8 +103,13 @@ describe("409 CAS -> retry succeeds, peer entry survives", () => {
 });
 
 describe("PUSH_RETRIES exhaustion", () => {
-  it("every PUT 409s -> retry_exhausted shape", async () => {
-    const fake = fakeGitHub({
+  // Exhaustion means NOTHING WAS WRITTEN. It used to be returned as an ordinary
+  // `{status: "retry_exhausted"}` value, which mcp.ts then wrapped in a result
+  // with no isError flag -- indistinguishable from a successful claim to
+  // anything skimming the envelope. It now throws, and the throw is what makes
+  // the tool result isError (asserted in mcp.test.ts).
+  const alwaysRacing = () =>
+    fakeGitHub({
       claims: {},
       beforePut(state) {
         // Always race: bump the sha before every PUT so our sha is always stale.
@@ -115,15 +120,26 @@ describe("PUSH_RETRIES exhaustion", () => {
         };
       },
     });
+
+  it("every PUT 409s -> throws RetryExhaustedError after PUSH_RETRIES attempts", async () => {
+    const fake = alwaysRacing();
     vi.stubGlobal("fetch", fake.fetch);
 
-    const res: any = await claim(testCtx(), { task: "t", touches: ["src/api"] });
+    await expect(claim(testCtx(), { task: "t", touches: ["src/api"] })).rejects.toThrow(
+      RetryExhaustedError,
+    );
+    expect(fake.state.putCount).toBe(PUSH_RETRIES);
+  });
 
-    expect(res).toEqual({
-      status: "retry_exhausted",
-      message: "Push kept losing the race; call survey() and try again.",
-    });
-    expect(fake.state.putCount).toBe(5); // PUSH_RETRIES
+  it("the error says plainly that nothing landed", async () => {
+    const fake = alwaysRacing();
+    vi.stubGlobal("fetch", fake.fetch);
+
+    const err: any = await claim(testCtx(), { task: "t", touches: ["src/api"] }).catch((e) => e);
+    expect(err).toBeInstanceOf(RetryExhaustedError);
+    expect(err.status).toBe("retry_exhausted");
+    expect(err.message).toMatch(/Nothing was written/);
+    expect(err.message).toMatch(/did NOT land/);
   });
 });
 
@@ -190,7 +206,12 @@ describe("duplicate-instance warning", () => {
     });
     vi.stubGlobal("fetch", fake.fetch);
 
-    const res: any = await claim(testCtx(), { task: "new", touches: ["a"] });
+    // Touches OVERLAP the existing claim on purpose. The self-overwrite guard
+    // blocks an UNRELATED claim over my own active one, so the warning path is
+    // now reached via a re-claim of the same files — which is also the realistic
+    // shape of this case: a server restart mints a new instance token and the
+    // agent re-claims the work it was already holding.
+    const res: any = await claim(testCtx(), { task: "new", touches: ["src/x"] });
 
     expect(res.status).toBe("claimed");
     expect(res.warning).toMatch(/already holds agent_id 'jonny-mobile'/);

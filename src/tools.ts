@@ -29,11 +29,52 @@ import type {
 export const PUSH_RETRIES = 5;
 export const BACKOFF_BASE_MS = 400;
 
+/**
+ * Most mailbox notes retained in claims.json.
+ *
+ * mailbox() appended without limit. claims.json is not a log -- it is a hot
+ * coordination file that EVERY peer, local and remote, fetches and parses on
+ * EVERY survey/claim/release. Unbounded growth therefore taxes every operation
+ * the mesh performs, and it degrades gradually enough that nobody notices until
+ * the file is large. Notes are also the least durable content in the file: they
+ * are a human-in-the-loop channel, not an audit trail (the coordination
+ * branch's git history is the audit trail, and history() surfaces it).
+ *
+ * So the oldest notes are dropped once the cap is reached, and the response
+ * says so explicitly rather than silently discarding a peer's question.
+ */
+export const MAX_MAILBOX_NOTES = 200;
+
 const BLOCKED_MESSAGE =
   "Overlap with an active peer claim. Narrow `touches`, wait, or re-call with force=true.";
+const SELF_OVERWRITE_MESSAGE =
+  "You already hold an ACTIVE claim on unrelated files. Claims are keyed by " +
+  "agent_id, so this would silently replace it — and a later release()/finish() " +
+  "would then act on the WRONG claim. Close the old one first (finish/release), " +
+  "or re-call with force=true if you really mean to abandon it.";
 const EXHAUSTED_MESSAGE =
-  "Push kept losing the race; call survey() and try again.";
+  `Nothing was written. The compare-and-swap lost the race ${PUSH_RETRIES} times ` +
+  "in a row, so your claim/update/note did NOT land. Call survey() to see the " +
+  "current board and try again.";
 const VALID_STATUSES: ClaimStatus[] = ["planning", "in-progress", "done"];
+
+/**
+ * Thrown when casLoop() gives up after PUSH_RETRIES failed compare-and-swaps.
+ *
+ * This is an ERROR, not a status. It previously returned as an ordinary value
+ * -- `{status: "retry_exhausted", message}` cast to T -- which mcp.ts then
+ * wrapped in a result with no isError flag. To anything skimming the envelope
+ * (including a model reading tool output) that is indistinguishable from a
+ * successful claim, so an agent could proceed to edit files it did not hold.
+ * Throwing forces the caller to classify it: mcp.ts maps it to isError: true.
+ */
+export class RetryExhaustedError extends Error {
+  readonly status = "retry_exhausted";
+  constructor(message: string = EXHAUSTED_MESSAGE) {
+    super(message);
+    this.name = "RetryExhaustedError";
+  }
+}
 
 // --------------------------------------------------------------------------
 // Context construction
@@ -153,10 +194,9 @@ async function casLoop<T>(
       await ctx.sleep(BACKOFF_BASE_MS * (attempt + 1));
     }
   }
-  return {
-    status: "retry_exhausted",
-    message: EXHAUSTED_MESSAGE,
-  } as unknown as T;
+  // Out of retries: nothing was committed. Throwing (rather than returning a
+  // success-shaped payload) is what makes this reach the client as isError.
+  throw new RetryExhaustedError();
 }
 
 // --------------------------------------------------------------------------
@@ -257,6 +297,35 @@ export async function claim(ctx: Ctx, args: ClaimArgs): Promise<unknown> {
     }
 
     const existing = doc.claims[ctx.agentId];
+
+    // Self-overwrite guard. Claims are keyed by agent_id alone, so a second
+    // claim under the same id REPLACES the first with no signal. When one human
+    // runs several concurrent sessions they share an agent_id, so a session
+    // working on project B silently evicts project A's claim — and A's later
+    // release()/finish() then closes B's claim instead. That is not theoretical:
+    // it happened, and a "done" claim for an unrelated project got released.
+    //
+    // The duplicate-agent warning below cannot catch it: it compares
+    // `existing.instance`, and concurrent sessions can carry the SAME instance
+    // token, so the mismatch never fires.
+    //
+    // Trigger on ZERO overlap rather than any difference, so the common,
+    // legitimate case of a session widening its own scope ([a] -> [a, b]) still
+    // passes untouched, while an unrelated workstream is stopped. `done` claims
+    // are free to replace — that is the normal finish-then-claim-next flow.
+    if (!force && existing && existing.status !== "done") {
+      const prev = new Set(existing.touches ?? []);
+      if (prev.size > 0 && !touches.some((t) => prev.has(t))) {
+        return {
+          return: {
+            status: "blocked",
+            message: SELF_OVERWRITE_MESSAGE,
+            existing_claim: existing,
+          },
+        };
+      }
+    }
+
     const entry: ClaimEntry = {
       task: args.task,
       touches,
@@ -437,9 +506,29 @@ export async function mailbox(ctx: Ctx, args: MailboxArgs = {}): Promise<unknown
       at: ctx.now(),
     };
     doc.notes.push(note);
+
+    // Bound the file. Dropping the OLDEST notes keeps the channel usable
+    // (a question just asked is the one that matters) and keeps every peer's
+    // fetch-and-parse cost flat.
+    let dropped = 0;
+    if (doc.notes.length > MAX_MAILBOX_NOTES) {
+      dropped = doc.notes.length - MAX_MAILBOX_NOTES;
+      doc.notes = doc.notes.slice(dropped);
+    }
+
     return {
       message: `agentsync: ${ctx.agentId} posts a note`,
-      result: { status: "posted", note, notes: doc.notes },
+      result: {
+        status: "posted",
+        note,
+        notes: doc.notes,
+        ...(dropped
+          ? {
+              dropped_oldest: dropped,
+              retention: `claims.json keeps the ${MAX_MAILBOX_NOTES} most recent notes; older ones remain in the coordination branch's git history (see history()).`,
+            }
+          : {}),
+      },
     };
   });
 }

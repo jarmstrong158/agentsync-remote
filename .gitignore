@@ -4,3 +4,6 @@ dist/
 .dev.vars
 *.log
 .DS_Store
+
+# Local Xylem memory store (context-keeper) — machine-local, never shared
+.context/
