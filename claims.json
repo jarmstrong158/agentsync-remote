@@ -14,26 +14,25 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem gear + ability cost: bake the items table into Game so worn slots equip on pickup and move effective atk/def, and give abilities an mp cost that a failed cast does not burn a cooldown on",
+      "task": "meristem loot drops: wire items.drop_tables so killing an enemy rolls its table and spawns the item, closing the fight-loot-equip loop",
       "touches": [
-        "schemas/abilities.schema.json",
-        "schemas/README.md",
+        "schemas/items.schema.json",
         "packages/spec-store/meristem_spec_store/crossref.py",
         "packages/spec-store/meristem_spec_store/scaffold.py",
         "packages/compiler/meristem_compiler/scenes.py",
         "packages/compiler/meristem_compiler/compile.py",
-        "packages/compiler/meristem_compiler/templates/top_down_controller.gd.tmpl",
+        "packages/compiler/meristem_compiler/templates/enemy_idle.gd.tmpl",
+        "packages/compiler/meristem_compiler/templates/enemy_patrol.gd.tmpl",
+        "packages/compiler/meristem_compiler/templates/enemy_chase.gd.tmpl",
         "packages/verifier/meristem_verifier/assertions.py",
-        "packages/verifier/meristem_verifier/harness/verify.gd",
-        "examples/slice-01/manifest.json"
+        "packages/verifier/meristem_verifier/harness/verify.gd"
       ],
       "requires": [],
-      "branch": "feat/gear-and-ability-cost",
-      "status": "done",
-      "updated_at": "2026-07-26T18:09:23.957168+00:00",
+      "branch": "feat/loot-drops",
+      "status": "in-progress",
+      "updated_at": "2026-07-26T18:14:43.349337+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. PR #13 (branch feat/gear-and-ability-cost, commit 350d281), CI green ubuntu + windows py3.12. PR #12 (abilities) merged as ca0b84f before starting, so this is NOT stacked - lesson from the earlier auto-close applied. GEAR: item `slot` and `stats` had been authorable since the schema was written and compiled to nothing but a sprite and a placement - the example's Training Sword declared +2 atk and touched no hit. The items table is now baked into the Game autoload as id -> {slot, stats}; collecting something in a WORN slot (weapon/armor/accessory) equips it and its stats move Game.atk()/Game.defense(). consumable and key_item are carried and grant nothing, so equipping is slot-driven rather than anything-with-stats (a potion with {hp:5} must not become permanent max hp). The player's swing now asks Game.atk() per hit instead of a baked ATTACK_DAMAGE constant - that is the change that makes gear possible at all, since a constant cannot respond to a pickup. Defence subtracts from incoming damage with a FLOOR OF 1, because enough armour would otherwise make the game unlosable. ABILITY COST: optional `cost` spent from the caster's `mp` stat with `mp_regen` per second; an unaffordable cast neither fires NOR burns its cooldown, since a failed cast that started a cooldown reads as the game eating inputs. Cross-ref refuses a cost larger than the caster's whole mp pool. HUD gained mp, equipped loadout, effective atk/def beside hp, and a per-slot ability readout (ready / seconds / cannot afford) which is POLLED not signalled because a cooldown changes continuously. VERIFICATION caught a real bug: new ability_cost assertion failed on the first run (fired true, pool unchanged at 10) because `cost` was in the schema and read by the runner but _player_abilities never copied it into the baked slot, so every ability defaulted to FREE - the manifest said 2 mp and the game charged nothing. Fixed, plus a shape test asserting every baked slot carries a cost key so the omission fails without an engine run. New gear_bonus assertion confirms atk 4 -> 6 with the sword equipped. That is the third time an engine assertion caught something all string checks were green on (melee reach, harness frame timing, now this). Suite 198 passed with MERISTEM_GODOT set (all five assertions green), 192 without as CI runs. Decision recorded as dec-017-ce0f. STILL NOT WIRED: items.drop_tables and rarity_tiers unread so nothing drops on kill and gear must be hand-placed; no inventory/swapping/unequip (a second weapon silently replaces the first); only atk and def bonuses are consumed so an item granting hp or spd validates and does nothing; narrative and economy still entirely unread; no quests or roguelite run structure; turn_based_combat emits nothing; no attack animation in the humanoid archetype. RECOMMENDED NEXT: merge PR #13, then wire items.drop_tables so killing an enemy actually drops its loot - that closes the fight-loot-equip loop end to end and every piece it needs now exists.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
