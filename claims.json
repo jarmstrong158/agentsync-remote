@@ -28,10 +28,11 @@
       ],
       "requires": [],
       "branch": "feat/stats-reach-the-runtime",
-      "status": "in-progress",
-      "updated_at": "2026-07-27T21:31:36.396041+00:00",
+      "status": "done",
+      "updated_at": "2026-07-27T21:45:45.526531+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "Stats reach the runtime. PR #21 open, CI green on ubuntu + windows. Game bakes every declared stat into BASE_STATS with a generic stat(name); abilities gain `scaling` read at cast time; an unknown scaling stat is refused at cross-ref AND compile. New stat_scaling engine assertion; writing it exposed that ability_damage derived its expectation from raw power. Closes gap 2 of the Vanguard fit report -- Greenweald now authors the Carved Rod as +4 mag as its docs say. 225 tests pass. Next: merge #21.",
+      "changed_files": null
     }
   },
   "notes": [
