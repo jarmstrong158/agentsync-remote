@@ -24,10 +24,11 @@
       ],
       "requires": [],
       "branch": "feat/humanoid-facings",
-      "status": "in-progress",
-      "updated_at": "2026-07-27T00:30:58.017184+00:00",
+      "status": "done",
+      "updated_at": "2026-07-27T00:56:06.685123+00:00",
       "instance": "712c43ad",
-      "note": "humanoid facings done in Meristem: south/north/east/west, west = east mirrored, south byte-identical to before. 6 new tests, 211 pass. Vanguard 4-direction overworld sheets regenerated (24 humanoids). Next: wire Vanguard overworld loaders to use them."
+      "note": "Humanoid facings shipped end to end. Meristem PR #20 (four facings + compiler emits them, 217 tests). Vanguard PR #1 (one sprite ladder in BattleSpriteLoader, 24 generated sheets, verified in real Godot + windowed capture). vanguard-web PR #1 (overworld player is a directional Sprite, verified in browser). All three pushed to origin. Next: merge the three PRs, Meristem first since the others reference it.",
+      "changed_files": null
     }
   },
   "notes": [
