@@ -14,18 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "retire the Puny-Characters placeholders from Vanguard: generate the full generic-NPC roster with Meristem in the same 32x32 sheet format, including the seven sprite_ids the maps reference but SPRITE_MAP never defined",
+      "task": "meristem humanoid directional views: add south/north/east/west facings to the humanoid archetype so top-down characters face where they walk, then regenerate Vanguard's party/NPC sheets with all four and wire the Godot overworld to use them",
       "touches": [
-        "tools/vanguard_bestiary.py",
-        "docs/reference/vanguard-npcs.png"
+        "packages/generators/meristem_generators/humanoid.py",
+        "packages/generators/meristem_generators/archetypes.py",
+        "packages/generators/meristem_generators/catalog.py",
+        "packages/generators/tests/test_generators.py",
+        "tools/vanguard_bestiary.py"
       ],
       "requires": [],
-      "branch": "feat/vanguard-npc-roster",
-      "status": "done",
-      "updated_at": "2026-07-26T23:59:00.032861+00:00",
+      "branch": "feat/humanoid-facings",
+      "status": "in-progress",
+      "updated_at": "2026-07-27T00:11:17.919310+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED, awaiting merge. PR #19 (branch feat/vanguard-npc-roster), CI green ubuntu + windows. PR #18 merged as 059e2bf first. Vanguard is not a git repo, so its side is a file-level delivery. COMPLETES THE SPRITE PASS: 68 sheets now generated (43 creatures + 6 party + 19 NPCs), all gate-clean, and the third-party Puny-Characters sheets are no longer referenced anywhere in battle_sprite_loader.gd. THE STYLE CLASH WAS REAL AND I VERIFIED IT BY RENDERING BOTH: Puny figures are chibi, roughly two heads tall, filling about half the 32px cell with mitten hands, while everything Meristem builds is roughly four heads tall and fills the cell - a Puny villager beside a generated party member is literally half their height. FOUND REAL MISSING CONTENT: seven sprite_ids referenced by shipped map scenes were never in SPRITE_MAP at all - soldier_red (12 placements), fighter_red (11), thief_dark (5), worker_purple (3), monk_grey (3), worker_green, soldier_gray - so get_sprite_path returned empty string for all of them across about thirty-five placements. IMPORTANT CORRECTION I had to make mid-task: this was NOT visibly broken, because Vanguard has its OWN procedural NPC generator (PartyOverworldSpriteGenerator, 1455 lines) which is the PRIMARY path and succeeds first; the sheet is only a fallback. I nearly reported it as broken content before checking npc_controller.gd. DELIBERATELY NOT TOUCHED: that same PartyOverworldSpriteGenerator. It is a DIFFERENT FORMAT (32x48 cells, versus Puny/Meristem 32x32), it already hue-shifts to the same standard Meristem's shading was ported from (dec-004-e7c9), and it gives per-NPC colour variety the map scenes author individually - replacing it with fixed sheets would have reduced variety rather than increasing consistency. So Vanguard now has one 32x32 sheet vocabulary (all Meristem) plus its own 32x48 overworld generator, rather than three styles. Maren's hand-painted maren_overworld.png also untouched. VERIFIED: all 68 .import files present, project runs headless with no script or parse errors. Note for future PowerShell work: Get-ChildItem -Filter '*.import' does NOT match 'name.png.import' reliably - use Where-Object Name -like instead, and never pipe a long-running process through Select-Object -First N because it closes the pipeline and kills the process. RECOMMENDED NEXT: merge PR #19. Remaining Meristem gaps from the sim test (docs/reference/vanguard-fit.md) are unchanged and are about the COMPILER not sprites: a third stat reaching the runtime, status effects, enemy abilities, and NPCs/dialog - entities.npcs still validates while the compiler never reads it.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
