@@ -14,21 +14,24 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem humanoid directional views: add south/north/east/west facings to the humanoid archetype so top-down characters face where they walk, then regenerate Vanguard's party/NPC sheets with all four and wire the Godot overworld to use them",
+      "task": "meristem: arbitrary stats reach the runtime. Bake every declared player stat into the Game autoload (not just atk/def), add a generic stat() accessor, and give abilities an optional `scaling` stat so a MAG-style second offence stat actually changes damage. Refuse a scaling reference to a stat the caster does not have, rather than silently ignoring it.",
       "touches": [
-        "packages/generators/meristem_generators/humanoid.py",
-        "packages/generators/meristem_generators/archetypes.py",
-        "packages/generators/meristem_generators/catalog.py",
-        "packages/generators/tests/test_generators.py",
-        "tools/vanguard_bestiary.py"
+        "packages/compiler/meristem_compiler/scenes.py",
+        "packages/compiler/meristem_compiler/compile.py",
+        "packages/compiler/tests/test_compile.py",
+        "packages/spec-store/meristem_spec_store/crossref.py",
+        "packages/verifier/meristem_verifier/assertions.py",
+        "schemas/abilities.schema.json",
+        "examples/vanguard-greenweald/manifest.json",
+        "docs/reference/vanguard-fit.md",
+        "DECISIONS.md"
       ],
       "requires": [],
-      "branch": "feat/humanoid-facings",
-      "status": "done",
-      "updated_at": "2026-07-27T00:56:06.685123+00:00",
+      "branch": "feat/stats-reach-the-runtime",
+      "status": "in-progress",
+      "updated_at": "2026-07-27T21:31:36.396041+00:00",
       "instance": "712c43ad",
-      "note": "Humanoid facings shipped end to end. Meristem PR #20 (four facings + compiler emits them, 217 tests). Vanguard PR #1 (one sprite ladder in BattleSpriteLoader, 24 generated sheets, verified in real Godot + windowed capture). vanguard-web PR #1 (overworld player is a directional Sprite, verified in browser). All three pushed to origin. Next: merge the three PRs, Meristem first since the others reference it.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
