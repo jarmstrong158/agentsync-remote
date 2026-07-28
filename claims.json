@@ -26,10 +26,11 @@
       ],
       "requires": [],
       "branch": "feat/vanguard-npc-sprites",
-      "status": "in-progress",
-      "updated_at": "2026-07-28T01:15:28.222308+00:00",
+      "status": "done",
+      "updated_at": "2026-07-28T01:25:21.676693+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "All 15 Vanguard NPCs on Meristem art. meristem PR #22 (per-placed-NPC generator + headband/wide_brim hats, 221 tests). vanguard PR #2 (sheets keyed map_node, palettes dumped from the running game, verifier walks every map). Verified: 6 party + 12 placed NPCs, exit 0. Found in passing and filed separately: 14 enemy .tres files use single quotes in PackedStringArray and fail to parse, including captain_rhogar (Act 1 boss) -- cascades to emberreach_patrol encounter. Not fixed here, out of scope.",
+      "changed_files": null
     }
   },
   "notes": [
