@@ -14,25 +14,22 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem: arbitrary stats reach the runtime. Bake every declared player stat into the Game autoload (not just atk/def), add a generic stat() accessor, and give abilities an optional `scaling` stat so a MAG-style second offence stat actually changes damage. Refuse a scaling reference to a stat the caster does not have, rather than silently ignoring it.",
+      "task": "vanguard NPCs on Meristem art: add headband + wide_brim hats to the Meristem humanoid, dump each placed NPC's RESOLVED palette out of Godot, generate a four-direction overworld sheet per NPC from its own authored colours, and put those at the top of the sprite ladder. Preserves per-NPC variety (it is authored, not random) while retiring the old procedural look.",
       "touches": [
-        "packages/compiler/meristem_compiler/scenes.py",
-        "packages/compiler/meristem_compiler/compile.py",
-        "packages/compiler/tests/test_compile.py",
-        "packages/spec-store/meristem_spec_store/crossref.py",
-        "packages/verifier/meristem_verifier/assertions.py",
-        "schemas/abilities.schema.json",
-        "examples/vanguard-greenweald/manifest.json",
-        "docs/reference/vanguard-fit.md",
-        "DECISIONS.md"
+        "packages/generators/meristem_generators/humanoid.py",
+        "packages/generators/tests/test_generators.py",
+        "tools/vanguard_npcs.py",
+        "vanguard/tools/dump_npc_palettes.gd",
+        "vanguard/scripts/battle/battle_sprite_loader.gd",
+        "vanguard/scripts/overworld/npc_controller.gd",
+        "vanguard/sprites/npcs"
       ],
       "requires": [],
-      "branch": "feat/stats-reach-the-runtime",
-      "status": "done",
-      "updated_at": "2026-07-27T21:45:45.526531+00:00",
+      "branch": "feat/vanguard-npc-sprites",
+      "status": "in-progress",
+      "updated_at": "2026-07-28T01:15:28.222308+00:00",
       "instance": "712c43ad",
-      "note": "Stats reach the runtime. PR #21 open, CI green on ubuntu + windows. Game bakes every declared stat into BASE_STATS with a generic stat(name); abilities gain `scaling` read at cast time; an unknown scaling stat is refused at cross-ref AND compile. New stat_scaling engine assertion; writing it exposed that ability_damage derived its expectation from raw power. Closes gap 2 of the Vanguard fit report -- Greenweald now authors the Carved Rod as +4 mag as its docs say. 225 tests pass. Next: merge #21.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
