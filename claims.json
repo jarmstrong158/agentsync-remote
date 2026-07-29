@@ -14,23 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard NPCs on Meristem art: add headband + wide_brim hats to the Meristem humanoid, dump each placed NPC's RESOLVED palette out of Godot, generate a four-direction overworld sheet per NPC from its own authored colours, and put those at the top of the sprite ladder. Preserves per-NPC variety (it is authored, not random) while retiring the old procedural look.",
+      "task": "dec-093 forced-engine probe: env-gated shop override + eval arm to test whether an engine build would even help (all prior build-side nulls were measured inside the 0-2 xmult band the agent never leaves)",
       "touches": [
-        "packages/generators/meristem_generators/humanoid.py",
-        "packages/generators/tests/test_generators.py",
-        "tools/vanguard_npcs.py",
-        "vanguard/tools/dump_npc_palettes.gd",
-        "vanguard/scripts/battle/battle_sprite_loader.gd",
-        "vanguard/scripts/overworld/npc_controller.gd",
-        "vanguard/sprites/npcs"
+        "engine_forcing.py",
+        "training/action_executor.py",
+        "eval_session.py",
+        "tests/test_engine_forcing.py",
+        "DECISIONS.md"
       ],
       "requires": [],
-      "branch": "feat/vanguard-npc-sprites",
-      "status": "done",
-      "updated_at": "2026-07-28T01:25:21.676693+00:00",
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-07-29T11:28:00.500405+00:00",
       "instance": "712c43ad",
-      "note": "All 15 Vanguard NPCs on Meristem art. meristem PR #22 (per-placed-NPC generator + headband/wide_brim hats, 221 tests). vanguard PR #2 (sheets keyed map_node, palettes dumped from the running game, verifier walks every map). Verified: 6 party + 12 placed NPCs, exit 0. Found in passing and filed separately: 14 enemy .tres files use single quotes in PackedStringArray and fail to parse, including captain_rhogar (Act 1 boss) -- cascades to emberreach_patrol encounter. Not fixed here, out of scope.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
