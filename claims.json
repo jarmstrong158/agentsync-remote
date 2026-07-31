@@ -26,9 +26,9 @@
       "requires": [],
       "branch": "mcp-2026-07-28-migration",
       "status": "done",
-      "updated_at": "2026-07-31T12:25:26.371208+00:00",
+      "updated_at": "2026-07-31T16:28:44.263195+00:00",
       "instance": "712c43ad",
-      "note": "Repo 1 of 11 DONE + PUSHED. skein migrated to MCP 2026-07-28 on mcp>=2.0,<3. Branch mcp-2026-07-28-migration, commit 83fed4b, pushed to origin. 130 -> 136 tests all passing, ruff + mypy clean. Verified over real stdio subprocess AND the frozen PyInstaller exe, not just in-process. No handshake/session/roots/sampling/logging surface existed, so no test had to be rewritten; 6 tests added. Decision recorded as dec-004-fe17. NOTE: branch is based on fix/audit-sweep (5 commits ahead of main), not main. KEY FINDING for remaining repos: mcp.server.fastmcp is DELETED in SDK 2.0.0 with no alias, so agentsync, cambium and render-groups-mcp break on next clean install at their current mcp>=1.2 pins. Next: repo 2, rag-pipeline.",
+      "note": "Repos 1-3 of 11 DONE + PUSHED, all on branch mcp-2026-07-28-migration. (1) skein 83fed4b: 130->136 tests, ruff+mypy clean, verified on real stdio AND frozen PyInstaller exe. (2) rag-pipeline fcdc179: was HAND-ROLLED JSON-RPC at 2024-11-05, moved onto SDK; 64->73 tests, 9 added, zero existed before. (3) skillmatch-mcp 8e1648f: also hand-rolled at 2024-11-05, moved onto SDK LOW-LEVEL Server to keep 20 published schemas verbatim (zero drift, asserted by test); 124->133 tests; 5 TestToolCallIsError tests rewritten off the dead stdin/stdout loop onto a real client, assertions unchanged; version 1.0.2->2.0.0, server.json bumped, sdist+wheel built and twine-check PASSED but NOT uploaded (no PyPI token on disk; user has none). KEY SEQUENCING RISK: agentsync, cambium, context-keeper, skillmatch-mcp, conductor-mcp and rag-pipeline ALL share system python 3.12 with NO venvs, currently mcp 1.27.0. Global bump to 2.0 breaks all six at once including the live Xylem servers. Mitigation in force: each repo migrated+verified in an isolated scratch venv, working trees left on their ORIGINAL branch, single global SDK flip deferred to the very end. Remaining: 4 conductor-mcp, 5 waveform-mcp, 6 context-keeper, 7 agentsync, 8 cambium, 9-11 the three Workers.",
       "changed_files": null
     }
   },
