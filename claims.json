@@ -25,10 +25,11 @@
       ],
       "requires": [],
       "branch": "mcp-2026-07-28-migration",
-      "status": "in-progress",
-      "updated_at": "2026-07-31T12:17:34.213201+00:00",
+      "status": "done",
+      "updated_at": "2026-07-31T12:25:26.371208+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "Repo 1 of 11 DONE + PUSHED. skein migrated to MCP 2026-07-28 on mcp>=2.0,<3. Branch mcp-2026-07-28-migration, commit 83fed4b, pushed to origin. 130 -> 136 tests all passing, ruff + mypy clean. Verified over real stdio subprocess AND the frozen PyInstaller exe, not just in-process. No handshake/session/roots/sampling/logging surface existed, so no test had to be rewritten; 6 tests added. Decision recorded as dec-004-fe17. NOTE: branch is based on fix/audit-sweep (5 commits ahead of main), not main. KEY FINDING for remaining repos: mcp.server.fastmcp is DELETED in SDK 2.0.0 with no alias, so agentsync, cambium and render-groups-mcp break on next clean install at their current mcp>=1.2 pins. Next: repo 2, rag-pipeline.",
+      "changed_files": null
     }
   },
   "notes": [
