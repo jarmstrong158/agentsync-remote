@@ -28,10 +28,11 @@
       ],
       "requires": [],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-01T19:20:04.729239+00:00",
+      "status": "done",
+      "updated_at": "2026-08-01T20:44:05.606643+00:00",
       "instance": "712c43ad",
-      "note": "Milestone 1 of 2 done. Skill core written: SKILL.md (4-phase process) + 4 references (interview 10-question set, 10-section template, 12 style rules, domain-adapter table with evidence channels per project type, 20-item rubric) + 2 full worked example briefs (visual/pixel-art, non-visual/data-pipeline). Next: docs/ANATOMY.md analysis of the source Reddit brief, README, plugin manifests, git commit. NOTE: not vendoring the source brief verbatim (third-party content) - ANATOMY.md will analyse with attribution and short quotes only."
+      "note": "DONE + PUSHED TO ORIGIN. github.com/jarmstrong158/implementation-brief, main @ c7eefd1, tracking origin/main, clean tree. Built a Claude Code skill that writes spec-grade implementation briefs, reverse-engineered from the SNOWFLOW brief on r/ClaudeAI. Shipped: SKILL.md (4-phase: interview, survey repo, write, rubric) + 5 references (10-question interview with defaults for each, 10-section template, 12 style rules, domain-adapter table mapping project type to evidence channel and section-8 phrasing, 20-item adversarial rubric) + 2 complete original example briefs deliberately far apart (pixel-art visual vs data-pipeline correctness) so the universal shape is separable from borrowed vocabulary. Verified by TEST-INSTALL not just validate, per the xylem dec-009 lesson: uninstalled the local-path marketplace, re-added by GitHub name (the path the README advertises), reinstalled. Status enabled, Skills (1), Hooks (0), MCP (0), ~136 always-on tokens / ~1.5k on invoke. Decisions recorded: dec-001-605e (skill not MCP - nothing external to call, so an MCP would be an empty wrapper), con-001-59f5 (never vendor the third-party source brief; ANATOMY.md analyses it with attribution and short quotes, all examples original). RECOMMENDED NEXT: dogfood it - run the skill against a real project (vanguard-web is the obvious candidate) and let the rubric pass expose which reference file is thin. The domain-adapter table is the piece most likely to need extending on first real contact.",
+      "changed_files": []
     }
   },
   "notes": [
