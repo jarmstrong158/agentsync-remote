@@ -14,21 +14,25 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Dogfood the implementation-brief skill: write BRIEF.md for vanguard-web, a visual fidelity pass raising rendered output to the bar in vanguard/docs/sprite_style_guide.md",
+      "task": "vanguard-web milestone 1 (from BRIEF.md): commit brief + CLAUDE.md pointer, then add a deterministic debug boot path so the screenshot harness can load fixed scenes reproducibly",
       "touches": [
-        "vanguard-web/BRIEF.md"
+        "vanguard-web/BRIEF.md",
+        "vanguard-web/CLAUDE.md",
+        "vanguard-web/src/main.ts",
+        "vanguard-web/src/run.ts",
+        "vanguard-web/src/debugBoot.ts"
       ],
       "requires": [
-        "vanguard/docs/sprite_style_guide.md",
-        "vanguard-web/src/sprites.ts",
-        "vanguard-web/src/BattleScene.ts"
+        "vanguard-web/src/OverworldScene.ts",
+        "vanguard-web/src/BattleScene.ts",
+        "vanguard-web/src/story.ts",
+        "vanguard-web/src/data.ts"
       ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-01T23:34:05.140224+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-01T23:37:09.053042+00:00",
       "instance": "712c43ad",
-      "note": "DONE. Wrote vanguard-web/BRIEF.md (3.2k words) - a visual fidelity pass raising rendered output to the bar already documented in vanguard/docs/sprite_style_guide.md. LEFT UNCOMMITTED in vanguard-web by design; user did not ask for a commit in that repo, so it is staged for their review. Nothing else in vanguard-web was touched. Survey findings that shaped it: the game is functionally complete (4685 lines, playable, systems all built) and the gap is purely visual - the style guide documents a 15-colour/3-hue-shifted-shade/sel-out/top-left-light bar that the committed screenshots plainly do not meet. The style guide itself concedes at line 207 that 'the AI cannot see the rendered result', which is the exact bottleneck vanguard-web was built to remove, so the brief makes a fixed-scene screenshot harness milestone 1 and forbids asking the user what something looks like. Rubric pass caught one real failure: milestone 2's gate read 'unambiguously better', a BLOCKING condition phrased as a judgment call - replaced with five checkable conditions. Self-honesty check found a second gap: all 21 criteria could pass with a cast that does not cohere; added a contact-sheet cohesion criterion. Skill improvements pushed separately to implementation-brief @ 14f3614. RECOMMENDED NEXT: if the user wants the brief acted on, milestone 1 (the screenshot harness) is self-contained and unlocks every later gate; do not start milestone 2 before it exists.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
