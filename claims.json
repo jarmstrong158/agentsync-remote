@@ -24,10 +24,11 @@
       ],
       "requires": [],
       "branch": "rules-projection-and-pretooluse-guard",
-      "status": "in-progress",
-      "updated_at": "2026-08-01T02:58:17.040049+00:00",
+      "status": "done",
+      "updated_at": "2026-08-01T03:05:55.008025+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "ALL 11 REPOS MIGRATED + PUSHED to branch mcp-2026-07-28-migration. Commits: skein 83fed4b (130->136), rag-pipeline fcdc179 (64->73), skillmatch-mcp 8e1648f (124->133), Conductor cf60e42 (136->144), waveform-mcp fe42070 (257->267), context-keeper 8d2913b (361->373), agentsync 0ba8e1f (53->60), cambium 3d5c15b (83->90), context-keeper-remote 52d8f56 (59->75), agentsync-remote c528aba (81->99), cambium-remote c710164 (41->57). Total 1394 -> 1507 tests, all green. SCOPE CORRECTION: conductor-mcp is DEPRECATED per its own README; migrated the live Conductor repo instead. THREE APPROACHES, not one: SDK v2 bump for repos already on the SDK; SDK ADOPTION for rag-pipeline/skillmatch/Conductor which hand-rolled JSON-RPC at 2024-11-05; HAND-WRITTEN DUAL-ERA for context-keeper (zero-dependency is advertised and its .mcpb Desktop bundle has no pip step, so a dependency would break that install path) and for all three Workers. 1000-RACE FIGURE UNCHANGED: stress-cas.test.ts imports claim() directly, never touches the protocol layer; re-ran on the migrated branch, races=1000 lostClaims=0 doubleGrants=0 racesWith409=1000. HANDSHAKE HARDENING: 3 of 4 documented properties survive; negotiate-down is replaced for modern clients by spec-mandated -32022 rejection with the supported list, anti-banana guard retained on the legacy path. BLOCKED, NOT DONE: (1) the 3 Workers are code-complete and tested but NOT DEPLOYED - no CLOUDFLARE_API_TOKEN and non-interactive session, so wrangler cannot authenticate; user must run wrangler deploy --env production themselves. (2) skillmatch-mcp 2.0.0 sdist+wheel built and twine-check PASSED but NOT uploaded; user pasted a PyPI token into chat and must revoke it. (3) Global SDK flip still pending: 6 repos share system python at mcp 1.27.0; all working trees restored to their original branches so the live setup is untouched. cambium+agentsync must land together (con-003-e8ba).",
+      "changed_files": null
     }
   },
   "notes": [
