@@ -29,9 +29,9 @@
       "requires": [],
       "branch": "main",
       "status": "in-progress",
-      "updated_at": "2026-08-01T19:13:23.543555+00:00",
+      "updated_at": "2026-08-01T19:20:04.729239+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "Milestone 1 of 2 done. Skill core written: SKILL.md (4-phase process) + 4 references (interview 10-question set, 10-section template, 12 style rules, domain-adapter table with evidence channels per project type, 20-item rubric) + 2 full worked example briefs (visual/pixel-art, non-visual/data-pipeline). Next: docs/ANATOMY.md analysis of the source Reddit brief, README, plugin manifests, git commit. NOTE: not vendoring the source brief verbatim (third-party content) - ANATOMY.md will analyse with attribution and short quotes only."
     }
   },
   "notes": [
