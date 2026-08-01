@@ -24,10 +24,10 @@
       ],
       "requires": [],
       "branch": "rules-projection-and-pretooluse-guard",
-      "status": "in-progress",
-      "updated_at": "2026-08-01T03:11:45.946818+00:00",
+      "status": "done",
+      "updated_at": "2026-08-01T03:14:20.311712+00:00",
       "instance": "712c43ad",
-      "note": "Implementation + tests green (392 passed, was 382). Rules projection, PreToolUse scope_guard, truncation floor all landed. Docs updated. Remaining: version bump + commit + push.",
+      "note": "DONE + PUSHED. PR #13 opened on context-keeper (branch rules-projection-and-pretooluse-guard, commit 66de4f2). Three changes from the Anthropic CLAUDE.md/auto-memory doc: (1) scoped constraints now project into .claude/rules/*.md with paths: frontmatter, opt-in rules_export, render-on-write on every constraint mutation - the harness loads the rule when a covered file is READ, earlier than any hook; generator owns a subdirectory and reaps only marker-carrying files, so hand-written rules survive; glob-metacharacter scopes are skipped AND reported since a never-firing rule file reads as coverage. export_rules kept out of tools/list per con-004, schema payload unchanged at 2955/3150. (2) scope_guard moved to PreToolUse so the rule arrives before the write instead of after; one script serves either wiring via hook_event_name with PostToolUse as the default, so existing installs are unaffected; opt-in confirm_absolute escalates to permissionDecision ask, documented as triggering on scope not on a detected violation. Verified PreToolUse additionalContext is genuinely injected BEFORE building on it - that is what con-002 demands. (3) Summary truncation floored at the constraints block plus summary_truncated reporting, closing the dec-009 empty-injection failure by its second route; new keys emitted only on truncation so the cache-stable prefix holds. Also widened con-002's allowlist, documented positioning vs built-in auto memory, and recorded the subagent coverage gap (SessionStart does not fire for subagents). 392 tests pass, was 382. Recorded dec-018-c8aa and dec-019-9c32 in context-keeper before the commit. Next action: review and squash-merge PR #13; optionally re-wire scope_guard to PreToolUse in ~/.claude/settings.json (still on PostToolUse, works either way).",
       "changed_files": null
     }
   },
