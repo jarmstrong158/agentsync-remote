@@ -14,21 +14,22 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "context-keeper: adopt CLAUDE.md-doc findings - .claude/rules/ scoped-constraint projection, PreToolUse scope_guard (rule arrives before the edit), summary truncation floor, README positioning vs auto memory",
+      "task": "context-keeper: relevance/discoverability for truncated summaries, global-scope quality flag, SubagentStart memory injection, release-asset verification",
       "touches": [
         "context-keeper/server.py",
-        "context-keeper/hooks/scope_guard.py",
+        "context-keeper/hooks/session_start.py",
+        "context-keeper/hooks/subagent_start.py",
         "context-keeper/tests/test_server.py",
+        "context-keeper/.github/workflows",
         "context-keeper/README.md",
         "context-keeper/CLAUDE.md"
       ],
       "requires": [],
-      "branch": "rules-projection-and-pretooluse-guard",
-      "status": "done",
-      "updated_at": "2026-08-01T13:57:55.784170+00:00",
+      "branch": "close-the-delivery-gaps",
+      "status": "in-progress",
+      "updated_at": "2026-08-01T14:17:29.212859+00:00",
       "instance": "712c43ad",
-      "note": "v0.16.0 RELEASED and fully distributed. GitHub release https://github.com/jarmstrong158/context-keeper/releases/tag/v0.16.0 (not draft, not prerelease). PyPI: context-keeper-mcp 0.16.0 is latest, wheel + sdist both present. MCP registry: 0.16.0 published (io.github.jarmstrong158/context-keeper). Desktop bundle context-keeper-0.16.0.mcpb (75326 bytes) attached. RELEASE-TIME FAILURE FOUND AND FIXED: the first publish shipped WITHOUT the .mcpb because mcpb/manifest.json carried a `_tools_comment` key and @anthropic-ai/mcpb@2 had tightened validation to reject unrecognised keys ('Cannot pack extension with invalid manifest'). Silent at release level - the PyPI/registry workflow succeeds independently, only the separate bundle workflow failed, and a release missing an asset looks like one that never had an asset. Note was also restating a rule TestManifestToolsMatchServer already enforces (con-009's failure mode). Fixed via PR #15 (b59aa90) with TestManifestHasNoEditorialKeys guarding any underscore-prefixed key at any depth, verified by reintroducing one and watching it fail; manifest now passes `npx @anthropic-ai/mcpb@2 validate` exit 0. Bundle then built on CI via workflow_dispatch, verified (manifest 0.16.0, 14 tools matching server.TOOLS, store_paths.py staged) and uploaded to the existing release with gh release upload. Recorded con-013-4b25. 443 tests, CI green ubuntu+windows x 3.10+3.12. Three PRs merged this session: #13, #14, #15. Board clear.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
