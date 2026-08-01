@@ -14,22 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "MCP 2026-07-28 spec migration, repo 1 of 11: skein. Bump mcp SDK v1 to v2.0.0, FastMCP to MCPServer, add tools/list cache hints, fix PyInstaller hidden imports, add spec-conformance tests.",
+      "task": "context-keeper: adopt CLAUDE.md-doc findings - .claude/rules/ scoped-constraint projection, PreToolUse scope_guard (rule arrives before the edit), summary truncation floor, README positioning vs auto memory",
       "touches": [
-        "skein/skein_mcp/server.py",
-        "skein/pyproject.toml",
-        "skein/packaging/windows/skein.spec",
-        "skein/tests/test_mcp_protocol.py",
-        "skein/README.md",
-        "skein/docs/ARCHITECTURE.md"
+        "context-keeper/server.py",
+        "context-keeper/hooks/scope_guard.py",
+        "context-keeper/tests/test_server.py",
+        "context-keeper/README.md",
+        "context-keeper/CLAUDE.md"
       ],
       "requires": [],
-      "branch": "mcp-2026-07-28-migration",
-      "status": "done",
-      "updated_at": "2026-07-31T16:28:44.263195+00:00",
+      "branch": "rules-projection-and-pretooluse-guard",
+      "status": "in-progress",
+      "updated_at": "2026-08-01T02:58:17.040049+00:00",
       "instance": "712c43ad",
-      "note": "Repos 1-3 of 11 DONE + PUSHED, all on branch mcp-2026-07-28-migration. (1) skein 83fed4b: 130->136 tests, ruff+mypy clean, verified on real stdio AND frozen PyInstaller exe. (2) rag-pipeline fcdc179: was HAND-ROLLED JSON-RPC at 2024-11-05, moved onto SDK; 64->73 tests, 9 added, zero existed before. (3) skillmatch-mcp 8e1648f: also hand-rolled at 2024-11-05, moved onto SDK LOW-LEVEL Server to keep 20 published schemas verbatim (zero drift, asserted by test); 124->133 tests; 5 TestToolCallIsError tests rewritten off the dead stdin/stdout loop onto a real client, assertions unchanged; version 1.0.2->2.0.0, server.json bumped, sdist+wheel built and twine-check PASSED but NOT uploaded (no PyPI token on disk; user has none). KEY SEQUENCING RISK: agentsync, cambium, context-keeper, skillmatch-mcp, conductor-mcp and rag-pipeline ALL share system python 3.12 with NO venvs, currently mcp 1.27.0. Global bump to 2.0 breaks all six at once including the live Xylem servers. Mitigation in force: each repo migrated+verified in an isolated scratch venv, working trees left on their ORIGINAL branch, single global SDK flip deferred to the very end. Remaining: 4 conductor-mcp, 5 waveform-mcp, 6 context-keeper, 7 agentsync, 8 cambium, 9-11 the three Workers.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
