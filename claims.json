@@ -29,10 +29,11 @@
         "vanguard-web/src/data.ts"
       ],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-01T23:37:09.053042+00:00",
+      "status": "done",
+      "updated_at": "2026-08-01T23:51:58.387372+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED TO ORIGIN. github.com/jarmstrong158/vanguard-web, main @ bcc9f79, clean tree, tracking origin/main. Milestone 1 of BRIEF.md complete: a deterministic screenshot harness. npm run shots captures 4 fixed scenes (title/overworld/battle/party) at 1x, 4x and greyscale into docs/shots/<label>/. VERIFIED byte-identical across two independent runs, all 10 files - seeded RNG, hand-driven clock, and sprite generation that has zero randomness. Baseline committed at docs/shots/00-baseline. Three real obstacles found only by running it, not by reading code: (1) requestAnimationFrame never fires in a hidden/headless tab so the game rendered ZERO frames - fixed by driving game.step() manually with synthetic timestamps, which is also more reproducible than counting real frames; (2) stepping synchronously starved Phaser's asset loader, so any scene with preload() captured as an empty clear-colour frame - steps now yield to the event loop; (3) a fresh save has no story flags so arriving anywhere fired that location's cutscene and the capture landed on a dialogue box - shot state now marks every WORLD_BEAT seen. Shot mode is inert without ?shot= and never writes localStorage. ALSO FIXED (pre-existing, found while verifying): tsconfig had no noEmit, so npm run build emitted 17 .js files into src/ and vitest ran the suite twice, the second time against stale compiled output that could pass while source was broken. Two BRIEF.md corrections from reading code over design docs: canvas is 384x216 not the style guide's 320x180, and Phaser.Scale.FIT is NOT integer scaling so every pixel is resampled on most window sizes - that fix is now scoped into milestone 1. Recorded con-001-e5b4: never judge a visual change by reasoning about code, run the harness and look. RECOMMENDED NEXT: finish the integer-scale fix (small, and until it lands nothing rendered can be judged fairly), then milestone 2 (shading.ts derivation layer + Maren) behind its five-condition gate.",
+      "changed_files": []
     }
   },
   "notes": [
