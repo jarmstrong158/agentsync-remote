@@ -14,25 +14,20 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "Build implementation-brief: a Claude Code skill repo that interviews a user and emits a SNOWFLOW-style spec/implementation brief for handing to an agent",
+      "task": "Dogfood the implementation-brief skill: write BRIEF.md for vanguard-web, a visual fidelity pass raising rendered output to the bar in vanguard/docs/sprite_style_guide.md",
       "touches": [
-        "implementation-brief/README.md",
-        "implementation-brief/LICENSE",
-        "implementation-brief/.gitignore",
-        "implementation-brief/.claude-plugin/marketplace.json",
-        "implementation-brief/plugin/.claude-plugin/plugin.json",
-        "implementation-brief/plugin/skills/implementation-brief/SKILL.md",
-        "implementation-brief/plugin/skills/implementation-brief/references/",
-        "implementation-brief/plugin/skills/implementation-brief/examples/",
-        "implementation-brief/docs/ANATOMY.md"
+        "vanguard-web/BRIEF.md"
       ],
-      "requires": [],
+      "requires": [
+        "vanguard/docs/sprite_style_guide.md",
+        "vanguard-web/src/sprites.ts",
+        "vanguard-web/src/BattleScene.ts"
+      ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-01T20:44:05.606643+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-01T23:29:52.367432+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. github.com/jarmstrong158/implementation-brief, main @ c7eefd1, tracking origin/main, clean tree. Built a Claude Code skill that writes spec-grade implementation briefs, reverse-engineered from the SNOWFLOW brief on r/ClaudeAI. Shipped: SKILL.md (4-phase: interview, survey repo, write, rubric) + 5 references (10-question interview with defaults for each, 10-section template, 12 style rules, domain-adapter table mapping project type to evidence channel and section-8 phrasing, 20-item adversarial rubric) + 2 complete original example briefs deliberately far apart (pixel-art visual vs data-pipeline correctness) so the universal shape is separable from borrowed vocabulary. Verified by TEST-INSTALL not just validate, per the xylem dec-009 lesson: uninstalled the local-path marketplace, re-added by GitHub name (the path the README advertises), reinstalled. Status enabled, Skills (1), Hooks (0), MCP (0), ~136 always-on tokens / ~1.5k on invoke. Decisions recorded: dec-001-605e (skill not MCP - nothing external to call, so an MCP would be an empty wrapper), con-001-59f5 (never vendor the third-party source brief; ANATOMY.md analyses it with attribution and short quotes, all examples original). RECOMMENDED NEXT: dogfood it - run the skill against a real project (vanguard-web is the obvious candidate) and let the rubric pass expose which reference file is thin. The domain-adapter table is the piece most likely to need extending on first real contact.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
