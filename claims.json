@@ -14,23 +14,24 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "context-keeper: relevance/discoverability for truncated summaries, global-scope quality flag, SubagentStart memory injection, release-asset verification",
+      "task": "Build implementation-brief: a Claude Code skill repo that interviews a user and emits a SNOWFLOW-style spec/implementation brief for handing to an agent",
       "touches": [
-        "context-keeper/server.py",
-        "context-keeper/hooks/session_start.py",
-        "context-keeper/hooks/subagent_start.py",
-        "context-keeper/tests/test_server.py",
-        "context-keeper/.github/workflows",
-        "context-keeper/README.md",
-        "context-keeper/CLAUDE.md"
+        "implementation-brief/README.md",
+        "implementation-brief/LICENSE",
+        "implementation-brief/.gitignore",
+        "implementation-brief/.claude-plugin/marketplace.json",
+        "implementation-brief/plugin/.claude-plugin/plugin.json",
+        "implementation-brief/plugin/skills/implementation-brief/SKILL.md",
+        "implementation-brief/plugin/skills/implementation-brief/references/",
+        "implementation-brief/plugin/skills/implementation-brief/examples/",
+        "implementation-brief/docs/ANATOMY.md"
       ],
       "requires": [],
-      "branch": "close-the-delivery-gaps",
-      "status": "done",
-      "updated_at": "2026-08-01T15:26:46.611253+00:00",
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-08-01T19:13:23.543555+00:00",
       "instance": "712c43ad",
-      "note": "v0.17.0 RELEASED, all three channels verified, PR #16 merged (3a381a4). Release https://github.com/jarmstrong158/context-keeper/releases/tag/v0.17.0. PyPI: 0.17.0 is latest with wheel + sdist. MCP registry: 0.17.0 published. Bundle context-keeper-0.17.0.mcpb (77941 bytes) attached on the FIRST attempt this time. The new verify-release workflow ran and passed all three of its own checks independently - the guard built in this release proving itself on the release that introduced it. Full pre-flight ran this time including `npx @anthropic-ai/mcpb@2 validate` (exit 0), which is precisely the check skipped before v0.16.0 and the reason that release shipped bundle-less. Contents: truncated summaries now leave a discoverable id trail paid for INSIDE the token budget (balatron was losing 116 lines/session undiscoverably); summary_over_budget added because the worst case - constraints floor alone exceeding budget, so nothing is dropped and summary_truncated stays False - was silent; verify_quality flags global_scope only when a concrete path can be named from enforced_by or a real-directory tag (5 actionable across real stores, from 47% of constraints being global and thus invisible to drift check + rules projection + scope_guard simultaneously); new subagent_start.py briefs spawned subagents with the constraints block via SubagentStart, capped since a fan-out multiplies it; constraint_reinject moved off `import server` (matcher \"\" = every tool call, the hottest hook here), both now ~5ms over the interpreter floor; `..` rejected in scopes at the _scope_to_paths chokepoint after CI caught a Windows/POSIX os.path.exists divergence. Also wired SubagentStart into ~/.claude/settings.json (timeout 5, no matcher so every subagent is briefed), verified firing across 16 real project stores; backup at ~/.claude/settings.json.bak-subagentstart. 469 tests from 443. Recorded dec-021-b607, con-010 and con-012 widened. Board clear.",
-      "changed_files": null
+      "note": null
     }
   },
   "notes": [
