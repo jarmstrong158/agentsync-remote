@@ -26,10 +26,11 @@
       ],
       "requires": [],
       "branch": "close-the-delivery-gaps",
-      "status": "in-progress",
-      "updated_at": "2026-08-01T14:17:29.212859+00:00",
+      "status": "done",
+      "updated_at": "2026-08-01T15:26:46.611253+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "v0.17.0 RELEASED, all three channels verified, PR #16 merged (3a381a4). Release https://github.com/jarmstrong158/context-keeper/releases/tag/v0.17.0. PyPI: 0.17.0 is latest with wheel + sdist. MCP registry: 0.17.0 published. Bundle context-keeper-0.17.0.mcpb (77941 bytes) attached on the FIRST attempt this time. The new verify-release workflow ran and passed all three of its own checks independently - the guard built in this release proving itself on the release that introduced it. Full pre-flight ran this time including `npx @anthropic-ai/mcpb@2 validate` (exit 0), which is precisely the check skipped before v0.16.0 and the reason that release shipped bundle-less. Contents: truncated summaries now leave a discoverable id trail paid for INSIDE the token budget (balatron was losing 116 lines/session undiscoverably); summary_over_budget added because the worst case - constraints floor alone exceeding budget, so nothing is dropped and summary_truncated stays False - was silent; verify_quality flags global_scope only when a concrete path can be named from enforced_by or a real-directory tag (5 actionable across real stores, from 47% of constraints being global and thus invisible to drift check + rules projection + scope_guard simultaneously); new subagent_start.py briefs spawned subagents with the constraints block via SubagentStart, capped since a fan-out multiplies it; constraint_reinject moved off `import server` (matcher \"\" = every tool call, the hottest hook here), both now ~5ms over the interpreter floor; `..` rejected in scopes at the _scope_to_paths chokepoint after CI caught a Windows/POSIX os.path.exists divergence. Also wired SubagentStart into ~/.claude/settings.json (timeout 5, no matcher so every subagent is briefed), verified firing across 16 real project stores; backup at ~/.claude/settings.json.bak-subagentstart. 469 tests from 443. Recorded dec-021-b607, con-010 and con-012 widened. Board clear.",
+      "changed_files": null
     }
   },
   "notes": [
