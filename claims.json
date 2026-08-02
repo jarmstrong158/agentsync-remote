@@ -26,10 +26,11 @@
         "vanguard-web/tools/shots.mjs"
       ],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-02T00:44:58.108333+00:00",
+      "status": "done",
+      "updated_at": "2026-08-02T00:49:29.160263+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 5bb00dc, clean tree, tracking origin/main. Milestone 3 complete, gate PASSES measured on the 1x capture not eyeballed: mountains 67.4, ground near 65.7, ground far 80.5, Maren torso 87.0, UI panel highest internal contrast - background darkest, actors mid. New src/art/backdrop.ts replaces two flat colour bands and one silhouette with four depth ranges separated by VALUE (farthest at 72 percent toward the sky, deliberately almost invisible), a five-step sky with hash-dithered seams, a scattered horizon plus dark foothills, and ground texture on a jittered 3x2 lattice. TWO THINGS THE NUMBERS CAUGHT THAT THE EYE DID NOT: (1) per-pixel ground texture at a visible density is STATIC not grass - isolated orphan pixels, style guide 8.6; trading a visible repeat for noise is not a fix, one tuft per lattice cell reads as cover. (2) physically correct aerial perspective on the ground made the image WORSE - lifting the field toward the sky as hard as the far ranges put it within 3.5 luma of the sprites standing on it, worse figure/ground than the flat baseline's 10; ground now takes a 0.12 lift against the mountains' 0.72 and separation is 6.5. The section 8 value-structure criterion outranks physical correctness at this resolution - worth remembering for the remaining regions. Contact shadows under every actor already existed, unchanged. Build clean, 22 tests green, deviations logged in DECISIONS.md. RECOMMENDED NEXT: milestone 4 (rest of the cast) - migration is now a one-argument change per character since chibi() takes paint + headW, plus a declared palette each. Enemies are the weakest element and read low-contrast against the darker ground in the greyscale capture, so do them before the party.",
+      "changed_files": []
     }
   },
   "notes": [
