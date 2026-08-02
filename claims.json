@@ -14,24 +14,21 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web milestone 5 (BRIEF.md 2.5): UI pass - two-tone bevelled panels replacing the gradient debug-blue, text shadows, HP/MP bar troughs, greyscale-safe selection highlight",
+      "task": "vanguard-web: text-shadow sweep (closes a section 8 criterion) then milestone 6 - three-cue impact and idle phase offsets",
       "touches": [
         "vanguard-web/src/art/ui.ts",
-        "vanguard-web/src/sprites.ts",
+        "vanguard-web/src/main.ts",
         "vanguard-web/src/BattleScene.ts",
-        "vanguard-web/src/art/palette.ts",
         "vanguard-web/DECISIONS.md"
       ],
       "requires": [
-        "vanguard-web/src/PartyMenuScene.ts",
         "vanguard-web/tools/shots.mjs"
       ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T01:30:45.229725+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T01:35:34.243003+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 6250d6a, clean tree, tracking origin/main. Milestone 5 (UI) complete apart from one honestly-scoped gap. The panel was a rounded rect with a royal-blue gradient body and a translucent drop shadow - BRIEF section 0 names that look as a defect and 2.5's negative spec bans every ingredient (no gradients, no rounded corners, no partial alpha). Now a flat desaturated ground inside a two-tone bevel lit from the same top-left as the sprites. New src/art/ui.ts exports panel/selection/bar/shadowed; ffWindow keeps its signature and delegates, so all five calling scenes updated at once for one edit. Selection highlight is a VALUE step plus bevel rather than a hue change because section 8 requires it to survive greyscale - measured luma delta vs an unselected cell 35.5 -> 47.0 (note the old saturated blue was legible but modest, not invisible as I first characterised it). HP/MP bars gained a keyline, dark trough and lit top row. Turn-order frames share the panel bevel. REMAINING GAP, recorded in DECISIONS.md as work not as an accepted deviation: text shadows are wired in BattleScene only; DialogueScene, ShopScene, PartyMenuScene, OverworldScene and CampScene still add unshadowed text, so section 8's 'all text is legible over its actual background' is NOT yet fully met - the shadowed() helper exists so each is a one-line change at the add.text site. Build clean, 22 tests green. BRIEF STATUS: milestones 1-5 done, both hard gates passed. REMAINING: finish text shadows across the four scenes, milestone 6 (animation timings, three-cue impact, idle phase offsets, secondary motion), milestone 7 (fractional-position debug audit, palette-budget CI test, frame-time verification). RECOMMENDED NEXT: the text-shadow sweep first since it is small and closes a section 8 criterion, then milestone 6.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
