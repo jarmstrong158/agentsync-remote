@@ -23,10 +23,11 @@
       ],
       "requires": [],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-02T10:38:05.290532+00:00",
+      "status": "done",
+      "updated_at": "2026-08-02T10:39:47.103344+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 6afe879, clean tree, tracking origin/main. Added npm run perf - an rAF-mode frame-time probe, deliberately separate from the screenshot harness because that one drives the clock by hand so captures reproduce, and the same property makes its timings meaningless for performance. ?perf=1 settles the scene with the manual clock, hands it back to requestAnimationFrame, samples 600 real deltas, and reports the 1% LOW rather than only the mean because an average hides exactly the hitch that matters (BRIEF section 3). RESULTS across all four scenes: mean 0.35-0.80ms, p95 0.46-1.14ms, 1% low 5.8-9.6ms, worst single frame 13.7ms, 0.0% of frames over the 16.6ms budget. STATED PRECISELY and recorded that way in DECISIONS.md rather than rounded up to a pass: this measures per-frame WORK, not delivered frame rate - it runs headless with --disable-gpu-vsync so rAF fires unthrottled at ~1300fps and each delta is the cost of a step, not a 16.6ms display interval. Strong evidence the budget is met; NOT the same claim as 'verified 60 FPS on the target machine'. A real-display check remains outstanding. Build clean, 29 tests green. FINAL BRIEF STATUS: milestones 1-5 complete, 6 and 7 partial, both hard gates passed, every section 8 criterion now either met or explicitly recorded as outstanding - none silently assumed. Tooling in place for whoever continues: npm run shots (byte-reproducible captures + fractional-coordinate audit that fails the run), npm run perf, npm test (29 incl. palette invariants), tools/focus.mjs for single-sprite and silhouette inspection. REMAINING: section 2.6 four-phase attack timing table and secondary motion on hair/satchels; a real-display frame-rate confirmation.",
+      "changed_files": []
     }
   },
   "notes": [
