@@ -14,22 +14,18 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web: text-shadow sweep (closes a section 8 criterion) then milestone 6 - three-cue impact and idle phase offsets",
+      "task": "dec-098 switch the primary experiment metric from win rate to per-blind clear rate at antes 4-6: build the comparison tool with power analysis, since every prior A/B was underpowered by construction (a realistic +1pp/blind lever needs 18,627 runs/arm as win rate vs 62,134 blinds/arm as clear rate)",
       "touches": [
-        "vanguard-web/src/art/ui.ts",
-        "vanguard-web/src/main.ts",
-        "vanguard-web/src/BattleScene.ts",
-        "vanguard-web/DECISIONS.md"
+        "audit_blind_clear.py",
+        "tests/test_blind_clear.py",
+        "DECISIONS.md"
       ],
-      "requires": [
-        "vanguard-web/tools/shots.mjs"
-      ],
+      "requires": [],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T01:37:57.455735+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T01:50:55.494404+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ de5a958, clean tree, tracking origin/main. Two things landed. (1) TEXT-SHADOW SWEEP COMPLETE - closes section 8's text-legibility criterion. Installed by patching the Phaser Text factory once in main.ts rather than wrapping ~60 add.text call sites across six scenes; a rule enforced by remembering to wrap each call decays the first time someone adds a scene. VERIFIED the overworld and party-menu captures both changed byte-wise without either file being edited by hand. (2) MILESTONE 6 PARTIAL: hitstop added, completing the three-cue impact - the white flash and knockback already existed and the pause is the cue that sells weight; idle breathe added as a 1px two-frame offset at the style guide's ~600ms with a deterministic per-actor phase so the party stops breathing in unison, running only in the command phase because during an action the tweens own img.y and two writers on one property produce a stutter not a breath. DEVIATION LOGGED: knockback stays 6px against the brief's stated 1-2px - at 384x216 with 32px sprites 2px does not read, and the brief's figure was written assuming 320x180. STILL OUTSTANDING in 2.6, recorded rather than quietly dropped: the four-phase attack timing table (anticipation/contact/follow-through/recovery) and secondary motion on hair and satchels. Build clean, 22 tests green. BRIEF STATUS: milestones 1-5 complete, 6 partial, both hard gates passed. REMAINING: finish 2.6 timings + secondary motion, then milestone 7 (fractional-position debug audit across all five scenes, palette-budget CI test, frame-time verification with 1% lows). RECOMMENDED NEXT: milestone 7 - it is mostly verification tooling and would close out several section 8 criteria that are currently asserted but unmeasured, which matters more than the remaining animation polish.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
