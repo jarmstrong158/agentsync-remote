@@ -14,22 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web milestone 4b (BRIEF.md 2.2): migrate the remaining cast - party, humanoid enemies and NPCs - to declared palettes and volumetric shading; verify against the battle capture, not the contact sheet",
+      "task": "vanguard-web milestone 5 (BRIEF.md 2.5): UI pass - two-tone bevelled panels replacing the gradient debug-blue, text shadows, HP/MP bar troughs, greyscale-safe selection highlight",
       "touches": [
-        "vanguard-web/src/art/palette.ts",
+        "vanguard-web/src/art/ui.ts",
         "vanguard-web/src/sprites.ts",
+        "vanguard-web/src/BattleScene.ts",
+        "vanguard-web/src/art/palette.ts",
         "vanguard-web/DECISIONS.md"
       ],
       "requires": [
-        "vanguard-web/src/art/shading.ts",
-        "vanguard-web/tools/focus.mjs"
+        "vanguard-web/src/PartyMenuScene.ts",
+        "vanguard-web/tools/shots.mjs"
       ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T01:25:47.284671+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T01:27:29.429923+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ c8df54e, clean tree, tracking origin/main. Milestone 4 COMPLETE (4a enemies + 4b cast). Kael, Lida, Senna, Yara, Davan, Mirror, militia, ashguard, Rhogar and three townsfolk variants all on declared palettes and volumetric shading. HEROES joins BEASTS in palette.ts; colour literals in sprites.ts are down from ~90 to 6. Every humanoid now uses the narrowed head + neck proven on Maren - leaving the default would have made him the only character whose silhouette reads. THE MEASUREMENT THAT MATTERED: Senna sat at dv +1.2 against the ground, the same value as the field she stands on, so she read as a hole rather than a character. That PREDATES the migration - the harness only made it visible. Vest lightened 0x3a2d26 -> 0x5c4838 and she separates. Identical failure mode to the Shadow Creeper in 4a, found the same way; two independent instances is the argument for checking every sprite against the SCENE rather than the neutral contact sheet, and that is now the standing practice. Build clean, 22 tests green, all deviations in DECISIONS.md. BRIEF STATUS: milestones 1-4 done, 2 of 2 hard gates passed. REMAINING: milestone 5 (UI - untouched, still the saturated debug-blue panel that BRIEF section 0 names as a defect; panel bevels, text shadows, bar treatment, selection highlight that survives greyscale), milestone 6 (animation + three-cue impact + idle phase offsets), milestone 7 (fractional-position audit, palette-budget CI test, frame time). RECOMMENDED NEXT: milestone 5 - the UI is now the single most obvious remaining tell in the frame, and section 8 has five UI criteria none of which are met.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
