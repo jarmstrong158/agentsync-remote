@@ -25,10 +25,11 @@
         "vanguard-web/tools/focus.mjs"
       ],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-02T01:15:39.449073+00:00",
+      "status": "done",
+      "updated_at": "2026-08-02T01:20:12.150271+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 31eddfd, clean tree, tracking origin/main. Milestone 4a complete: seven beasts migrated to declared palettes and volumetric shading (shade, moth, wolf, slime, rat, spider, stalker) - each now has three hue-shifted shades, a lit edge and a shaded underside instead of one flat fill. Enemies went first because the milestone 3 greyscale showed them as the weakest element, reading as low-contrast cutouts against the newly darkened ground. INFRASTRUCTURE: BEASTS declares bases and a generic paletteFor() builds the bounded palette, so remaining characters are a small declaration each rather than bespoke code; Maren's hand-written marenPalette() was worth doing once to learn what the helper needed. KEY LESSON, recorded in DECISIONS.md: giving the Shadow Creeper a brighter violet ramp so it had 'visible form' per section 2.3 looked correct on the neutral contact sheet and dropped its contrast against the field from 12.5 to 2.0 - it would have vanished in play. Measured, darkened, back to 12.3 with the ramp intact. A sprite's VALUE LEVEL is a property of the scene it stands in, not of the sprite; judging on the contact sheet alone is how that regression ships. Applies directly to the remaining party migration. Build clean, 22 tests green. REMAINING for milestone 4b: kael, lida, senna, yara, davan, mirror, militia, ashguard, rhogar, villager x2, elder - all still on the old flat p.block path with inline literals. BEASTS already declares militia/ashguard/rhogar bases, so those three are part-done. RECOMMENDED: migrate party next (they are on screen constantly), verifying each against the battle capture not just the contact sheet, then milestone 5 (UI) which is untouched and still the saturated debug-blue panel called out in BRIEF section 0.",
+      "changed_files": []
     }
   },
   "notes": [
