@@ -14,22 +14,19 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web milestone 7: make the asserted section 8 criteria measurable - palette-budget vitest, fractional-position audit wired into the harness as a failure",
+      "task": "vanguard-web: rAF-mode frame-time probe to close section 8's 60 FPS / 1% low criterion, which is currently asserted and unmeasured",
       "touches": [
-        "vanguard-web/src/art/palette.test.ts",
         "vanguard-web/src/debugBoot.ts",
-        "vanguard-web/tools/shots.mjs",
+        "vanguard-web/tools/perf.mjs",
+        "vanguard-web/package.json",
         "vanguard-web/DECISIONS.md"
       ],
-      "requires": [
-        "vanguard-web/src/art/shading.ts"
-      ],
+      "requires": [],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T04:16:30.536587+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T10:38:05.290532+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ daef5f5, clean tree, tracking origin/main. Milestone 7 partial - two section 8 criteria that were upheld by hand are now enforced. PALETTE TESTS (22 -> 29 tests): per-character colour ceiling, no two bases close enough to read as one colour, shadows shift hue not just darken, shaded skin stays in the warm band, ramp steps strictly ordered by value, no base is pure black. They assert DECLARATIONS not baked pixels because baking needs a canvas and a test that cannot run in CI stops running; since every pixel snaps to its declared palette, a bound on the declaration is a bound on the sprite. Caught a real bug on first run: villager2.eye was byte-identical to villager2.hair, left over from extracting palettes out of draw code. TWO OF MY OWN ASSERTIONS WERE WRONG and I corrected the tests not the code - (a) 'shadows always shift hue' fails for a base already on the shadow target and for dark bases where a few degrees quantises away in 8-bit, (b) 'skin rotates toward red, cloth the other way' is false because from a 27-degree base the short way to blue-violet ALSO runs backwards through red, so direction carries no information; replaced with the property that matters, shaded skin must stay in the warm band. PIXEL-GRID AUDIT: the harness now scans every scene's display list for fractional coordinates and FAILS the capture. Found two offenders immediately - treasure chests placed at unrounded generated coordinates, and the real one, an eased bob tween writing y directly which put a chest and every child of its container on a fractional coordinate for all but two frames of its cycle. Now tweens a proxy and rounds on apply, which is what BRIEF section 3 actually asks for. NOT DONE, recorded rather than counted as passing: frame time and 1% lows - the harness drives the clock by hand so its timings say nothing about real rAF performance; that criterion needs a separate rAF-mode probe. BRIEF STATUS: milestones 1-5 complete, 6 and 7 partial, both hard gates passed, build clean, 29 tests green, captures byte-reproducible. REMAINING: 2.6 four-phase attack timings + secondary motion; an rAF-mode frame-time probe.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
