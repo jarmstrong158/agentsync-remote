@@ -14,23 +14,21 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web milestone 3 (BRIEF.md 2.4): battle/overworld backgrounds - depth planes, broken tiling, horizon transition, actor contact shadows; gated on the greyscale value-structure check",
+      "task": "vanguard-web milestone 4a (BRIEF.md 2.3): migrate enemy sprites to the shade derivation layer - declared palettes, volumetric form, hue-shifted 3-shade ramps. Enemies first, they read weakest against the darkened ground.",
       "touches": [
-        "vanguard-web/src/BattleScene.ts",
-        "vanguard-web/src/art/backdrop.ts",
         "vanguard-web/src/art/palette.ts",
+        "vanguard-web/src/sprites.ts",
         "vanguard-web/DECISIONS.md"
       ],
       "requires": [
         "vanguard-web/src/art/shading.ts",
-        "vanguard-web/tools/shots.mjs"
+        "vanguard-web/tools/focus.mjs"
       ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T00:49:29.160263+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T01:15:39.449073+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 5bb00dc, clean tree, tracking origin/main. Milestone 3 complete, gate PASSES measured on the 1x capture not eyeballed: mountains 67.4, ground near 65.7, ground far 80.5, Maren torso 87.0, UI panel highest internal contrast - background darkest, actors mid. New src/art/backdrop.ts replaces two flat colour bands and one silhouette with four depth ranges separated by VALUE (farthest at 72 percent toward the sky, deliberately almost invisible), a five-step sky with hash-dithered seams, a scattered horizon plus dark foothills, and ground texture on a jittered 3x2 lattice. TWO THINGS THE NUMBERS CAUGHT THAT THE EYE DID NOT: (1) per-pixel ground texture at a visible density is STATIC not grass - isolated orphan pixels, style guide 8.6; trading a visible repeat for noise is not a fix, one tuft per lattice cell reads as cover. (2) physically correct aerial perspective on the ground made the image WORSE - lifting the field toward the sky as hard as the far ranges put it within 3.5 luma of the sprites standing on it, worse figure/ground than the flat baseline's 10; ground now takes a 0.12 lift against the mountains' 0.72 and separation is 6.5. The section 8 value-structure criterion outranks physical correctness at this resolution - worth remembering for the remaining regions. Contact shadows under every actor already existed, unchanged. Build clean, 22 tests green, deviations logged in DECISIONS.md. RECOMMENDED NEXT: milestone 4 (rest of the cast) - migration is now a one-argument change per character since chibi() takes paint + headW, plus a declared palette each. Enemies are the weakest element and read low-contrast against the darker ground in the greyscale capture, so do them before the party.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
