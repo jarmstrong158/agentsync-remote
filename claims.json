@@ -25,10 +25,11 @@
         "vanguard-web/tools/shots.mjs"
       ],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-02T01:35:34.243003+00:00",
+      "status": "done",
+      "updated_at": "2026-08-02T01:36:13.135268+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "GLOBAL SDK FLIP COMPLETE. System python mcp 1.27.0 -> 2.0.0, and all six system-python repos checked out onto mcp-2026-07-28-migration (rag-pipeline, skillmatch-mcp, Conductor, cambium, agentsync, context-keeper). skein and waveform-mcp already ran their own venvs at 2.0.0. SMOKE TEST: all 8 Python MCP servers launched over REAL stdio and answered 2026-07-28 with ttlMs=300000 cacheScope=public - skein 6 tools, rag-pipeline 4, skillmatch-mcp 20, Conductor 24, waveform-mcp 157, context-keeper 14, agentsync 9, cambium 16. Suites re-run on the real global SDK: context-keeper 373 passed, agentsync 60 passed, cambium 90 passed. Mirror round-trip verified again post-flip: migrated local speaking 2026-07-28 against the still-legacy live Worker, OK. con-007 (explicit User-Agent) confirmed intact in mirror.py. NOTE: the MCP server processes running in THIS session started before the flip and still hold v1 code in memory; a Claude Code / Claude Desktop restart is needed to load the migrated servers. STILL BLOCKED ON CREDENTIALS, unchanged: (1) the 3 Cloudflare Workers are code-complete, tested and pushed but NOT DEPLOYED - no CLOUDFLARE_API_TOKEN, non-interactive session, wrangler cannot authenticate. (2) skillmatch-mcp 2.0.0 artifacts built and twine-check PASSED but NOT uploaded. The PyPI token the user pasted into chat was NOT used and must be revoked. ROLLBACK if needed: pip install \"mcp>=1.27,<2\" and git checkout the prior branch in each repo.",
+      "changed_files": []
     }
   },
   "notes": [
