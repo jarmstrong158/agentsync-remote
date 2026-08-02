@@ -27,10 +27,11 @@
         "vanguard-web/tools/shots.mjs"
       ],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-02T00:22:47.099019+00:00",
+      "status": "done",
+      "updated_at": "2026-08-02T00:38:24.077453+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 8ecdb4c, clean tree, tracking origin/main. Milestone 2 complete and its five-condition gate PASSES, all measured not eyeballed: 3 hue-shifted shades per material (torso 67/113/103 deg - hue moves, so not brightness scaling); cast shadows below hair and chin (forehead luma 79 under hair vs 173 below, chest 84 vs 118); 0 pure-black and 0 near-black desaturated pixels; silhouette identifiable (staff reads as a separate held object, column profile differs from Kael by ~10 source px on average); zero colour literals in drawMaren. Built src/art/shading.ts (sole source of derived colour) and src/art/palette.ts (sole home of literals). FOUR things only rendering could have found: (1) the flat-fill silhouette was an unreadable blob - head and torso were both 12px wide so they merged, and the staff sat flush against the arm; fixed via opt-in chibi() params so the unmigrated cast is untouched. (2) skin shadows came out OLIVE because shadow() lerped every hue toward blue-violet and skin at 27deg travels through yellow-green - hue now interpolates the short way and skin uses a rosy target per style guide 2.3; lit 27deg to shaded 24deg, toward red. (3) 57 distinct colours on one 32x32 sprite because derived shades, cast shadows and the outline blend each mint a colour per application - sprites now snap to a declared palette, Maren is a bounded 32. (4) nearest-colour snapping BLEEDS ACROSS MATERIALS: a deep cool-brown cast shadow landed on dark green and turned the face olive a second time; fixed with explicit cast-shadow depth entries. DEVIATION LOGGED in DECISIONS.md: 32 colours exceeds the brief's 15 - ten materials at three shades cannot fit 15, the budget is a SNES hardware convention while the three-shade rule is what stops a sprite reading flat. Harness gained a contact sheet (BRIEF 5 shot 5) and tools/focus.mjs for single-sprite + silhouette inspection; the gate was unjudgeable without them since cohesion is invisible in a scene. Build clean, 22 tests green. Recorded con-002-57a4. RECOMMENDED NEXT: milestone 3 (backgrounds) NOT milestone 4 - the brief warns 2.4 that improved sprites on flat colour-band backgrounds look pasted on, and the battle capture now shows exactly that: Maren reads finished beside a two-band sky and a uniform dotted ground.",
+      "changed_files": []
     }
   },
   "notes": [
