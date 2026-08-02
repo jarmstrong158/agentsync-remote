@@ -25,10 +25,11 @@
         "vanguard-web/tools/focus.mjs"
       ],
       "branch": "main",
-      "status": "in-progress",
-      "updated_at": "2026-08-02T01:21:34.605519+00:00",
+      "status": "done",
+      "updated_at": "2026-08-02T01:25:47.284671+00:00",
       "instance": "712c43ad",
-      "note": null
+      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ c8df54e, clean tree, tracking origin/main. Milestone 4 COMPLETE (4a enemies + 4b cast). Kael, Lida, Senna, Yara, Davan, Mirror, militia, ashguard, Rhogar and three townsfolk variants all on declared palettes and volumetric shading. HEROES joins BEASTS in palette.ts; colour literals in sprites.ts are down from ~90 to 6. Every humanoid now uses the narrowed head + neck proven on Maren - leaving the default would have made him the only character whose silhouette reads. THE MEASUREMENT THAT MATTERED: Senna sat at dv +1.2 against the ground, the same value as the field she stands on, so she read as a hole rather than a character. That PREDATES the migration - the harness only made it visible. Vest lightened 0x3a2d26 -> 0x5c4838 and she separates. Identical failure mode to the Shadow Creeper in 4a, found the same way; two independent instances is the argument for checking every sprite against the SCENE rather than the neutral contact sheet, and that is now the standing practice. Build clean, 22 tests green, all deviations in DECISIONS.md. BRIEF STATUS: milestones 1-4 done, 2 of 2 hard gates passed. REMAINING: milestone 5 (UI - untouched, still the saturated debug-blue panel that BRIEF section 0 names as a defect; panel bevels, text shadows, bar treatment, selection highlight that survives greyscale), milestone 6 (animation + three-cue impact + idle phase offsets), milestone 7 (fractional-position audit, palette-budget CI test, frame time). RECOMMENDED NEXT: milestone 5 - the UI is now the single most obvious remaining tell in the frame, and section 8 has five UI criteria none of which are met.",
+      "changed_files": []
     }
   },
   "notes": [
