@@ -18,7 +18,7 @@ import source from "../src/shared/mcp-core.ts?raw";
 // sha-256 of the LF-normalized bytes of src/shared/mcp-core.ts.
 // To change the shared core: edit it, run this test, copy the reported actual
 // hash here AND into the sibling repos' copies of this test in the same PR.
-const SHARED_CORE_SHA256 = "c09c91b94cda4451741a98ff9f1ca0aa288776eb7a3dd76b78dd7bf49c3983b4";
+const SHARED_CORE_SHA256 = "e26f9177912e145fc66259b490aa8baa38c4c985e19db4f447c9a86c9c7f2f1b";
 
 async function sha256Hex(text: string): Promise<string> {
   const bytes = new TextEncoder().encode(text);

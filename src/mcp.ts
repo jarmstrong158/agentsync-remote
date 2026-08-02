@@ -18,6 +18,13 @@ import {
   handleJsonRpcHttp,
   isNotification,
   negotiateProtocol,
+  requestProtocolVersion,
+  stampModernResult,
+  validateRequestHeaders,
+  SUPPORTED_PROTOCOLS,
+  SUPPORTED_PROTOCOL_LIST,
+  RPC_HEADER_MISMATCH,
+  RPC_UNSUPPORTED_PROTOCOL_VERSION,
   rpcError,
   rpcResult,
   validateArguments,
@@ -227,10 +234,66 @@ export const TOOLS: ToolDef[] = [
 async function handleMessage(
   msg: JsonRpcMessage,
   ctx: Ctx,
+  headers: { get(name: string): string | null } | null,
 ): Promise<object | null> {
   const method = msg.method;
 
+  // --- Protocol era (revision 2026-07-28) ---------------------------------
+  //
+  // The handshake is retired: a modern client declares its version in
+  // `params._meta` on every request; a legacy client opens with `initialize`
+  // and never sends `_meta`. Presence of that key is the era signal.
+  //
+  // Both eras are served. The local Python agentsync peer writes the same
+  // claims.json and any already-configured client is legacy until upgraded;
+  // legacy clients have no fall-forward mechanism, so a modern-only Worker
+  // would break them outright.
+  const declaredVersion = requestProtocolVersion(msg.params);
+  const modern = declaredVersion !== null;
+
+  if (modern && !SUPPORTED_PROTOCOLS.has(declaredVersion)) {
+    // NOTE: this REPLACES the negotiate-down behaviour for modern clients.
+    // 2026-07-28 requires rejecting an unsupported version with the supported
+    // list so the client can retry, rather than silently downgrading it.
+    // negotiateProtocol still guards the legacy `initialize` path below.
+    return rpcError(msg.id, RPC_UNSUPPORTED_PROTOCOL_VERSION, "Unsupported protocol version", {
+      supported: SUPPORTED_PROTOCOL_LIST,
+      requested: declaredVersion,
+    });
+  }
+
+  // Streamable HTTP mirrors body fields into headers so gateways can route
+  // without parsing the body; the server MUST reject disagreement, or a
+  // gateway routing on the header and this server executing on the body can be
+  // made to disagree deliberately.
+  if (headers) {
+    const named = typeof msg.params?.name === "string" ? msg.params.name : null;
+    const problem = validateRequestHeaders(
+      headers,
+      method ?? "",
+      declaredVersion,
+      method === "tools/call" ? named : null,
+    );
+    if (problem) return rpcError(msg.id, RPC_HEADER_MISMATCH, problem);
+  }
+
+  // Legacy callers get byte-identical responses to pre-migration.
+  const ok = (result: Record<string, unknown>) =>
+    rpcResult(msg.id, modern ? stampModernResult(result, method ?? "", SERVER_INFO) : result);
+
   switch (method) {
+    case "server/discover": {
+      // MUST be implemented as of 2026-07-28. Answered regardless of declared
+      // era, since a dual-era client may use it as a probe.
+      return rpcResult(
+        msg.id,
+        stampModernResult(
+          { supportedVersions: SUPPORTED_PROTOCOL_LIST, capabilities: { tools: {} } },
+          "server/discover",
+          SERVER_INFO,
+        ),
+      );
+    }
     case "initialize": {
       // Previously this echoed whatever the client sent, so asking for
       // "banana" got you `protocolVersion: "banana"` -- the server advertising
@@ -249,10 +312,10 @@ async function handleMessage(
     }
 
     case "ping":
-      return rpcResult(msg.id, {});
+      return ok({});
 
     case "tools/list":
-      return rpcResult(msg.id, {
+      return ok({
         tools: TOOLS.map((t) => ({
           name: t.name,
           description: t.description,
@@ -290,7 +353,7 @@ async function handleMessage(
       try {
         const out = await tool.handler(ctx, args);
         log("tool_call", { tool: name, duration_ms: Date.now() - started, ok: true });
-        return rpcResult(msg.id, {
+        return ok({
           content: [{ type: "text", text: JSON.stringify(out, null, 2) }],
           isError: false,
         });
@@ -314,7 +377,7 @@ async function handleMessage(
           message: e instanceof Error ? e.message : String(e),
           stack: e instanceof Error ? e.stack : undefined,
         });
-        return rpcResult(msg.id, {
+        return ok({
           content: [{ type: "text", text: message }],
           isError: true,
         });
@@ -335,7 +398,7 @@ async function handleMessage(
  */
 export function createMcpHandler(): (request: Request, ctx: Ctx) => Promise<Response> {
   return async (request: Request, ctx: Ctx): Promise<Response> => {
-    return handleJsonRpcHttp(request, (msg) => handleMessage(msg, ctx), {
+    return handleJsonRpcHttp(request, (msg) => handleMessage(msg, ctx, request.headers), {
       // No server-initiated SSE stream and no session to tear down.
       allow: "POST, DELETE",
       handleDelete: true,

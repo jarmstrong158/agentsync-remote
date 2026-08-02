@@ -45,7 +45,12 @@
 // Protocol negotiation
 // ---------------------------------------------------------------------------
 
-/** The protocol revision these Workers implement. */
+/** The current protocol revision. Stateless: no handshake, no session id.
+ *  Clients declare it per-request in `params._meta`. */
+export const MODERN_PROTOCOL_VERSION = "2026-07-28";
+
+/** The revision answered to a LEGACY client, i.e. one that opens with
+ *  `initialize`. Modern clients never send that method. */
 export const DEFAULT_PROTOCOL_VERSION = "2025-06-18";
 
 /** Revisions we will agree to speak if a client asks for one of them. Anything
@@ -53,10 +58,19 @@ export const DEFAULT_PROTOCOL_VERSION = "2025-06-18";
  *  string back, which previously let a client dictate the advertised protocol
  *  (`protocolVersion: "banana"`). */
 export const SUPPORTED_PROTOCOLS: ReadonlySet<string> = new Set([
+  "2026-07-28",
   "2025-06-18",
   "2025-03-26",
   "2024-11-05",
 ]);
+
+/** Advertised by `server/discover`, newest first. */
+export const SUPPORTED_PROTOCOL_LIST: readonly string[] = [
+  "2026-07-28",
+  "2025-06-18",
+  "2025-03-26",
+  "2024-11-05",
+];
 
 export interface NegotiatedProtocol {
   /** The version we will actually speak, always one of SUPPORTED_PROTOCOLS. */
@@ -86,6 +100,138 @@ export const RPC_INVALID_REQUEST = -32600;
 export const RPC_METHOD_NOT_FOUND = -32601;
 export const RPC_INVALID_PARAMS = -32602;
 export const RPC_INTERNAL_ERROR = -32603;
+
+// Allocated from the range the 2026-07-28 spec reserves for protocol-defined
+// errors (-32020..-32099). These were -32001/-32004 in the draft; the final
+// revision renumbered them.
+export const RPC_HEADER_MISMATCH = -32020;
+export const RPC_UNSUPPORTED_PROTOCOL_VERSION = -32022;
+
+// ---------------------------------------------------------------------------
+// 2026-07-28 per-request metadata
+// ---------------------------------------------------------------------------
+
+export const META_PROTOCOL_VERSION = "io.modelcontextprotocol/protocolVersion";
+export const META_CLIENT_INFO = "io.modelcontextprotocol/clientInfo";
+export const META_SERVER_INFO = "io.modelcontextprotocol/serverInfo";
+
+/** Freshness hints (SEP-2549). The tool catalogue is static code, identical
+ *  for every caller with no auth-scoped variation, so it is `public`. Tool
+ *  RESULTS are caller-scoped, but tools/call is not a cacheable method. */
+export const CACHE_TTL_MS = 300_000;
+export const CACHEABLE_METHODS: ReadonlySet<string> = new Set([
+  "tools/list",
+  "server/discover",
+]);
+
+/**
+ * The protocol version a MODERN client declared, or null if it is legacy.
+ *
+ * Presence of the `_meta` key is the era signal: 2026-07-28 clients send it on
+ * every request, handshake-era clients never do.
+ */
+export function requestProtocolVersion(params: unknown): string | null {
+  const meta = (params as { _meta?: unknown } | undefined)?._meta;
+  if (!meta || typeof meta !== "object") return null;
+  const version = (meta as Record<string, unknown>)[META_PROTOCOL_VERSION];
+  return typeof version === "string" ? version : null;
+}
+
+export interface ServerIdentity {
+  name: string;
+  version: string;
+}
+
+/**
+ * Stamp the fields 2026-07-28 requires onto a result.
+ *
+ * Only applied for modern callers, so a legacy client sees byte-identical
+ * responses to what it saw before the migration.
+ */
+export function stampModernResult(
+  result: Record<string, unknown>,
+  method: string,
+  serverInfo: ServerIdentity,
+): Record<string, unknown> {
+  const meta = { ...((result._meta as Record<string, unknown>) ?? {}) };
+  // No handshake any more, so identity travels on every result.
+  meta[META_SERVER_INFO] = serverInfo;
+  const stamped: Record<string, unknown> = {
+    ...result,
+    resultType: "complete",
+    _meta: meta,
+  };
+  if (CACHEABLE_METHODS.has(method)) {
+    stamped.ttlMs = CACHE_TTL_MS;
+    stamped.cacheScope = "public";
+  }
+  return stamped;
+}
+
+// ---------------------------------------------------------------------------
+// Streamable HTTP request headers (2026-07-28)
+// ---------------------------------------------------------------------------
+
+/**
+ * Validate the standard request headers a Streamable HTTP server must check.
+ *
+ * The spec mirrors selected body fields into headers so intermediaries can
+ * route without parsing the body, and REQUIRES the server to reject any
+ * disagreement — otherwise a gateway routing on the header and a server
+ * executing on the body can be made to disagree deliberately.
+ *
+ * Returns an error message, or null when the request is acceptable. Legacy
+ * requests (no `_meta`) are exempt: those headers did not exist in their era.
+ */
+export function validateRequestHeaders(
+  headers: { get(name: string): string | null },
+  method: string,
+  declaredVersion: string | null,
+  toolOrUri: string | null,
+): string | null {
+  // Legacy era: nothing to validate.
+  if (declaredVersion === null) return null;
+
+  const headerVersion = headers.get("mcp-protocol-version");
+  if (!headerVersion) {
+    return "missing required header: MCP-Protocol-Version";
+  }
+  if (headerVersion !== declaredVersion) {
+    return `MCP-Protocol-Version header '${headerVersion}' does not match body value '${declaredVersion}'`;
+  }
+
+  const headerMethod = headers.get("mcp-method");
+  if (!headerMethod) return "missing required header: Mcp-Method";
+  if (headerMethod !== method) {
+    return `Mcp-Method header '${headerMethod}' does not match body value '${method}'`;
+  }
+
+  // Mcp-Name is required only for the methods that carry a name or uri.
+  if (toolOrUri !== null) {
+    const headerName = headers.get("mcp-name");
+    if (!headerName) return "missing required header: Mcp-Name";
+    if (decodeMcpName(headerName) !== toolOrUri) {
+      return `Mcp-Name header does not match body value '${toolOrUri}'`;
+    }
+  }
+  return null;
+}
+
+/**
+ * Decode the Base64 sentinel form clients must use when a name cannot be
+ * safely represented as a plain ASCII header value: `=?base64?<b64>?=`.
+ */
+export function decodeMcpName(value: string): string {
+  const match = /^=\?base64\?(.*)\?=$/.exec(value);
+  if (!match) return value;
+  try {
+    const binary = atob(match[1]);
+    const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  } catch {
+    return value;
+  }
+}
 
 export interface JsonRpcMessage {
   jsonrpc?: string;
