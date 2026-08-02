@@ -12,22 +12,6 @@
       "updated_at": "2026-07-18T14:45:21.018Z",
       "instance": "eacf4ead-2268-4a96-baae-008370c95492",
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
-    },
-    "jonny-desktop": {
-      "task": "vanguard-web: rAF-mode frame-time probe to close section 8's 60 FPS / 1% low criterion, which is currently asserted and unmeasured",
-      "touches": [
-        "vanguard-web/src/debugBoot.ts",
-        "vanguard-web/tools/perf.mjs",
-        "vanguard-web/package.json",
-        "vanguard-web/DECISIONS.md"
-      ],
-      "requires": [],
-      "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T10:39:47.103344+00:00",
-      "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 6afe879, clean tree, tracking origin/main. Added npm run perf - an rAF-mode frame-time probe, deliberately separate from the screenshot harness because that one drives the clock by hand so captures reproduce, and the same property makes its timings meaningless for performance. ?perf=1 settles the scene with the manual clock, hands it back to requestAnimationFrame, samples 600 real deltas, and reports the 1% LOW rather than only the mean because an average hides exactly the hitch that matters (BRIEF section 3). RESULTS across all four scenes: mean 0.35-0.80ms, p95 0.46-1.14ms, 1% low 5.8-9.6ms, worst single frame 13.7ms, 0.0% of frames over the 16.6ms budget. STATED PRECISELY and recorded that way in DECISIONS.md rather than rounded up to a pass: this measures per-frame WORK, not delivered frame rate - it runs headless with --disable-gpu-vsync so rAF fires unthrottled at ~1300fps and each delta is the cost of a step, not a 16.6ms display interval. Strong evidence the budget is met; NOT the same claim as 'verified 60 FPS on the target machine'. A real-display check remains outstanding. Build clean, 29 tests green. FINAL BRIEF STATUS: milestones 1-5 complete, 6 and 7 partial, both hard gates passed, every section 8 criterion now either met or explicitly recorded as outstanding - none silently assumed. Tooling in place for whoever continues: npm run shots (byte-reproducible captures + fractional-coordinate audit that fails the run), npm run perf, npm test (29 incl. palette invariants), tools/focus.mjs for single-sprite and silhouette inspection. REMAINING: section 2.6 four-phase attack timing table and secondary motion on hair/satchels; a real-display frame-rate confirmation.",
-      "changed_files": []
     }
   },
   "notes": [
