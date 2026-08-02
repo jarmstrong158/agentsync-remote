@@ -14,19 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web: replace Phaser.Scale.FIT with integer-multiple scaling + letterbox, so rendered pixels are never resampled to fractional size (BRIEF.md milestone 1 remainder)",
+      "task": "vanguard-web milestone 2 (BRIEF.md): shade derivation layer (src/art/shading.ts + palette.ts) and Maren rebuilt to the style guide bar, behind the five-condition gate",
       "touches": [
-        "vanguard-web/src/main.ts",
-        "vanguard-web/index.html",
-        "vanguard-web/BRIEF.md"
+        "vanguard-web/src/art/shading.ts",
+        "vanguard-web/src/art/palette.ts",
+        "vanguard-web/src/sprites.ts",
+        "vanguard-web/src/overworldSprites.ts",
+        "vanguard-web/DECISIONS.md"
       ],
-      "requires": [],
+      "requires": [
+        "vanguard-web/src/BattleScene.ts",
+        "vanguard-web/tools/shots.mjs"
+      ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T00:21:45.019831+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T00:22:47.099019+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 365311e, clean tree, tracking origin/main. Integer canvas scaling enforced, completing BRIEF.md milestone 1. Root cause was two-layered: Phaser.Scale.FIT stretched the canvas to fill #game, and #game was width min(94vw,1024px) - at 1024 that is 1024/384 = 2.667x, so image-rendering:pixelated gave some source pixels 3 screen pixels and their neighbours 2. Uneven grid on essentially every window size, unfixable downstream by any sprite work. Now Phaser.Scale.NONE + computed integer zoom, recomputed on resize, letterboxed; #game no longer sets a width (a width is a target for Phaser to stretch to, which caused this). VERIFIED IN-BROWSER not by reasoning: 1280x720 -> zoom 3, displayed 1152x648, scale exactly 3.000 both axes; fresh load at 1000x700 -> zoom 2, displayed 768x432, fits viewport. Backing store stays 384x216 so captures are unaffected - confirmed by re-running the harness: all 10 files byte-identical to the committed baseline, which also proves the harness works as a regression detector. Build clean, 22 tests green, no stray .js. BRIEF.md \u00a71 rewritten from 'must be fixed' to 'must stay that way' and \u00a78 gained a checkable criterion (rect.width/canvas.width is an integer and equals the height ratio at every window size) so it is verified rather than eyeballed. MILESTONE 1 NOW COMPLETE: harness + baseline + integer scaling. RECOMMENDED NEXT: milestone 2 - shading.ts derivation layer and Maren rebuilt - behind its five-condition gate. Nothing rendered could be judged fairly before this commit; now it can.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
