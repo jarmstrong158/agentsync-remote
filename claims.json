@@ -14,7 +14,7 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web milestone 4a (BRIEF.md 2.3): migrate enemy sprites to the shade derivation layer - declared palettes, volumetric form, hue-shifted 3-shade ramps. Enemies first, they read weakest against the darkened ground.",
+      "task": "vanguard-web milestone 4b (BRIEF.md 2.2): migrate the remaining cast - party, humanoid enemies and NPCs - to declared palettes and volumetric shading; verify against the battle capture, not the contact sheet",
       "touches": [
         "vanguard-web/src/art/palette.ts",
         "vanguard-web/src/sprites.ts",
@@ -25,11 +25,10 @@
         "vanguard-web/tools/focus.mjs"
       ],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-02T01:20:12.150271+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T01:21:34.605519+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. vanguard-web main @ 31eddfd, clean tree, tracking origin/main. Milestone 4a complete: seven beasts migrated to declared palettes and volumetric shading (shade, moth, wolf, slime, rat, spider, stalker) - each now has three hue-shifted shades, a lit edge and a shaded underside instead of one flat fill. Enemies went first because the milestone 3 greyscale showed them as the weakest element, reading as low-contrast cutouts against the newly darkened ground. INFRASTRUCTURE: BEASTS declares bases and a generic paletteFor() builds the bounded palette, so remaining characters are a small declaration each rather than bespoke code; Maren's hand-written marenPalette() was worth doing once to learn what the helper needed. KEY LESSON, recorded in DECISIONS.md: giving the Shadow Creeper a brighter violet ramp so it had 'visible form' per section 2.3 looked correct on the neutral contact sheet and dropped its contrast against the field from 12.5 to 2.0 - it would have vanished in play. Measured, darkened, back to 12.3 with the ramp intact. A sprite's VALUE LEVEL is a property of the scene it stands in, not of the sprite; judging on the contact sheet alone is how that regression ships. Applies directly to the remaining party migration. Build clean, 22 tests green. REMAINING for milestone 4b: kael, lida, senna, yara, davan, mirror, militia, ashguard, rhogar, villager x2, elder - all still on the old flat p.block path with inline literals. BEASTS already declares militia/ashguard/rhogar bases, so those three are part-done. RECOMMENDED: migrate party next (they are on screen constantly), verifying each against the battle capture not just the contact sheet, then milestone 5 (UI) which is untouched and still the saturated debug-blue panel called out in BRIEF section 0.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
