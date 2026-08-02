@@ -2,12 +2,12 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jarmstrong158/agentsync-remote",
   "title": "agentsync (remote)",
-  "description": "Self-hosted Cloudflare Worker remote transport for agentsync (streamable-HTTP).",
+  "description": "Self-hosted Cloudflare Worker remote transport for agentsync (streamable-HTTP). Speaks MCP protocol revision 2026-07-28 and is dual-era: modern clients declare their version per request in _meta, and handshake-era clients are still served, so an existing connector keeps working. Stateless by design - no session id, no server-initiated stream.",
   "repository": {
     "url": "https://github.com/jarmstrong158/agentsync-remote",
     "source": "github"
   },
-  "version": "0.1.1",
+  "version": "0.2.0",
   "remotes": [
     {
       "type": "streamable-http",
