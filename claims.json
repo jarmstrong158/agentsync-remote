@@ -14,26 +14,18 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard-web milestone 1 (from BRIEF.md): commit brief + CLAUDE.md pointer, then add a deterministic debug boot path so the screenshot harness can load fixed scenes reproducibly",
+      "task": "vanguard-web: replace Phaser.Scale.FIT with integer-multiple scaling + letterbox, so rendered pixels are never resampled to fractional size (BRIEF.md milestone 1 remainder)",
       "touches": [
-        "vanguard-web/BRIEF.md",
-        "vanguard-web/CLAUDE.md",
         "vanguard-web/src/main.ts",
-        "vanguard-web/src/run.ts",
-        "vanguard-web/src/debugBoot.ts"
+        "vanguard-web/index.html",
+        "vanguard-web/BRIEF.md"
       ],
-      "requires": [
-        "vanguard-web/src/OverworldScene.ts",
-        "vanguard-web/src/BattleScene.ts",
-        "vanguard-web/src/story.ts",
-        "vanguard-web/src/data.ts"
-      ],
+      "requires": [],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-01T23:51:58.387372+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-02T00:18:39.467177+00:00",
       "instance": "712c43ad",
-      "note": "DONE + PUSHED TO ORIGIN. github.com/jarmstrong158/vanguard-web, main @ bcc9f79, clean tree, tracking origin/main. Milestone 1 of BRIEF.md complete: a deterministic screenshot harness. npm run shots captures 4 fixed scenes (title/overworld/battle/party) at 1x, 4x and greyscale into docs/shots/<label>/. VERIFIED byte-identical across two independent runs, all 10 files - seeded RNG, hand-driven clock, and sprite generation that has zero randomness. Baseline committed at docs/shots/00-baseline. Three real obstacles found only by running it, not by reading code: (1) requestAnimationFrame never fires in a hidden/headless tab so the game rendered ZERO frames - fixed by driving game.step() manually with synthetic timestamps, which is also more reproducible than counting real frames; (2) stepping synchronously starved Phaser's asset loader, so any scene with preload() captured as an empty clear-colour frame - steps now yield to the event loop; (3) a fresh save has no story flags so arriving anywhere fired that location's cutscene and the capture landed on a dialogue box - shot state now marks every WORLD_BEAT seen. Shot mode is inert without ?shot= and never writes localStorage. ALSO FIXED (pre-existing, found while verifying): tsconfig had no noEmit, so npm run build emitted 17 .js files into src/ and vitest ran the suite twice, the second time against stale compiled output that could pass while source was broken. Two BRIEF.md corrections from reading code over design docs: canvas is 384x216 not the style guide's 320x180, and Phaser.Scale.FIT is NOT integer scaling so every pixel is resampled on most window sizes - that fix is now scoped into milestone 1. Recorded con-001-e5b4: never judge a visual change by reasoning about code, run the harness and look. RECOMMENDED NEXT: finish the integer-scale fix (small, and until it lands nothing rendered can be judged fairly), then milestone 2 (shading.ts derivation layer + Maren) behind its five-condition gate.",
-      "changed_files": []
+      "note": null
     }
   },
   "notes": [
