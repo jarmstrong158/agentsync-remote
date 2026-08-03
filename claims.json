@@ -14,15 +14,14 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem: fix the linear hue lerp in shading.py that gives every skin-toned generated sprite an olive shadow side",
+      "task": "vanguard: correct the linear hue lerp in the sprite style guide's GDScript snippet - the source all three buggy ports were copied from",
       "touches": [
-        "meristem/packages/generators/meristem_generators/shading.py",
-        "meristem/DECISIONS.md"
+        "vanguard/docs/sprite_style_guide.md"
       ],
       "requires": [],
-      "branch": "main",
+      "branch": "regions/side-areas",
       "status": "in-progress",
-      "updated_at": "2026-08-03T19:57:47.898051+00:00",
+      "updated_at": "2026-08-03T20:00:06.469215+00:00",
       "instance": "e8544d39",
       "note": null
     }
