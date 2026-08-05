@@ -14,21 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "refactor sweep from the code audit: one shared scope-rules module (con-011 invariant is currently FALSE), verify_quality check registry, server.py module split with re-exports, test split, plus dedup in context-keeper-remote and agentsync",
+      "task": "vanguard: expand the enemy roster across under-served regions - author new enemies in docs/design/enemy_design.md, regenerate via gen_enemies/gen_abilities/gen_wiring, level and drop them to match where they spawn, and verify reachability",
       "touches": [
-        "context-keeper/scope_rules.py",
-        "context-keeper/server.py",
-        "context-keeper/work_focus.py",
-        "context-keeper/hooks/scope_guard.py",
-        "context-keeper/tests/",
-        "context-keeper/evals/",
-        "context-keeper-remote/src/",
-        "agentsync/agentsync_server.py"
+        "vanguard/docs/design/enemy_design.md",
+        "vanguard/data/enemies/",
+        "vanguard/data/abilities/",
+        "vanguard/scripts/data/enemy_sprite_generator.gd",
+        "vanguard/DECISIONS.md"
       ],
-      "requires": [],
-      "branch": "refactor-audit-sweep",
+      "requires": [
+        "vanguard/tools/gen_enemies.py",
+        "vanguard/tools/gen_abilities.py",
+        "vanguard/tools/gen_wiring.py",
+        "vanguard/tools/walk_story.gd"
+      ],
+      "branch": "regions/side-areas",
       "status": "in-progress",
-      "updated_at": "2026-08-05T15:23:42.283236+00:00",
+      "updated_at": "2026-08-05T15:30:31.914891+00:00",
       "instance": "e8544d39",
       "note": null
     }
