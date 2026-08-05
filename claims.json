@@ -29,10 +29,12 @@
         "vanguard/tools/walk_story.gd"
       ],
       "branch": "regions/side-areas",
-      "status": "in-progress",
-      "updated_at": "2026-08-05T15:30:31.914891+00:00",
+      "status": "done",
+      "updated_at": "2026-08-05T15:39:33.797636+00:00",
       "instance": "e8544d39",
-      "note": null
+      "note": "DONE + PUSHED. vanguard @ 9b36ca8 on regions/side-areas, clean tree. DID NOT ADD ENEMIES - the ask said 'if needed' and it was not needed. 52 of 93 existing enemies had NO encounter referencing them: generated, levelled, given abilities and drops, and unable to appear in play. The 52 were almost exactly the creature families the design doc is built around - every wolf but one, every serpent but one, every raptor but one, every slime but one, every beetle, every wisp. The 'familiar but different' recognition loop existed in data and never reached a player. Adding more enemies would have deepened precisely the problem con-004 exists to prevent. NEW tools/gen_encounters.py reads each enemy's level out of its own .tres and assigns by level band using the tier table in enemy_design.md section 2, so an encounter cannot disagree with the enemy about how strong it is; groups prefer same-family pairings so a group reads as a pack rather than a bag of monsters. RESULT: 27 encounters written, 19 map pools updated, 93/93 enemies referenced, 0 unreachable, 27/27 new encounters in a map pool, 1100 resources load (was 1073), parse clean. Bosses excluded from random pools - a boss belongs to a scripted trigger; Stonemantle's only 'random' encounter used to be Yara's duel and the Hollows' was the Hollow Stalker. TWO OF MY OWN GAP ANALYSES WERE WRONG FIRST: counting enemy_factory.gd SECTION 8 said three regions had a single encounter each, but that is a LEGACY hand-authored set, not the 41 .tres encounters the maps actually load via encounter_pool; then a family-by-region matrix overstated the gaps because the design varies variants by ELEMENT and two regions share fire, so most 'gaps' were covered by a sibling region's variant. Measuring what the encounter resources actually reference was the only reading that matched the game. Pattern for the record: when auditing content coverage, measure the artefact the RUNTIME loads, not the most convenient list. REMAINING: enemy_factory.gd's SECTION 8 is a legacy parallel definition of enemies and encounters that the maps do not use - worth deleting or reconciling, since two sources of truth for the roster is how this kind of drift starts.",
+      "changed_files": null,
+      "changed_files_repo": "jarmstrong158/agentsync-remote"
     }
   },
   "notes": [
