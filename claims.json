@@ -14,18 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem: add a pose system so generated sheets carry real action animation (attack/bow/stave/throw/hurt/death), then rebake vanguard's sheets and verify with the filmstrip band report",
+      "task": "context-keeper: make supersession a first-class signal (write-time overlap advisory, predecessor line in get_context, backfill survey)",
       "touches": [
-        "meristem/packages/generators/meristem_generators/poses.py",
-        "meristem/tools/vanguard_bestiary.py",
-        "meristem/packages/generators/tests/test_poses.py",
-        "meristem/DECISIONS.md",
-        "vanguard/sprites/"
+        "context-keeper/server.py",
+        "context-keeper/tests/test_server.py",
+        "context-keeper/mirror.py",
+        "context-keeper/tests/test_mirror.py",
+        "context-keeper/CLAUDE.md",
+        "context-keeper-remote/src/tools/retrieve.ts",
+        "context-keeper-remote/src/tools/upsert.ts",
+        "context-keeper-remote/src/tools/import.ts",
+        "context-keeper-remote/src/entries.ts",
+        "context-keeper-remote/test/server.test.ts"
       ],
       "requires": [],
-      "branch": "main",
+      "branch": "supersession-first-class",
       "status": "in-progress",
-      "updated_at": "2026-08-05T11:11:08.153826+00:00",
+      "updated_at": "2026-08-05T11:15:26.066251+00:00",
       "instance": "e8544d39",
       "note": null
     }
