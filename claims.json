@@ -30,9 +30,9 @@
       "requires": [],
       "branch": "supersession-first-class",
       "status": "in-progress",
-      "updated_at": "2026-08-05T11:15:26.066251+00:00",
+      "updated_at": "2026-08-05T11:21:58.337714+00:00",
       "instance": "e8544d39",
-      "note": null
+      "note": "1/3 landed locally: write-time supersession advisory on record_entry (tag + whole-component scope overlap, same-kind only, advisory only -- never links, never blocks, never mutates the older entry). Guidance in _FIELD_GUIDANCE per con-004; zero schema growth, TestToolSchemaBudget green. 391 tests pass. Next: predecessor line in get_context."
     }
   },
   "notes": [
