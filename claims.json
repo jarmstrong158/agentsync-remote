@@ -30,9 +30,9 @@
       "requires": [],
       "branch": "supersession-first-class",
       "status": "in-progress",
-      "updated_at": "2026-08-05T11:30:15.393921+00:00",
+      "updated_at": "2026-08-05T11:30:33.361402+00:00",
       "instance": "e8544d39",
-      "note": null
+      "note": "RESTORED claim - original note preserved below. This claim was accidentally released by a concurrent session on the same instance slot (e8544d39), which was doing sprite/pose work in vanguard and meristem. The two sessions overwrote each other's claim in the shared slot, so a release intended for the sprite work took this one instead. No context-keeper files were touched by that session; only the board entry was lost, and it is restored here unchanged so the ten files it covers are protected again. ORIGINAL NOTE: 1/3 landed locally: write-time supersession advisory on record_entry (tag + whole-component scope overlap, same-kind only, advisory only -- never links, never blocks, never mutates the older entry). Guidance in _FIELD_GUIDANCE per con-004; zero schema growth, TestToolSchemaBudget green. 391 tests pass. Next: predecessor line in get_context."
     }
   },
   "notes": [
