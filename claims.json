@@ -22,10 +22,12 @@
       ],
       "requires": [],
       "branch": "fix-concurrent-claim-clobber",
-      "status": "in-progress",
-      "updated_at": "2026-08-05T14:26:06.467208+00:00",
+      "status": "done",
+      "updated_at": "2026-08-05T14:37:52.014990+00:00",
       "instance": "e8544d39",
-      "note": null
+      "note": "DONE + PUSHED. agentsync PR #5 (fix-concurrent-claim-clobber @ 1348462). claim() now refuses when the id holds an in-progress claim for DIFFERENT work regardless of instance -- the old guard keyed on a per-PROCESS uuid, so it caught a restarted server and waved through a concurrent session, which is the case that loses work. Same-task re-claim stays free (widening touches mid-unit). release(expect_task=) added for the close-side hazard, optional and additive. 51+5+protocol tests pass; the test that had encoded the wrong assumption is inverted with the live incident in its docstring. Recorded as agentsync dec-007-635e. HONEST LIMIT: release(expect_task) only protects callers who pass it; a full fix needs per-session identity the server cannot get today, so unique AGENTSYNC_AGENT_IDs per session remain the real remedy -- worth doing on this machine. NOTE: finish() could not be used because the board repo (agentsync-remote) differs from the code repo, so it never sees the pushed branch; PR opened with gh instead.",
+      "changed_files": null,
+      "changed_files_repo": "jarmstrong158/agentsync-remote"
     }
   },
   "notes": [
