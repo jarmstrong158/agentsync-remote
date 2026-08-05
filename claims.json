@@ -14,20 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "agentsync: fix concurrent-session claim clobbering -- the duplicate-id guard keys on a per-PROCESS instance id, so two sessions sharing one server silently overwrite each other's claims",
+      "task": "refactor sweep from the code audit: one shared scope-rules module (con-011 invariant is currently FALSE), verify_quality check registry, server.py module split with re-exports, test split, plus dedup in context-keeper-remote and agentsync",
       "touches": [
-        "agentsync/agentsync_server.py",
-        "agentsync/test_agentsync.py",
-        "agentsync/DESIGN.md"
+        "context-keeper/scope_rules.py",
+        "context-keeper/server.py",
+        "context-keeper/work_focus.py",
+        "context-keeper/hooks/scope_guard.py",
+        "context-keeper/tests/",
+        "context-keeper/evals/",
+        "context-keeper-remote/src/",
+        "agentsync/agentsync_server.py"
       ],
       "requires": [],
-      "branch": "fix-concurrent-claim-clobber",
-      "status": "done",
-      "updated_at": "2026-08-05T14:37:52.014990+00:00",
+      "branch": "refactor-audit-sweep",
+      "status": "in-progress",
+      "updated_at": "2026-08-05T15:23:42.283236+00:00",
       "instance": "e8544d39",
-      "note": "DONE + PUSHED. agentsync PR #5 (fix-concurrent-claim-clobber @ 1348462). claim() now refuses when the id holds an in-progress claim for DIFFERENT work regardless of instance -- the old guard keyed on a per-PROCESS uuid, so it caught a restarted server and waved through a concurrent session, which is the case that loses work. Same-task re-claim stays free (widening touches mid-unit). release(expect_task=) added for the close-side hazard, optional and additive. 51+5+protocol tests pass; the test that had encoded the wrong assumption is inverted with the live incident in its docstring. Recorded as agentsync dec-007-635e. HONEST LIMIT: release(expect_task) only protects callers who pass it; a full fix needs per-session identity the server cannot get today, so unique AGENTSYNC_AGENT_IDs per session remain the real remedy -- worth doing on this machine. NOTE: finish() could not be used because the board repo (agentsync-remote) differs from the code repo, so it never sees the pushed branch; PR opened with gh instead.",
-      "changed_files": null,
-      "changed_files_repo": "jarmstrong158/agentsync-remote"
+      "note": null
     }
   },
   "notes": [
