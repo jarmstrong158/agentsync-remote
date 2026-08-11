@@ -14,20 +14,21 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem/vanguard: bake all 8 direction rows into battle sheets using humanoid_facings, so 87 percent of every sheet stops being blank and non-south facings render",
+      "task": "meristem: add non-humanoid archetypes (golem/construct) so granite_golem, lattice_sentinel and the crystallized enemies stop being men in grey, then remap and rebake",
       "touches": [
+        "meristem/packages/generators/meristem_generators/golem.py",
+        "meristem/packages/generators/meristem_generators/archetypes.py",
         "meristem/tools/vanguard_bestiary.py",
-        "vanguard/sprites/",
-        "vanguard/DECISIONS.md"
+        "meristem/packages/generators/tests/",
+        "meristem/DECISIONS.md",
+        "vanguard/sprites/enemies/"
       ],
       "requires": [],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-11T14:54:20.996360+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-11T16:11:30.222513+00:00",
       "instance": "1fc56c63",
-      "note": "DONE + PUSHED. meristem @ df2d788 on main; vanguard @ c882d96 on regions/side-areas. Cloned the LPC generator and read it as a HUMAN REFERENCE rather than shipping its art, which sidesteps the CC-BY-SA licensing concern entirely. LPC standard measured from the actual sheets, not recalled: 64x64 cells, 4 direction rows, walk 9 frames, slash 6, thrust 8, spellcast 7, shoot 13, hurt 6, run 8, jump 5, idle 2. FOUND AND FIXED THE BIGGEST STRUCTURAL GAP: every Vanguard battle sheet is 24x8 cells and ONLY ROW 0 was ever written, so 87 percent of every sheet was blank - and BattleSpriteLoader.create_battle_frames takes a direction argument, meaning any request for a non-south facing rendered NOTHING. Meristem was already drawing four cardinals via humanoid_facings and had been feeding them to the overworld sheets all along; the battle sheet simply never asked. ROW_FACING now maps Vanguard's eight compass rows (S SW W NW N NE E SE) onto those four with each diagonal taking its nearest cardinal, and non-humanoids repeat their single drawn view across all rows rather than leaving seven blank - a wolf that renders when asked for west beats a wolf that vanishes. VERIFIED the rows are real art and not eight copies of south: W and E are side profiles, N/NW/NE show the back of the head, S/SW/SE the face. 92 sheets rebaked, 1100 resources load. REMAINING GAP vs LPC, recorded in DECISIONS.md: frame COUNTS are still thin - Vanguard walk 6 vs LPC 9, sword 4 vs slash 6 / thrust 8, hurt 1 vs 6. Closing those means either more archetype frame functions in Meristem or richer pose recipes per band. Also still open from the reference sheets: 19 of 43 creatures are archetype 'humanoid' including granite_golem, lattice_sentinel and crystallized_stillkeeper, which need non-humanoid archetypes rather than a recolour.",
-      "changed_files": [],
-      "changed_files_repo": "jarmstrong158/agentsync-remote"
+      "note": null
     }
   },
   "notes": [
