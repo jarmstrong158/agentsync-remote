@@ -29,10 +29,10 @@
         "vanguard/tools/walk_story.gd"
       ],
       "branch": "regions/side-areas",
-      "status": "in-progress",
-      "updated_at": "2026-08-05T16:13:57.058070+00:00",
-      "instance": "e8544d39",
-      "note": "RESTORED to in-progress -- this claim belongs to the vanguard enemy-roster session and was NOT finished. A concurrent session (the context-keeper/agentsync refactor sweep) took this slot under the shared agent id jonny-desktop and its closing note landed here, flipping this claim to done. That is exactly the hazard agentsync PR #5 fixes, still live because the RUNNING agentsync server is the pre-fix code -- the guard keys on a per-process token, and both sessions share instance e8544d39, so neither claim nor update_status refused. The vanguard work's real status is unknown to the refactor session; treat this claim as in-progress and let that session re-state it. The refactor sweep's own outcome is recorded in its PRs: context-keeper d21e032 PR #17, context-keeper-remote 19c43eb PR #6, agentsync 8dce1da PR #5, Xylem ed24879, jarmstrong158.github.io e67daa2. ACTION: restart the agentsync MCP server after PR #5 merges, and give each session its own AGENTSYNC_AGENT_ID -- that remains the real remedy.",
+      "status": "done",
+      "updated_at": "2026-08-11T14:39:54.575934+00:00",
+      "instance": "1fc56c63",
+      "note": "DONE + PUSHED, vanguard @ 9b36ca8 on regions/side-areas. Enemy reachability work complete: 52 of 93 enemies had no encounter referencing them; tools/gen_encounters.py assigns them by level band read from their own .tres and groups them into same-family packs. 27 encounters written, 19 map pools updated, 93/93 enemies reachable, 0 unreachable, 1100 resources load, parse clean. No new enemies authored - the ask allowed for it 'if needed' and it was not needed. Closing this claim so the next unit can be claimed; it was showing in-progress after the work had shipped.",
       "changed_files": null,
       "changed_files_repo": "jarmstrong158/agentsync-remote"
     }
