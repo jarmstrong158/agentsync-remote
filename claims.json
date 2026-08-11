@@ -14,20 +14,18 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem: static-region mask for poses - action frames move 53-91 percent of pixels because a whole-figure translate cancels the foot anchor",
+      "task": "meristem/vanguard: bake all 8 direction rows into battle sheets using humanoid_facings, so 87 percent of every sheet stops being blank and non-south facings render",
       "touches": [
-        "meristem/packages/generators/meristem_generators/poses.py",
-        "meristem/packages/generators/tests/test_poses.py",
-        "meristem/DECISIONS.md"
+        "meristem/tools/vanguard_bestiary.py",
+        "vanguard/sprites/",
+        "vanguard/DECISIONS.md"
       ],
       "requires": [],
       "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-11T14:43:14.078467+00:00",
+      "status": "in-progress",
+      "updated_at": "2026-08-11T14:51:45.840303+00:00",
       "instance": "1fc56c63",
-      "note": "DONE + PUSHED. meristem @ d81195c on main; vanguard @ 412aadd on regions/side-areas. Added a STATIC-REGION MASK to the pose system, prompted by the user's sprite-resources doc. Root cause named: lean anchored the feet and a whole-figure shift in the same recipe moved them anyway, so an action frame changed 53-91 percent of its pixels between adjacent frames and the sprite slid rather than pivoting - the opposite of style guide 5.1 'feet must plant rather than slide'. BAND_HOLD declares how many bottom rows a band may not move; hold_static restores them from the idle after transforms; translation dropped from the action recipes since lean carries the motion and a whole-figure translate only moves the planted rows for the mask to undo. Death holds nothing, the figure is meant to leave the ground. Sword churn 85->72, 82->68, 73->55 percent. 96 tests plus two new ones pinning the planted rows and a churn ceiling. Vanguard rebaked (92 sheets), 1100 resources load. IMPORTANT CORRECTION recorded in DECISIONS.md rather than dropped: I reached for this as a fix for 'pixel dancing' and that diagnosis was WRONG. Churn measures the MAGNITUDE of change, not its coherence - a shear moves the whole torso together and a wind-up into a strike is supposed to be a large change, so 55-72 percent is fine. Dancing is unrelated pixels flickering because frames were drawn independently, which transform-derived poses CANNOT do since every frame comes from one idle. The band where dancing could occur is walk, which uses separately-drawn archetype frames, and that measures 3-31 percent. The mask still earns its place, for the reason the style guide gives rather than the one I reached for. NEW FINDING from the meristem reference sheets (docs/reference/vanguard-bestiary.png), which label each creature's ARCHETYPE: 19 of 43 creatures are 'humanoid' and they are near-identical body-with-palette-swap - including granite_golem, lattice_sentinel and crystallized_stillkeeper, which should not be people-shaped at all. That is the same silhouette problem found earlier on three bosses, but at ~19 sprites rather than 3, and it is the largest remaining art issue. Fixing it means new archetypes (golem/construct) in Meristem, not a recolour.",
-      "changed_files": [],
-      "changed_files_repo": "jarmstrong158/agentsync-remote"
+      "note": null
     }
   },
   "notes": [
