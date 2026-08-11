@@ -14,27 +14,18 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "vanguard: expand the enemy roster across under-served regions - author new enemies in docs/design/enemy_design.md, regenerate via gen_enemies/gen_abilities/gen_wiring, level and drop them to match where they spawn, and verify reachability",
+      "task": "meristem: static-region mask for poses - action frames move 53-91 percent of pixels because a whole-figure translate cancels the foot anchor",
       "touches": [
-        "vanguard/docs/design/enemy_design.md",
-        "vanguard/data/enemies/",
-        "vanguard/data/abilities/",
-        "vanguard/scripts/data/enemy_sprite_generator.gd",
-        "vanguard/DECISIONS.md"
+        "meristem/packages/generators/meristem_generators/poses.py",
+        "meristem/packages/generators/tests/test_poses.py",
+        "meristem/DECISIONS.md"
       ],
-      "requires": [
-        "vanguard/tools/gen_enemies.py",
-        "vanguard/tools/gen_abilities.py",
-        "vanguard/tools/gen_wiring.py",
-        "vanguard/tools/walk_story.gd"
-      ],
-      "branch": "regions/side-areas",
-      "status": "done",
-      "updated_at": "2026-08-11T14:39:54.575934+00:00",
+      "requires": [],
+      "branch": "main",
+      "status": "in-progress",
+      "updated_at": "2026-08-11T14:40:06.382423+00:00",
       "instance": "1fc56c63",
-      "note": "DONE + PUSHED, vanguard @ 9b36ca8 on regions/side-areas. Enemy reachability work complete: 52 of 93 enemies had no encounter referencing them; tools/gen_encounters.py assigns them by level band read from their own .tres and groups them into same-family packs. 27 encounters written, 19 map pools updated, 93/93 enemies reachable, 0 unreachable, 1100 resources load, parse clean. No new enemies authored - the ask allowed for it 'if needed' and it was not needed. Closing this claim so the next unit can be claimed; it was showing in-progress after the work had shipped.",
-      "changed_files": null,
-      "changed_files_repo": "jarmstrong158/agentsync-remote"
+      "note": null
     }
   },
   "notes": [
