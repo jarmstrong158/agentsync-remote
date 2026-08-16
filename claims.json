@@ -28,9 +28,9 @@
       ],
       "branch": "cambium-pages",
       "status": "in-progress",
-      "updated_at": "2026-08-16T16:27:38.370948+00:00",
+      "updated_at": "2026-08-16T16:43:52.104965+00:00",
       "instance": "339fae1f",
-      "note": "PART 1 done and green. cambium page tier: compile_page / compile_project / list_pages / recompile, storing pages in .cambium/pages.json (a SEPARATE file from knowledge.json so a derived page can never be recalled or promoted). Staleness is computed from a (status, updated_at, content_hash) fingerprint per source with the HASH authoritative - the stores are hand-editable so updated_at lies in both directions. 9 page tests + 7 snapshot tests pass. Also added export_snapshot + a CLI front end (args = CLI, bare = stdio server, mirroring context-keeper's entry point). Next: the static dashboard, served over Tailscale rather than GitHub Pages - Pages from a private repo is still a public site, and con-015-12da forbids publishing cross-store derived artifacts."
+      "note": "BUILD COMPLETE, NOT YET COMMITTED OR PUSHED - holding the claim until the user approves a push to the public cambium remote. 101/101 tests pass. PART 1: page tier (compile_page / compile_project / list_pages / recompile) in .cambium/pages.json, isolated from every trust-tier read by file separation; staleness from a per-source content hash with updated_at only corroborating, plus a new_match cause for wrongness-by-omission that no source diff can see. PART 2: export_snapshot + a CLI front end (args = CLI, bare argv = stdio server), and a static PWA at repos/xylem-dashboard served over Tailscale rather than GitHub Pages. THREE BUGS THE REAL STORES CAUGHT THAT THE SEEDED TESTS DID NOT: (1) index and unfiled pages fell through the \"no tag, no topic, match everything\" branch and were stale the instant they compiled - 7 pages, now fixed with _selector_matches returning None and a regression test; (2) verify_quality issues are keyed \"type\" not \"issue\", so every quality gap rendered as a blank bullet; (3) chain nodes carry full entry summaries and with white-space nowrap blew the page to 3702px of horizontal scroll. Decisions dec-014-f951 and dec-015-71d6 recorded in cambium's store. pyproject.toml needed no change - everything lives in cambium_server.py, which the wheel already ships."
     }
   },
   "notes": [
