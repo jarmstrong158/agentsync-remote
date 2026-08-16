@@ -14,23 +14,23 @@
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
     },
     "jonny-desktop": {
-      "task": "meristem: add non-humanoid archetypes (golem/construct) so granite_golem, lattice_sentinel and the crystallized enemies stop being men in grey, then remap and rebake",
+      "task": "cambium: add page tier (wiki synthesis compiled from context-keeper entries) + export-snapshot CLI, then a private cross-project dashboard app",
       "touches": [
-        "meristem/packages/generators/meristem_generators/golem.py",
-        "meristem/packages/generators/meristem_generators/archetypes.py",
-        "meristem/tools/vanguard_bestiary.py",
-        "meristem/packages/generators/tests/",
-        "meristem/DECISIONS.md",
-        "vanguard/sprites/enemies/"
+        "cambium/cambium_server.py",
+        "cambium/test_cambium.py",
+        "cambium/pyproject.toml",
+        "cambium/DESIGN.md",
+        "cambium/README.md"
       ],
-      "requires": [],
-      "branch": "main",
-      "status": "done",
-      "updated_at": "2026-08-11T16:18:30.509304+00:00",
-      "instance": "1fc56c63",
-      "note": "DONE + PUSHED. meristem @ 3735424 on main; vanguard @ da02b86 on regions/side-areas. Added a GOLEM archetype so built things stop being grey humanoids. The bestiary reference sheet labels each creature's archetype and 19 of 43 were humanoid, including granite_golem, lattice_sentinel and crystallized_mage - a golem drawn as a man in grey is a silhouette failure and section 4.1 asks a character to be recognisable from its outline alone; no shading pass fixes that because the SHAPE is the problem. golem.py has three builds (stone, crystal, lattice) and every choice in it exists to move the silhouette away from humanoid: shoulders near the full canvas width where a humanoid's are half, NO NECK (head is a block seated straight on the mass), arms as hanging slabs, stumpy legs so weight sits low, and a lit core instead of a face. MEASURED 46-51 percent silhouette IoU against a humanoid of the same palette, versus the 90 percent the vanguard audit flags as confusable. Humanoid count 19/43 -> 16. 98 tests pass, 1100 resources load. TWO ITERATIONS, BOTH CAUGHT BY LOOKING NOT BY THE NUMBER: crystal first shared stone's outline exactly - the original problem restated one level down - and now chamfers its shoulders to taper upward; lattice first carved horizontal gaps the full width and read as a slatted BENCH, and is now a narrow column with one break and two orbiting shards. Also note my own regex insertion put an import inside a multi-line import block and broke the module - repaired; string surgery into multi-line constructs keeps costing me. STILL HUMANOID ON PURPOSE: ashguard ranks, Rhogar, Vasek, Haric, Sevrin, the Mirror, Yara - those are people. CANDIDATES FOR A LATER PASS: crystallized_stillkeeper, living_crystal, frost_construct - drawn by a different tool (vanguard_new_enemies.py) and not in vanguard_bestiary.py, so they were out of scope here.",
-      "changed_files": [],
-      "changed_files_repo": "jarmstrong158/agentsync-remote"
+      "requires": [
+        "context-keeper/server.py",
+        "cambium/tools/dashboard.py"
+      ],
+      "branch": "cambium-pages",
+      "status": "in-progress",
+      "updated_at": "2026-08-16T16:06:42.021024+00:00",
+      "instance": "339fae1f",
+      "note": null
     }
   },
   "notes": [
