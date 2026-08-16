@@ -28,9 +28,9 @@
       ],
       "branch": "cambium-pages",
       "status": "in-progress",
-      "updated_at": "2026-08-16T16:06:42.021024+00:00",
+      "updated_at": "2026-08-16T16:27:38.370948+00:00",
       "instance": "339fae1f",
-      "note": null
+      "note": "PART 1 done and green. cambium page tier: compile_page / compile_project / list_pages / recompile, storing pages in .cambium/pages.json (a SEPARATE file from knowledge.json so a derived page can never be recalled or promoted). Staleness is computed from a (status, updated_at, content_hash) fingerprint per source with the HASH authoritative - the stores are hand-editable so updated_at lies in both directions. 9 page tests + 7 snapshot tests pass. Also added export_snapshot + a CLI front end (args = CLI, bare = stdio server, mirroring context-keeper's entry point). Next: the static dashboard, served over Tailscale rather than GitHub Pages - Pages from a private repo is still a public site, and con-015-12da forbids publishing cross-store derived artifacts."
     }
   },
   "notes": [
