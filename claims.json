@@ -12,25 +12,6 @@
       "updated_at": "2026-07-18T14:45:21.018Z",
       "instance": "eacf4ead-2268-4a96-baae-008370c95492",
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
-    },
-    "jonny-desktop": {
-      "task": "cambium: add page tier (wiki synthesis compiled from context-keeper entries) + export-snapshot CLI, then a private cross-project dashboard app",
-      "touches": [
-        "cambium/cambium_server.py",
-        "cambium/test_cambium.py",
-        "cambium/pyproject.toml",
-        "cambium/DESIGN.md",
-        "cambium/README.md"
-      ],
-      "requires": [
-        "context-keeper/server.py",
-        "cambium/tools/dashboard.py"
-      ],
-      "branch": "cambium-pages",
-      "status": "in-progress",
-      "updated_at": "2026-08-16T17:42:35.828342+00:00",
-      "instance": "339fae1f",
-      "note": "CONCEPT TIER SHIPPED. 106/106 tests pass (verified from complete output, not a truncated tail). The dashboard now opens on \"What we've learned\": 19 cross-project laws drawn from all 424 entries, each with evidence, the projects it was seen in, its citations, and a computed work list of candidate evidence it does not yet cite. That last number is the self-iteration signal - a law is written by judgement, but whether it has fallen behind is a comparison, so the review list appears without anyone asking. Candidates require TWO OR MORE shared topic tags: single-tag matching flagged all 17 laws as behind, which by this corpus's own rule is not a signal. Ran one full compile pass unprompted: 17 laws / 5 behind became 19 / 5, with two new laws the evidence forced (a suite that ran on one machine is observed not verified; a CI config matching no branch is indistinguishable from one that passes). Revisions went through deprecate + recapture so each carries a supersession record. `cambium-mcp refresh` recompiles pages, vault and snapshot in one idempotent call for a hook. THREE OF MY OWN BUGS THIS SESSION WERE INSTANCES OF LAWS I HAD JUST WRITTEN: refresh reported laws_behind 0 by checking against an empty corpus (a check that could only return clean); the generated markdown looked corrupted only because PowerShell Get-Content reads BOM-less UTF-8 as cp1252, exactly con-005; and sharpening the candidate rule broke the test whose fixture encoded the old behaviour, caught only by the full suite because my name-filtered subsets excluded it. _LESSONS.md is now GENERATED from the knowledge store rather than hand-maintained, because it had become a second copy of facts the store owns. Recorded dec-018-0a86. STILL NOT COMMITTED OR PUSHED."
     }
   },
   "notes": [
