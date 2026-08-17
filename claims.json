@@ -22,9 +22,9 @@
       "requires": [],
       "branch": "master",
       "status": "in-progress",
-      "updated_at": "2026-08-17T00:26:08.309388+00:00",
+      "updated_at": "2026-08-17T00:29:16.586099+00:00",
       "instance": "339fae1f",
-      "note": null
+      "note": "Safety fix landed in apply_queue.py: pre-write backup of every affected store to ~/.xylem/queue-backups/<stamp>/ (outside all repos, con-015), append-only journal at ~/.xylem/apply-journal.jsonl, bounded to 40 snapshots, stdout forced to utf-8 so an em-dash cannot kill a headless run, exit 10 = applied so the caller republishes only on change. 12 verification checks pass. Next: the signal path - Conductor is running on 127.0.0.1:5000 (its MCP is pointed at the wrong port, hence 404)."
     }
   },
   "notes": [
