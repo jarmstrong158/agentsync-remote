@@ -26,9 +26,9 @@
       ],
       "branch": "planes",
       "status": "in-progress",
-      "updated_at": "2026-08-22T01:05:49.003820+00:00",
+      "updated_at": "2026-08-22T01:28:21.374286+00:00",
       "instance": "7514946e",
-      "note": null
+      "note": "planes.py + test_planes.py written and green (30 tests). Gates calibrated against measured separation over noisy box / sphere / crumpled sphere / two real ARCore scans. NOTE: merge.py, test_merge.py and test_carve.py appeared in scanfuse during this session with no claim on the board -- another session appears to be active in this repo. I have not touched them."
     }
   },
   "notes": [
