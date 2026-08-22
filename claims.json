@@ -12,23 +12,6 @@
       "updated_at": "2026-07-18T14:45:21.018Z",
       "instance": "eacf4ead-2268-4a96-baae-008370c95492",
       "note": "DONE + MERGED. Plugin follow-up complete. (1) TEST-INSTALL caught a runtime load failure that `claude plugin validate` missed: plugin.json's explicit \"hooks\": \"./hooks/hooks.json\" double-loaded the auto-loaded standard hooks file ('Duplicate hooks file detected' -> Status: failed to load). Fix: removed the hooks field from plugin.json; the standard hooks/hooks.json auto-loads. Re-tested: Status enabled, `claude plugin details xylem` lists Skills (7), Hooks (2: SessionStart/SessionEnd), MCP servers (2: context-keeper-remote/agent-sync-remote). (2) Added DECISIONS.md mirroring xylem dec-001..dec-009 (newest first) as the human-readable sync target. Recorded xylem/dec-009 (lesson: validate checks manifest shape, not auto-load rules \u2014 always test-install). Shipped via PR #31, squash-merged to main (a1991a7). Install path re-verified end to end: `/plugin marketplace add jarmstrong158/xylem` then `/plugin install xylem@xylem-stack`. Board back to 0 active."
-    },
-    "jonny-desktop": {
-      "task": "scanfuse: add planes.py (RANSAC plane detection + vertex snapping) and tests/test_planes.py",
-      "touches": [
-        "scanfuse/src/scanfuse/planes.py",
-        "scanfuse/tests/test_planes.py"
-      ],
-      "requires": [
-        "scanfuse/src/scanfuse/align.py",
-        "scanfuse/src/scanfuse/types.py",
-        "scanfuse/src/scanfuse/voxel.py"
-      ],
-      "branch": "planes",
-      "status": "in-progress",
-      "updated_at": "2026-08-22T01:28:21.374286+00:00",
-      "instance": "7514946e",
-      "note": "planes.py + test_planes.py written and green (30 tests). Gates calibrated against measured separation over noisy box / sphere / crumpled sphere / two real ARCore scans. NOTE: merge.py, test_merge.py and test_carve.py appeared in scanfuse during this session with no claim on the board -- another session appears to be active in this repo. I have not touched them."
     }
   },
   "notes": [
